@@ -11,10 +11,10 @@ import { onNotificationClick } from "egov-ui-kit/utils/commons";
 import "./index.css";
 import { connect } from "react-redux";
 import get from "lodash/get";
-
+import { LabelContainer } from "egov-ui-framework/ui-containers";
 
 const styles = {
-  titleStyle: { fontSize: "20px", fontWeight: 500 },
+  titleStyle: { fontSize: "20px", fontWeight: 500, marginLeft: "-17px" },
 };
 
 const iconButtonStyle = {
@@ -57,10 +57,10 @@ const EgovAppBar = ({
         className={className || "header-with-drawer"}
         title={
           <div className="citizen-header-logo-label">
-            <div className="citizen-header-logo">
-              <img src={ulbLogo ? ulbLogo : pbLogo} onError={(event) => event.target.setAttribute("src", pbLogo)} />
+            <div className="citizen-header-logo" style={{ width: "44px", height: "47px" }}>
+              {<img style={{ width: "45px", height: "45px", transform: "translateY(-2px)" }} src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" />}
             </div>
-            <Label containerStyle={{ marginLeft: "0px" }} className="screenHeaderLabelStyle appbar-title-label" label={title} />
+            <LabelContainer style={{ marginLeft: "0px", color: "#00599F", fontWeight: 700, fontSize: "16px" }} className="screenHeaderLabelStyle appbar-title-label" labelKey={title}/>
             {titleAddon && (
               <Label
                 containerStyle={{ display: "inline-block", marginLeft: 5 }}
@@ -69,12 +69,17 @@ const EgovAppBar = ({
               />
             )}
             {isUserSetting && <div className="rainmaker-displayInline">
-              <Label
+              <h3 className="header-h3" style={{ transform: "translate(12px, -12px)" }}>
+                <strong style={{fontSize: "20px", color: "#0C3A60"}}>Housing and Urban Development Department</strong>
+                {/* <img src={homePageLogo} style={{ height: "30px", marginTop: "2px", marginBottom: "5px" }} /> */}
+                <br /><p style={{ fontSize: "14px", marginTop: "4px" }}>Government of Jammu & Kashmir</p>
+              </h3>
+              {/* <Label
                 containerStyle={{ marginLeft: "10px" }}
                 className="screenHeaderLabelStyle appbar-municipal-label"
                 label={ulbName && `TENANT_TENANTS_${ulbName.toUpperCase().replace(/[.]/g, "_")}`}
-              />
-              <Label containerStyle={{ marginLeft: "4px" }} className="screenHeaderLabelStyle appbar-municipal-label" label={defaultTitle} />
+              /> */}
+              {/* <Label containerStyle={{ marginLeft: "4px" }} className="screenHeaderLabelStyle appbar-municipal-label" label={defaultTitle} /> */}
             </div>}
           </div>
         }
@@ -105,9 +110,9 @@ const EgovAppBar = ({
           </div>
         )}
 
-        <div className="appbar-right-logo">
+        {/* <div className="appbar-right-logo">
           <img src={logoImage?logoImage:digitLogo} />
-        </div>
+        </div> */}
         <div className="icon-button">
           {refreshButton && (
             <IconButton style={iconButtonStyle} onClick={(e) => location.reload()}>

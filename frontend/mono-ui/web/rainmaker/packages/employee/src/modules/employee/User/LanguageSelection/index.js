@@ -5,6 +5,7 @@ import { LanguageSelectionForm } from "modules/common";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
+// import { banner1, banner2, banner3, banner4 } from "egov-ui-kit/common/common/Header/components/AppBar/bannerImages";
 
 class LanguageSelection extends Component {
   state = {
@@ -24,7 +25,7 @@ class LanguageSelection extends Component {
     const { value } = this.state;
     const { onLanguageSelect, onClick } = this;
     const { bannerUrl, logoUrl, languages } = this.props;
-
+    // let allImages = [banner3, banner4, banner1, banner2];
     return (
       <Banner className="language-selection" bannerUrl={bannerUrl} logoUrl={logoUrl}>
         <LanguageSelectionForm logoUrl={logoUrl} items={languages} value={value} onLanguageSelect={onLanguageSelect} onClick={onClick} />

@@ -1,6 +1,6 @@
 import React from "react";
 import { ButtonGroup, Card, Image } from "components";
-import { Button} from "egov-ui-framework/ui-atoms";
+import { Button } from "egov-ui-framework/ui-atoms";
 import Label from "egov-ui-kit/utils/translationNode";
 import logo from "egov-ui-kit/assets/images/logo_black.png";
 import "./index.css";
@@ -32,24 +32,25 @@ const defaultLabelStyle = {
   padding: 0,
 };
 
-const LanguageSelectionForm = ({ items, onLanguageSelect, value, onClick ,logoUrl}) => {
+const LanguageSelectionForm = ({ items, onLanguageSelect, value, onClick, logoUrl }) => {
   return (
     <Card
       className="col-sm-offset-4 col-sm-4 user-screens-card language-selection-card"
       textChildren={
         <div>
-           <div className="rainmaker-displayInline" style={{ justifyContent: "center" ,alignItems:"center" ,marginBottom: "24px"}}>
-            <div style={{  }}>
-              <Image className="mseva-logo" source={logoUrl?logoUrl:logo} />
-            </div >
-          <div style={{marginLeft:"7px"}}>
-          <Label bold={true}  fontSize= "23px" label="|" />
+          <div  style={{ marginBottom: "20px", borderBottom: "1px solid #192771", display: "flex", justifyContent: "center", marginTop: "8px" }}>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" style={{ width: "auto", height: "74px", padding: "0px 11px" }} />
+            <h3 style={{ fontSize: "20px", marginLeft: "12px", marginTop: "0px" }}>
+              <strong style={{ color: "#0C3A60", paddingRight: "15px", lineHeight: "1.2" }}>
+                Housing and Urban <br /> Development Deparment
+              </strong>
+              <br />
+              <p style={{ color: "#000000", fontSize: "14px", marginTop: "5px" }}>
+                Government of Jammu & Kashmir
+              </p>
+            </h3>
           </div>
-           <div style={{marginLeft:"7px" }}>
-              <Label bold={true} color="black" fontSize= "24px" label="STATE_LABEL" />
-           </div>
-          </div>
-        <form>
+          <form>
             <div className="rainmaker-displayInline" style={{ justifyContent: "center" }}>
               {items &&
                 items.map((item, index) => {
@@ -74,19 +75,19 @@ const LanguageSelectionForm = ({ items, onLanguageSelect, value, onClick ,logoUr
               />
             </div>
             <div className="button-container">
-            <Button
-            id="continue-action"
-            className="lang-continue-button"
-            style={{
-              height: "48px",     
-              width:"100%"        
-            }}
-            variant={"contained"}
-            color={"primary"}
-            onClick={onLanguageSelect}
-          >
-            <Label buttonLabel={true}   labelStyle={{fontWeight:500 }}  label="CORE_COMMON_CONTINUE" />
-          </Button>
+              <Button
+                id="continue-action"
+                className="lang-continue-button"
+                style={{
+                  height: "48px",
+                  width: "100%"
+                }}
+                variant={"contained"}
+                color={"primary"}
+                onClick={onLanguageSelect}
+              >
+                <Label buttonLabel={true} labelStyle={{ fontWeight: 500 }} label="CORE_COMMON_CONTINUE" />
+              </Button>
               {/* <Button
                 id="continue-action"
                 className="lang-continue-button"
