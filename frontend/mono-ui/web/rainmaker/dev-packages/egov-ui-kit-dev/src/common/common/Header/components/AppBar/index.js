@@ -72,7 +72,7 @@ const EgovAppBar = ({
               <h3 className="header-h3" style={{ transform: "translate(12px, -12px)" }}>
                 <strong style={{fontSize: "20px", color: "#0C3A60"}}>Housing and Urban Development Department</strong>
                 {/* <img src={homePageLogo} style={{ height: "30px", marginTop: "2px", marginBottom: "5px" }} /> */}
-                <br /><p style={{ fontSize: "14px", marginTop: "4px" }}>Government of Jammu & Kashmir</p>
+                <br /><p style={{ fontSize: "14px", marginTop: "4px", color:"#000000" }}>Government of Jammu & Kashmir</p>
               </h3>
               {/* <Label
                 containerStyle={{ marginLeft: "10px" }}

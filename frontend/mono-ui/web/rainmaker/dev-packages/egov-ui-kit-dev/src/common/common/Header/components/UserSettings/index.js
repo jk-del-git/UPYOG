@@ -1,6 +1,6 @@
 import { DropDown, Icon, Image, List } from "components";
 import { getTransformedLocale, getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
-import emptyFace from "egov-ui-kit/assets/images/download.png";
+import emptyFace from "egov-ui-kit/assets/images/s_letter.webp";
 import { getLocale, getTenantId, setTenantId, getUserInfo, setStoredModulesList, setModule } from "egov-ui-kit/utils/localStorageUtils";
 import React, { Component } from "react";
 import LogoutDialog from "../LogoutDialog";
@@ -32,7 +32,7 @@ class UserSettings extends Component {
       marginBottom: "24px",
     },
     label: {
-      color: "#5F5C57",
+      color: "#000000",
       fontSize: "12px",
       paddingRight: "35px",
     },
@@ -55,7 +55,7 @@ class UserSettings extends Component {
       background: "#ffffff",
       height: "65px",
       marginRight: "30px",
-      width: "102px",
+      width: "unset",
       marginBottom: "24px",
     },
   };
