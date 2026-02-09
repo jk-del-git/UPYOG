@@ -81,6 +81,9 @@ const EgovAppBar = ({
               /> */}
               {/* <Label containerStyle={{ marginLeft: "4px" }} className="screenHeaderLabelStyle appbar-municipal-label" label={defaultTitle} /> */}
             </div>}
+            <div className="finance-title">
+            <h5>Financial Accounting System</h5>
+            </div>
           </div>
         }
         titleStyle={styles.titleStyle}

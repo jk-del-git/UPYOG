@@ -126,7 +126,7 @@ class CityPickerFieldNew extends React.Component {
       <div style={containerStyle}>
         <input
           type="text"
-          placeholder="Select City"
+          placeholder="Select Organization"
           value={searchTerm}
           onChange={this.handleSearchChange}
           onFocus={this.handleFocus}
