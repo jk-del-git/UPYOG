@@ -64,4 +64,23 @@
   .header-h3 {
     display: none;
   }
+  .finance-title {
+    display: none;
+  }
 }
+
+.finance-title
+{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.75rem;
+  width: -webkit-fill-available;
+}
+
+.finance-title h5
+{
+      color: black;
+    font-size: 1.7rem !important;
+}
+
