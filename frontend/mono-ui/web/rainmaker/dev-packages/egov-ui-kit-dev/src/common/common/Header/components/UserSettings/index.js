@@ -35,6 +35,7 @@ class UserSettings extends Component {
       color: "#000000",
       fontSize: "12px",
       paddingRight: "35px",
+      width: "fit-content",
     },
     arrowIconStyle: {
       marginTop: "7px",
@@ -170,7 +171,8 @@ class UserSettings extends Component {
     // }
     this.setState({ displayAccInfo: false });
   };
-
+   
+  
   render() {
     const { languageSelected, displayAccInfo, tenantSelected, open, profilePic } = this.state;
     const { style } = this;
@@ -218,6 +220,7 @@ class UserSettings extends Component {
             dropDownData={languages}
             value={languageSelected}
             underlineStyle={{ borderBottom: "none" }}
+            iconStyle={{textAlign: "left", paddingLeft: "0px",  fill: "#484848"}}
           />
         )}
 
