@@ -28,3 +28,11 @@
 .menuStyle .label-container .label-text {
   color: rgba(0, 0, 0, 0.87) !important;
 }
+
+  /* Removing margin-right from both tenant's and localisation dropdown in large screen
+  so that Finance Accousting System have some space */
+  .userSettingsContainer .dropdown{
+    @media (min-width: 700px) {
+    margin-right: 0px !important;
+  }
+}
