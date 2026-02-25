@@ -115,9 +115,9 @@ class App extends Component {
               window.open('https://www.digit.org/', '_blank').focus();
             }}></img>
             <span style={{ margin: "0 10px" }}>|</span> */}
-            <span style={{ cursor: "pointer", fontSize: "16px", fontWeight: "400"}} onClick={() => { window.open('https://niua.in/', '_blank').focus();}} >Housing and Urban Development Deparment</span>
+            <span style={{ cursor: "pointer", fontSize: "16px", fontWeight: "400"}} onClick={() => { window.open('https://niua.in/', '_blank').focus();}} > Housing and Urban Development Deparment</span>
             <span style={{ margin: "0 10px" }}>|</span>
-            <span style={{ cursor: "pointer", fontSize: "16px", fontWeight: "400"}} onClick={() => { window.open(pdfUrl, '_blank').focus();}}>Copyright © 2026 Government of Jammu & Kashmir</span>
+            <span style={{ cursor: "pointer", fontSize: "16px", fontWeight: "400"}} onClick={() => { window.open(pdfUrl, '_blank').focus();}}> Copyright © 2026 Government of Jammu & Kashmir</span>
         </div>}
 
         {!loginScreens && !dashboardScreen && !isFixedFooter&&<div style={{ width: '100%', display: 'flex', flexFlow: 'column', position:"fixed", bottom: "0" }}>
@@ -127,10 +127,10 @@ class App extends Component {
             }}></img>
             <span style={{ margin: "0 10px" }}>|</span> */}
             <div className="footer-new-style">
-            <span style={{ cursor: "pointer", fontSize: "16px", fontWeight: "400"}} onClick={() => { window.open('https://niua.in/', '_blank').focus();}} >Housing and Urban Development Deparment</span>
-            <span style={{ margin: "0 10px" }}>|</span>
+            <span style={{ color:"#FFFFFF", cursor: "pointer", fontSize: "16px", fontWeight: "400"}} onClick={() => { window.open('https://niua.in/', '_blank').focus();}} >Housing and Urban Development Deparment</span>
+            <span style={{ color:"#FFFFFF", margin: "0 10px" }}>|</span>
             </div>
-            <span style={{ cursor: "pointer", fontSize: "16px", fontWeight: "400"}} onClick={() => { window.open(pdfUrl, '_blank').focus();}}>Copyright © 2026 Government of Jammu & Kashmir</span>
+            <span style={{ color:"#FFFFFF",cursor: "pointer", fontSize: "16px", fontWeight: "400"}} onClick={() => { window.open(pdfUrl, '_blank').focus();}}>Copyright © 2026 Government of Jammu & Kashmir</span>
           </div>
         </div>}
         
