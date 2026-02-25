@@ -29,11 +29,11 @@ class EGFFinance extends Component {
     finEnv = this.globalConfigExists() ? window.globalConfigs.getConfig("FIN_ENV") : process.env.REACT_APP_FIN_ENV;
     // Preparing finance subdomain url using the above environment name and the domain url
     subdomainurl = !!(finEnv) ? "-" + finEnv + "." + domainurl : "." + domainurl;
-    erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + subdomainurl + 
+    erp_url = loc.protocol + "//" + "jmc" + subdomainurl + 
     menuUrl+ "?ulb=" + tenantId.split(".")[1];
 
     // Passing ulb as a query parameter to erp url
-    // erp_url= 'https://'+getTenantId().split(".")[1]+"-jk.mycitydemo.in"+menuUrl
+    // erp_url= 'https://'+"jmc"+"-jk.mycitydemo.in"+menuUrl
     // +"?ulb="+tenantId.split(".")[1];
 
   
