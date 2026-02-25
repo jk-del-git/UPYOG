@@ -29,11 +29,12 @@ class EGFFinance extends Component {
     finEnv = this.globalConfigExists() ? window.globalConfigs.getConfig("FIN_ENV") : process.env.REACT_APP_FIN_ENV;
     // Preparing finance subdomain url using the above environment name and the domain url
     subdomainurl = !!(finEnv) ? "-" + finEnv + "." + domainurl : "." + domainurl;
-    // erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + subdomainurl + menuUrl;
+    erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + subdomainurl + 
+    menuUrl+ "?ulb=" + tenantId.split(".")[1];
 
     // Passing ulb as a query parameter to erp url
-    erp_url= 'https://'+getTenantId().split(".")[1]+"-jk.mycitydemo.in"+menuUrl
-    +"?ulb="+tenantId.split(".")[1];
+    // erp_url= 'https://'+getTenantId().split(".")[1]+"-jk.mycitydemo.in"+menuUrl
+    // +"?ulb="+tenantId.split(".")[1];
 
   
     return (
@@ -43,6 +44,7 @@ class EGFFinance extends Component {
           <input readOnly hidden="true" name="auth_token" value={auth_token} />
           <input readOnly hidden="true" name="tenantId" value={tenantId} />
           <input readOnly hidden="true" name="locale" value={locale} />
+          <input readOnly hidden="true" name="ulb" value={tenantId.split(".")[1]} />
 	        <input readOnly hidden="true" name="formPage" value="true" />
         </form>
       </div>
