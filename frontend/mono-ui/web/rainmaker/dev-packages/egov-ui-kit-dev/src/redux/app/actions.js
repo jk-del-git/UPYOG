@@ -41,70 +41,97 @@ export const toggleSnackbarAndSetText = (open, message = {}, variant) => {
   };
 };
 
-export const fetchLocalizationLabel = (locale = 'en_IN', module, tenantId, isFromModule) => {
+export const fetchLocalizationLabel = (locale, module, tenantId, isFromModule) => {
   return async (dispatch) => {
     let storedModuleList = [];
     if (getStoredModulesList() !== null) {
       storedModuleList = JSON.parse(getStoredModulesList());
+    } else {
+      storedModuleList = 'rainmaker-common'
     }
+    var newList = ['rainmaker-common'];
     const moduleName = getModule();
+
     let localeModule;
-    if (moduleName === 'rainmaker-common') {
+
+    if (moduleName === 'rainmaker-common' || !moduleName) {
       localeModule = 'rainmaker-common';
-    }
-    else if (storedModuleList.includes('rainmaker-common')) {
+    } else if (storedModuleList.includes('rainmaker-common')) {
       localeModule = moduleName;
-    }
-    else {
-      localeModule = moduleName ? `rainmaker-common,${moduleName}` : `rainmaker-common`;
+    } else {
+      localeModule = `rainmaker-common,${moduleName}`;
     }
     try {
       let resultArray = [], tenantModule = "", isCommonScreen;
       if (module != null) {
         tenantModule = `rainmaker-${module}`;
       }
-
-      if ((window.location.href.includes("/language-selection") || window.location.href.includes("/user/register") || window.location.href.includes("/user/login") || window.location.href.includes("/withoutAuth"))) {
-        if ((moduleName && storedModuleList.includes(moduleName) === false) || moduleName == null) isCommonScreen = true;
+      // Determine if it’s a common screen based on the current URL
+      if ((window.location.href.includes("/language-selection") || window.location.href.includes("/user/login") || window.location.href.includes("/user/register") ||
+        window.location.href.includes("/goSwift") || window.location.href.includes("/withoutAuth/egov-common/pay") || window.location.href.includes("/withoutAuth/egov-usm/search") ||
+        window.location.href.endsWith("citizen/") || window.location.href.endsWith("employee/") || 
+        window.location.href.endsWith("citizen-demo/") || window.location.href.endsWith("employee-demo/"))) {
+          isCommonScreen = true;
+        if ((moduleName && !storedModuleList.includes(moduleName)) || moduleName == null) {
+          isCommonScreen = true;
+        }
       }
 
-      if ((window.location.href.includes("/inbox"))) {
-        if (moduleName && storedModuleList.includes(`rainmaker-common`)) isFromModule = false;
+      // Handle the inbox path specifically
+      if (window.location.href.includes("/inbox")) {
+        if (moduleName && storedModuleList.includes(`rainmaker-common`)) {
+          isFromModule = false;
+        }
       }
 
-      if ((moduleName && storedModuleList.includes(moduleName) === false) || isFromModule || isCommonScreen) {
+      // Fetch localization labels if necessary
+      if ((moduleName) || isFromModule || isCommonScreen) {
         const payload1 = await httpRequest(LOCALATION.GET.URL, LOCALATION.GET.ACTION, [
           { key: "module", value: localeModule },
           { key: "locale", value: locale },
           { key: "tenantId", value: commonConfig.tenantId },
         ]);
         resultArray = [...payload1.messages];
-      }
-
-      if ((module && storedModuleList.includes(tenantModule) === false)) {
-        storedModuleList.push(tenantModule);
-        var newList = JSON.stringify(storedModuleList);
-        const payload2 = module
-          ? await httpRequest(LOCALATION.GET.URL, LOCALATION.GET.ACTION, [
-            { key: "module", value: `rainmaker-${module}` },
-            { key: "locale", value: locale },
-            { key: "tenantId", value: tenantId ? tenantId : commonConfig.tenantId },
-          ])
-          : [];
-        if (payload2 && payload2.messages) {
-          setStoredModulesList(newList);
-          resultArray = [...resultArray, ...payload2.messages];
+        if (!newList.includes(localeModule)) {
+          newList.push(localeModule);
         }
+        setStoredModulesList(JSON.stringify(newList));
       }
 
-      let prevLocalisationLabels = [];
-      if (getLocalizationLabels() != null && !isCommonScreen && storedModuleList.length > 0) {
-        prevLocalisationLabels = JSON.parse(getLocalizationLabels());
+      let prevLocalizationLabels = JSON.parse(getLocalizationLabels()) || [];
+      const uniqueLabelsMap = {};
+
+      // Add previous labels using "code" as the key
+      for (const label of prevLocalizationLabels) {
+        uniqueLabelsMap[label.code] = label;
       }
-      resultArray = [...prevLocalisationLabels, ...resultArray];
-      localStorage.removeItem(`localization_${getLocale()}`);
-      dispatch(setLocalizationLabels(locale, resultArray));
+
+      // Add new labels from resultArray, replacing any existing ones with the same code
+      for (const label of resultArray) {
+        uniqueLabelsMap[label.code] = label;
+      }
+
+      // Split any comma-separated values in newList into individual items
+      const normalizedList = newList.flatMap(item => item.split(','));
+
+      // Filter the merged labels to keep only those whose modules are in normalizedList
+      const filteredResultArray = Object.values(uniqueLabelsMap).filter(
+        (label) => normalizedList.includes(label.module)
+      );
+
+      console.log('Filtered Result Array:', filteredResultArray);
+
+      if (filteredResultArray.length > 0) {
+        // Clear previous localization in local storage
+        localStorage.removeItem(`localization_${getLocale()}`);
+        // Dispatch the localization labels and the module name
+        dispatch(setLocalizationLabels(locale, filteredResultArray, moduleName));
+      } else {
+        console.error("Processed result array is empty. Skipping dispatch.");
+      }
+
     } catch (error) {
+      console.error("Error fetching localization labels:", error);
     }
   };
 };
