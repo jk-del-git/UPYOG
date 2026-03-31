@@ -15,9 +15,11 @@ const inputStyleBase = {
   width: "100%",
   height: "44px",
   padding: "12px 15px",
+  // padding:"8px 15px",
   border: "1px solid #b3b3b3",
-  borderRadius: "10px",
-  fontSize: "16px",
+  // borderRadius: "10px",
+  borderRadius: "5px",
+  fontSize: "14px",
   outline: "none",
   boxSizing: "border-box",
   transition: "all 0.2s ease",
@@ -43,13 +45,14 @@ const suffixIconStyle = {
 
 class UsernameFieldWithIcon extends React.Component {
   state = { isFocused: false };
-
+ 
   handleFocus = () => this.setState({ isFocused: true });
   handleBlur = () => this.setState({ isFocused: false });
 
   render() {
     const { className, textFieldStyle = {}, placeholder, suffixIcon, ...textFieldProps } = this.props;
     const { isFocused } = this.state;
+    
     return (
       <div style={containerStyle}>
         <TextField

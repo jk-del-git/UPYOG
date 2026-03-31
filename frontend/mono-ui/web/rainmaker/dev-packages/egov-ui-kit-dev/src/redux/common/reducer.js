@@ -10,6 +10,7 @@ const intialState = {
 };
 
 const commonReducer = (state = intialState, action) => {
+  
   switch (action.type) {
     case commonTypes.SET_DROPDOWN_DATA:
       return {
@@ -100,6 +101,7 @@ const commonReducer = (state = intialState, action) => {
       const citiesByModule = transformById(action.payload.MdmsRes["tenant"].citymodule, "code");
       const tenantInfo = action.payload.MdmsRes["tenant"]["tenantInfo"];
       const cities = action.payload.MdmsRes["tenant"]["tenants"].map((item) => {
+        
         return {
           key: item.code,
           text: item.city.name,
@@ -119,6 +121,7 @@ const commonReducer = (state = intialState, action) => {
         },
         stateInfoById,
         cities: [...cities],
+        mappedArray:[],
         citiesByModule: citiesByModule,
         tenantInfo: tenantInfo,
       };

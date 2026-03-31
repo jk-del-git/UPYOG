@@ -1,43 +1,236 @@
-import React from "react";
+import React, {  useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Card, TextField, Image, UsernameFieldWithIcon } from "components";
 import { Button } from "egov-ui-framework/ui-atoms";
-import { CityPicker, CityPickerNew } from "modules/common";
+import {  CityPickerNew} from "modules/common";
 import Label from "egov-ui-kit/utils/translationNode";
 import logo from "egov-ui-kit/assets/images/logo_black.png";
 import "./index.css";
+import { connect } from "react-redux";
 
-const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl }) => {
+const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl,cities }) => {
+  const [generatedCaptcha, setGeneratedCaptcha] = useState("");
+  const [errorCaptcha, setErrorCaptcha] = useState(false);
   const fields = form.fields || {};
+  const city = fields.city || {};
+  const citySelected = city.value || "";
   const submit = form.submit;
+    const generate = () => {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const length = 6;
+  let captcha = "";//
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * chars.length);
+    captcha += chars[randomIndex];
+  }
+
+  localStorage.setItem("captcha", captcha);
+  setGeneratedCaptcha(captcha);
+};
+
+function groupByParent(data) {
+  if (!Array.isArray(data) || data.length === 0) {
+    return {};
+  }
+
+  const result = {};
+
+  for (const item of data) {
+    if (!item || !item.parent) continue;
+
+    if (!result[item.parent]) {
+      result[item.parent] = [];
+    }
+
+    // Push a shallow copy to avoid mutating original objects
+    result[item.parent].push({ ...item });
+  }
+
+  // Sort each parent's array alphabetically by `name`
+  for (const parentKey in result) {
+    result[parentKey].sort((a, b) => {
+      const nameA = typeof a.name === "string" ? a.name : "";
+      const nameB = typeof b.name === "string" ? b.name : "";
+
+      return nameA.localeCompare(nameB, undefined, {
+        sensitivity: "base", // case-insensitive
+        numeric: true        // "Item 2" < "Item 10"
+      });
+    });
+  }
+
+  return result;
+}
+
+
+  useEffect(() => {
+    generate();
+
+  }, []);
+
+
+ 
   return (
-    <Card
-      className="user-screens-card col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-4 col-sm-4"
-      style={{padding: "25px 45px"}}
-      textChildren={
-        <div>
-          <div  style={{ marginBottom: "20px", borderBottom: "1px solid #192771", display: "flex", justifyContent: "center", marginTop: "8px" }}>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" style={{ width: "auto", height: "74px", padding: "0px 11px" }} />
-            <h3 style={{ fontSize: "20px", marginLeft: "12px", marginTop: "0px" }}>
-              <strong style={{ color: "#0C3A60", paddingRight: "15px", lineHeight: "1.2" }}>
+    <React.Fragment>
+      <div style={{display:"flex", justifyContent:"center", marginTop:"0%", marginBottom:"2%"}}>
+    <div style={{
+      // borderRight: "1px solid black",
+      display: "flex",
+      alignItems: "anchorCenter",}}
+    >
+          <div
+            style={{
+        marginBottom: "20px", 
+        display: "flex",
+        justifyContent: "center",
+        marginTop: "8px",
+        alignItems: "center",
+      }}
+            >
+              {/* <img src="https://e7.pngegg.com/pngimages/121/89/png-clipart-lion-capital-of-ashoka-sarnath-states-and-territories-of-india-state-emblem-of-india-national-symbols-of-india-indian-miscellaneous-white-thumbnail.png" style={{ width: "auto", height: "74px", padding: "0px 11px" }} /> */}
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" style={{ width: "auto", height: "103px", padding: "0px 11px" }} />
+            <h3 style={{ fontSize: "27px", marginLeft: "12px", marginTop: "17px", fontWeight:"500" }}>
+              <strong style={{ 
+                color: "#0C3A60",
+                // color:"white",
+                 paddingRight: "15px", lineHeight: "1.2" }}>
                 Housing and Urban <br /> Development Deparment
               </strong>
               <br />
-              <p style={{ color: "#000000", fontSize: "14px", marginTop: "5px" }}>
+              <p style={{ 
+                // color:"white",
+                color: "#000000",
+                fontWeight: "500",
+                fontSize: "14px", marginTop: "5px" }}>
                 Government of Jammu & Kashmir
               </p>
             </h3>
           </div>
-          <Label className="text-center" bold={true} dark={true} fontSize={16} label="CORE_COMMON_LOGIN" />
+        </div>
+    <Card
+      className="user-screens-card col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-4 col-sm-4"
+      style={{
+    gap: "8%",
+    display: "flex",
+    // marginLeft: "0px",
+    marginLeft:"12%",
+    width: "40%",
+    // height:"80vh",
+    padding: "25px 28px",
+    borderRadius: "5px"
+    
+  }}
+      textChildren={<React.Fragment>
+        <div style={{width:"100%"}}>
+          <Label className="text-center" color={"rgb(12, 58, 96)"} bolder={true} fontSize={22} label="CORE_COMMON_LOGIN" />
           <UsernameFieldWithIcon onChange={(e, value) => handleFieldChange("username", value)} {...fields.username} />
           <UsernameFieldWithIcon onChange={(e, value) => handleFieldChange("password", value)} {...fields.password} />
-          <CityPickerNew onChange={handleFieldChange} fieldKey="city" field={fields.city} />
+          <CityPickerNew onChange={handleFieldChange} fieldKey="city" field={fields.city} flag={false} />
+          {/* Adding one more dropdown */}
+          {
+            Array.isArray(groupByParent(cities)[citySelected]) && groupByParent(cities)[citySelected].length > 0 && 
+             <CityPickerNew mappedOptions={groupByParent(cities)[citySelected]} onChange={handleFieldChange} flag={true} fieldKey="mappedUlb" field={fields.mappedUlb} />
+          }
+         
+                    <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      marginTop:"4%",
+                      marginBottom:"4%"
+                    }}
+>
+                    <div style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      width:"100%",
+                      backgroundColor:"#f0f0f0",
+                      backgroundSize:"cover",
+                      backgroundPosition:"center",
+                      backgroundRepeat:"no-repeat",
+                      backgroundImage: `url("https://jigyasa-csir.in/v2/auth/assets/captcha-bg.png")`,
+                    }}>
+                     <span
+                  className="captcha"
+                  style={{
+                    
+                    fontSize: "29px",
+                    fontWeight: "400",
+                  }}
+>
+                  {generatedCaptcha}
+</span></div>
+</div>
+
+<div style={{display:"grid", gridTemplateColumns:"9fr 1fr",  marginTop:"4%",
+                      marginBottom:"4%"}}>
+<div>
+ <TextField
+ required={false}
+  {...fields.captcha}
+ floatingLabelText={[null,null]}
+ hintStyle={{
+  fontSize: "14px",
+  fontWeight:"400",
+  color:"rgb(38,38,38,0.62)",
+ }}
+ inputStyle={{marginTop:"4px",}}
+ style={{
+  width: "100%",
+  height: "44px",
+  padding: "0px 15px",
+  marginTop:"4px",
+  border: "1px solid #b3b3b3",
+  // borderRadius: "10px",
+  borderRadius: "5px",
+  fontSize: "14px !important",
+  outline: "none",
+  boxSizing: "border-box",
+  transition: "all 0.2s ease",
+  backgroundColor: "#fff",
+  color: "#1B1B1B",
+  letterSpacing: "0.7px",}} 
+  underlineShow={false}
+ onChange={(e, value) => {
+   if(value !== generatedCaptcha) {
+    setErrorCaptcha(true);
+   }else{
+    setErrorCaptcha(false)
+   }
+   handleFieldChange("captcha", value)
+ }
+ 
+}
+                  />
+</div>
+                <div className="refresh-loop-div" style={{width:"100%", display:"flex", justifyContent:"end", alignItems:"center"}}>
+<span
+                    className="reload"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      generate();
+                    }}
+>
+<i class="material-icons">loop</i>
+</span>
+</div>
+</div>
+<div className="login__field field_disabled">
+<Label fieldKey="captcha" field={fields.captcha} handleFieldChange={handleFieldChange} />
+              {errorCaptcha && <span style={{ fontSize: "12px", color: "red" }}>Invalid Captcha</span> }
+</div>
           <Button
             {...submit}
+             onClick={(e) => {
+                if (generatedCaptcha !== fields.captcha.value) {
+                  e.preventDefault();
+                }
+              }}
             style={{
               height: "48px",
               width: "100%",
-              marginTop: "18px"
             }}
             variant={"contained"}
             color={"primary"}
@@ -55,11 +248,16 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl }) =>
               />
             </div>
           </Link>
-          {/* <Button {...submit} fullWidth={true} primary={true} /> */}
+           {/* <Button {...submit} fullWidth={true} primary={true} /> */}
         </div>
-      }
+      </React.Fragment>}
     />
-  );
+      </div>
+  </React.Fragment>);
 };
-
-export default LoginForm;
+  const mapStateToProps = (state) => ({
+  cities: state.common.cities,
+  selectedCity: state.common.selectedCity
+});
+// export default LoginForm;
+ export default connect(mapStateToProps)(LoginForm)

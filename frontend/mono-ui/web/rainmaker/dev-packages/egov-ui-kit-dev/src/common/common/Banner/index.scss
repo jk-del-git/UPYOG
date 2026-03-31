@@ -14,7 +14,8 @@
   left: 20px;
   top: 20px;
   z-index: 1;
-  color: #fff !important;
+  // color: #fff !important;
+    color:rgb(12, 58, 96) !important;
   position: absolute;
 }
 
@@ -158,4 +159,12 @@
 
 .banner-image.banner-fade-animate {
   opacity: 0.85;
+}
+
+.banner-image::before{
+  content: "" !important;
+  position: absolute !important;
+  inset:0 !important;
+  background: rgb(255, 255, 255,0.8) !important;
+  pointer-events: none !important;
 }

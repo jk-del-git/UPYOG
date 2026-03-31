@@ -127,10 +127,10 @@ class App extends Component {
             }}></img>
             <span style={{ margin: "0 10px" }}>|</span> */}
             <div className="footer-new-style">
-            <span style={{ color:"#FFFFFF", cursor: "pointer", fontSize: "16px", fontWeight: "400"}} onClick={() => { window.open('https://niua.in/', '_blank').focus();}} >Housing and Urban Development Department</span>
-            <span style={{ color:"#FFFFFF", margin: "0 10px" }}>|</span>
+            <span style={{ color:"#808080", cursor: "pointer", fontSize: "16px", fontWeight: "400"}} onClick={() => { window.open('https://niua.in/', '_blank').focus();}} >Housing and Urban Development Department</span>
+            <span style={{ color:"#808080", margin: "0 10px" }}>|</span>
             </div>
-            <span style={{ color:"#FFFFFF",cursor: "pointer", fontSize: "16px", fontWeight: "400"}} onClick={() => { window.open(pdfUrl, '_blank').focus();}}>Copyright © 2026 Government of Jammu & Kashmir</span>
+            <span style={{ color:"#808080",cursor: "pointer", fontSize: "16px", fontWeight: "400"}} onClick={() => { window.open(pdfUrl, '_blank').focus();}}>Copyright © 2026 Government of Jammu & Kashmir</span>
           </div>
         </div>}
         
