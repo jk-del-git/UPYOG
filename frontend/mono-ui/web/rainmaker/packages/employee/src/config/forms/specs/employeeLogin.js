@@ -30,6 +30,21 @@ const formConfig = {
       floatingLabelText: "CORE_COMMON_CITY",
       hintText: "CORE_COMMON_CITY_PLACEHOLDER",
     },
+    mappedUlb: {
+      id: "person-mappedUlb",
+      jsonPath: "employee.mappedUlb",
+      required: false,
+      floatingLabelText: "CORE_COMMON_CITY",
+      hintText: "CORE_COMMON_CITY_PLACEHOLDER",
+    },
+    captcha: {
+      id: "employee-captcha",
+      jsonPath: "employee.captcha",
+      required: false,  
+      value:"",
+      floatingLabelText: "",
+      hintText: "Enter Captcha",
+    },
   },
   submit: {
     label: "CORE_COMMON_LOGIN",

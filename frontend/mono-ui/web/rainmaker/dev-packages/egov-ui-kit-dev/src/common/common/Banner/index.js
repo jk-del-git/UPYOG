@@ -34,7 +34,7 @@ class Banner extends React.Component {
           }, 300); // animation duration
         });
       }, SLIDE_DURATION);
-      
+
     }
   }
 
@@ -72,10 +72,12 @@ class Banner extends React.Component {
             style={
               activeBannerUrl && {
                 // backgroundImage: `url(${activeBannerUrl})`,
+                backgroundImage: `url("https://s7ap1.scene7.com/is/image/incredibleindia/dal-lake-srinagar-jammu-&-kashmir-2-attr-hero?qlt=82&ts=1726816668703")`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
-                background: "linear-gradient(to left, #05ae70, #155cd1 105%)"
+                position: "relative",
+                // background:"linear-gradient(to left, #155cd1 105%,#05ae70 )"
               }
             }
           >

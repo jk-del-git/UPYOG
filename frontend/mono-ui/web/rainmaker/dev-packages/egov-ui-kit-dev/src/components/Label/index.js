@@ -62,6 +62,7 @@ const Label = ({
   dark = false,
   upperCase = false,
   bold = false,
+  bolder=false,
   containerStyle = {},
   labelStyle = {},
   labelClassName = "",
@@ -93,6 +94,9 @@ const Label = ({
   }
   if (upperCase) {
     additionalStyles.textTransform = "uppercase";
+  }
+  if(bolder){
+    additionalStyles.fontWeight = 700;
   }
 
   if (Object.keys(labelStyle).length || Object.keys(additionalStyles).length) {

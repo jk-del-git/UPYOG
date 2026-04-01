@@ -35,6 +35,7 @@ const defaultLabelStyle = {
 const LanguageSelectionForm = ({ items, onLanguageSelect, value, onClick, logoUrl }) => {
   return (
     <Card
+      style={{borderRadius:"5px"}}
       className="col-sm-offset-4 col-sm-4 user-screens-card language-selection-card"
       textChildren={
         <div>

@@ -19,8 +19,9 @@ const inputBoxStyle = {
   height: "44px",
   padding: "12px 40px 12px 15px",
   border: "1px solid #b3b3b3",
-  borderRadius: "10px",
-  fontSize: "16px",
+  // borderRadius: "10px",
+  borderRadius: "5px",
+  fontSize: "14px",
   outline: "none",
   boxSizing: "border-box",
   transition: "all 0.2s ease",
@@ -73,6 +74,7 @@ class CityPickerFieldNew extends React.Component {
       isFocused: false,
       open: false,
       searchTerm: "",
+      selectedUlb:""
     };
   }
 
@@ -91,8 +93,38 @@ class CityPickerFieldNew extends React.Component {
 
   handleCityClick = (cityCode, cityName) => {
     const { fieldKey, onChange } = this.props;
-    onChange(fieldKey, cityCode);
-    this.setState({ searchTerm: cityName, open: false });
+     onChange(fieldKey, cityCode);
+    console.log("on click props-->",this.props);
+    
+    if(this.props.flag==true){
+      this.setState({searchTerm: cityName, open: false,selectedUlb:cityName})
+      //  onChange(fieldKey, cityCode);
+    }else{
+       this.setState({ searchTerm: cityName, open: false });
+    }
+   
+  };
+
+
+
+   getCustomFilteredCities = () => {
+    const { cities, localizationLabels } = this.props;
+
+    const filteredCities = cities.filter(city => city.isParent);
+    
+    const { searchTerm } = this.state;
+    if (!searchTerm) {
+      return filteredCities;
+      // return cities
+    };
+    return filteredCities.filter((city) => {
+      const cityName = getTranslatedLabel(
+        `TENANT_TENANTS_${city.key.toUpperCase().replace(/[.:-\s\/]/g, "_")}`,
+        localizationLabels
+      );
+     
+      return filteredCities;
+    });
   };
 
   getFilteredCities = () => {
@@ -109,8 +141,10 @@ class CityPickerFieldNew extends React.Component {
     });
   };
 
+
+
   componentDidMount() {
-    const { field, localizationLabels } = this.props;
+    const { field,fieldKey, localizationLabels, mappedOptions } = this.props;
     if (field && field.value) {
       const selectedCity = getCityNameByCode(field.value, localizationLabels);
       this.setState({ searchTerm: selectedCity || "" });
@@ -120,14 +154,15 @@ class CityPickerFieldNew extends React.Component {
   render() {
     const { isFocused, open, searchTerm } = this.state;
     const { localizationLabels } = this.props;
-    const filteredCities = this.getFilteredCities();
-
+    // const filteredCities = this.getFilteredCities();
+    const filteredCities = this.getCustomFilteredCities();    
+    
     return (
       <div style={containerStyle}>
         <input
           type="text"
-          placeholder="Select Organization"
-          value={searchTerm}
+          placeholder={this.props.fieldKey=="mappedUlb"?"Select ULB":"Select Organization"}
+          value={this.props.flag ? this.state.selectedUlb : searchTerm}
           onChange={this.handleSearchChange}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
@@ -138,7 +173,7 @@ class CityPickerFieldNew extends React.Component {
         />
         <ArrowDropDownIcon style={suffixIconStyle} />
 
-        {open && (
+        {open && this.props.flag==false   && (
           <div style={dropdownStyle}>
             {filteredCities.length > 0 ? (
               filteredCities.map((city, i) => {
@@ -153,6 +188,32 @@ class CityPickerFieldNew extends React.Component {
                     onMouseDown={() => this.handleCityClick(city.key, cityName)}
                   >
                     {cityName}
+                  </div>
+                );
+              })
+            ) : (
+              <div style={{ padding: "12px 15px", color: "#999" }}>No City Found</div>
+            )}
+          </div>
+        )}
+
+{/* Dependent dropdown */}
+        {open && this.props.flag==true  && (
+          <div style={dropdownStyle}>
+            {Array.isArray(this.props.mappedOptions) && (this.props.mappedOptions.length > 0) ? (
+              this.props.mappedOptions.map((city, i) => {
+                const cityName = getTranslatedLabel(
+                  `TENANT_TENANTS_${city.key.toUpperCase().replace(/[.:-\s\/]/g, "_")}`,
+                  localizationLabels
+                );
+                return (
+                  <div
+                    key={i}
+                    style={listItemStyle}
+                    onMouseDown={() => this.handleCityClick(city.key, city.name)}
+                  >
+                    {/* {cityName} */}
+                    {city.name}
                   </div>
                 );
               })
@@ -178,7 +239,8 @@ CityPickerFieldNew.propTypes = {
 const mapStateToProps = (state) => {
   const cities = get(state, "common.cities", []);
   const localizationLabels = get(state, "app.localizationLabels", {});
-  return { cities, localizationLabels };
+  return { cities, 
+    localizationLabels };
 };
 
 export default connect(mapStateToProps)(CityPickerFieldNew);

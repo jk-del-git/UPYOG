@@ -22,3 +22,23 @@
     display: block;
   }
 }
+
+
+
+.refresh-loop-div {
+  // @media (min-width:700px) {
+    width:"100%" !important;
+    display:"flex" !important; 
+    justify-content:"end" !important;
+    align-items:"center" !important;
+  // }
+}
+
+.material-icons{
+  cursor:  pointer!important;
+}
+
+ .text-center .label-text {
+    color: "#0C3A60" !important;
+  }
+
