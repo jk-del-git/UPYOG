@@ -99,8 +99,7 @@ function groupByParent(data) {
               </strong>
               <br />
               <p style={{ 
-                // color:"white",
-                color: "#000000",
+                color: "#0C3A60",
                 fontWeight: "500",
                 fontSize: "14px", marginTop: "5px" }}>
                 Government of Jammu & Kashmir

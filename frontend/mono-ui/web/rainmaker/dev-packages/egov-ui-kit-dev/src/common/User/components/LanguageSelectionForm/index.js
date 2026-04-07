@@ -46,7 +46,7 @@ const LanguageSelectionForm = ({ items, onLanguageSelect, value, onClick, logoUr
                 Housing and Urban <br /> Development Deparment
               </strong>
               <br />
-              <p style={{ color: "#000000", fontSize: "14px", marginTop: "5px" }}>
+              <p style={{ color: "#0C3A60", fontSize: "14px", marginTop: "5px" }}>
                 Government of Jammu & Kashmir
               </p>
             </h3>
