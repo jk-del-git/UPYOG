@@ -94,18 +94,18 @@ class CityPickerFieldNew extends React.Component {
   handleCityClick = (cityCode, cityName) => {
     const { fieldKey, onChange } = this.props;
      onChange(fieldKey, cityCode);
-    console.log("on click props-->",this.props);
     
     if(this.props.flag==true){
       this.setState({searchTerm: cityName, open: false,selectedUlb:cityName})
-      //  onChange(fieldKey, cityCode);
+      onChange("mappedUlb",cityCode);
     }else{
        this.setState({ searchTerm: cityName, open: false });
+       if(this.props.field.value !== cityCode){
+        onChange("mappedUlb","");
+       }
     }
    
   };
-
-
 
    getCustomFilteredCities = () => {
     const { cities, localizationLabels } = this.props;
@@ -155,14 +155,14 @@ class CityPickerFieldNew extends React.Component {
     const { isFocused, open, searchTerm } = this.state;
     const { localizationLabels } = this.props;
     // const filteredCities = this.getFilteredCities();
-    const filteredCities = this.getCustomFilteredCities();    
+    const filteredCities = this.getCustomFilteredCities();
     
     return (
       <div style={containerStyle}>
         <input
           type="text"
           placeholder={this.props.fieldKey=="mappedUlb"?"Select ULB":"Select Organization"}
-          value={this.props.flag ? this.state.selectedUlb : searchTerm}
+          value={this.props.flag ? getCityNameByCode(this.props.field.value,this.props.localizationLabels) : searchTerm}
           onChange={this.handleSearchChange}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
