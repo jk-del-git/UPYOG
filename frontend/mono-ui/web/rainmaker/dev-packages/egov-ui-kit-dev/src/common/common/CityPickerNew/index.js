@@ -74,7 +74,7 @@ class CityPickerFieldNew extends React.Component {
       isFocused: false,
       open: false,
       searchTerm: "",
-      selectedUlb:""
+      selectedUlb:"",
     };
   }
 
@@ -113,6 +113,7 @@ class CityPickerFieldNew extends React.Component {
     const filteredCities = cities.filter(city => city.isParent);
     
     const { searchTerm } = this.state;
+
     if (!searchTerm) {
       return filteredCities;
       // return cities
@@ -123,7 +124,8 @@ class CityPickerFieldNew extends React.Component {
         localizationLabels
       );
      
-      return filteredCities;
+      // return filteredCities;
+      return cityName && cityName.toLowerCase().includes(searchTerm.toLowerCase());
     });
   };
 
@@ -145,11 +147,12 @@ class CityPickerFieldNew extends React.Component {
 
   componentDidMount() {
     const { field,fieldKey, localizationLabels, mappedOptions } = this.props;
-    if (field && field.value) {
-      const selectedCity = getCityNameByCode(field.value, localizationLabels);
-      this.setState({ searchTerm: selectedCity || "" });
-    }
+    // if (field && field.value) {
+    //   const selectedCity = getCityNameByCode(field.value, localizationLabels);
+    //   this.setState({ searchTerm: selectedCity || "" });
+    // }
   }
+
 
   render() {
     const { isFocused, open, searchTerm } = this.state;
@@ -162,7 +165,8 @@ class CityPickerFieldNew extends React.Component {
         <input
           type="text"
           placeholder={this.props.fieldKey=="mappedUlb"?"Select ULB":"Select Organization"}
-          value={this.props.flag ? getCityNameByCode(this.props.field.value,this.props.localizationLabels) : searchTerm}
+          value={searchTerm}
+          // value={this.props.flag ? getCityNameByCode(this.props.field.value,this.props.localizationLabels) : searchTerm}
           onChange={this.handleSearchChange}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
@@ -201,7 +205,16 @@ class CityPickerFieldNew extends React.Component {
         {open && this.props.flag==true  && (
           <div style={dropdownStyle}>
             {Array.isArray(this.props.mappedOptions) && (this.props.mappedOptions.length > 0) ? (
-              this.props.mappedOptions.map((city, i) => {
+              this.props.mappedOptions
+              .filter((city,i)=>{
+                if(searchTerm){
+                  return city.name && city.name.toLowerCase().includes(searchTerm.toLowerCase());
+                }else {
+                  return this.props.mappedOptions;
+                }
+                
+              })
+              .map((city, i) => {
                 const cityName = getTranslatedLabel(
                   `TENANT_TENANTS_${city.key.toUpperCase().replace(/[.:-\s\/]/g, "_")}`,
                   localizationLabels
@@ -212,7 +225,7 @@ class CityPickerFieldNew extends React.Component {
                     style={listItemStyle}
                     onMouseDown={() => this.handleCityClick(city.key, city.name)}
                   >
-                    {/* {cityName} */}
+                     {/* {cityName}  */}
                     {city.name}
                   </div>
                 );

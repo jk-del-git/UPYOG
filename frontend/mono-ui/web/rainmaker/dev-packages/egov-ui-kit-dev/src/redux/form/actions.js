@@ -78,7 +78,7 @@ export const submitForm = (formKey, saveUrl) => {
             formData.employee.password,
             "",
             "password",
-            formData.employee.tenantId,
+            formData.employee.mappedUlb ? formData.employee.mappedUlb :  formData.employee.tenantId,
             "EMPLOYEE"
           );
         } else {
