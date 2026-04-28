@@ -28,14 +28,14 @@ const formConfig = {
       jsonPath: "employee.tenantId",
       required: true,
       floatingLabelText: "CORE_COMMON_CITY",
-      hintText: "CORE_COMMON_CITY_PLACEHOLDER",
+      hintText: "CORE_COMMON_ORGANISATION",
     },
     mappedUlb: {
       id: "person-mappedUlb",
       jsonPath: "employee.mappedUlb",
       required: false,
       floatingLabelText: "CORE_COMMON_CITY",
-      hintText: "CORE_COMMON_CITY_PLACEHOLDER",
+      hintText: "CORE_COMMON_ULB",
     },
     captcha: {
       id: "employee-captcha",
@@ -43,7 +43,7 @@ const formConfig = {
       required: false,  
       value:"",
       floatingLabelText: "",
-      hintText: "Enter Captcha",
+      hintText: "CORE_COMMON_CAPTCHA",
     },
   },
   submit: {
