@@ -156,17 +156,15 @@ class CityPickerFieldNew extends React.Component {
 
   render() {
     const { isFocused, open, searchTerm } = this.state;
-    const { localizationLabels } = this.props;
-    // const filteredCities = this.getFilteredCities();
+    const { localizationLabels, ...textFieldProps } = this.props;
     const filteredCities = this.getCustomFilteredCities();
-    
+
     return (
       <div style={containerStyle}>
         <input
           type="text"
-          placeholder={this.props.fieldKey=="mappedUlb"?"Select ULB":"Select Organization"}
+          placeholder={textFieldProps.field && getTranslatedLabel(textFieldProps.field.hintText,localizationLabels)}
           value={searchTerm}
-          // value={this.props.flag ? getCityNameByCode(this.props.field.value,this.props.localizationLabels) : searchTerm}
           onChange={this.handleSearchChange}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
@@ -181,6 +179,7 @@ class CityPickerFieldNew extends React.Component {
           <div style={dropdownStyle}>
             {filteredCities.length > 0 ? (
               filteredCities.map((city, i) => {
+
                 const cityName = getTranslatedLabel(
                   `TENANT_TENANTS_${city.key.toUpperCase().replace(/[.:-\s\/]/g, "_")}`,
                   localizationLabels
@@ -225,8 +224,8 @@ class CityPickerFieldNew extends React.Component {
                     style={listItemStyle}
                     onMouseDown={() => this.handleCityClick(city.key, city.name)}
                   >
-                     {/* {cityName}  */}
-                    {city.name}
+                     {cityName}  
+                     {/* /* {city.name} */ }
                   </div>
                 );
               })
