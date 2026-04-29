@@ -71,7 +71,6 @@ class MobileNumberFieldNew extends React.Component {
   render() {
     const { className, prefix = "+91", prefixStyle = {}, textFieldStyle = {}, ...textFieldProps } = this.props;
     const { isFocused } = this.state;
-
     return (
       <div style={containerStyle}>
         <div style={{ ...prefixStyleBase, ...prefixStyle }}>{prefix}</div>
@@ -85,6 +84,7 @@ class MobileNumberFieldNew extends React.Component {
             ...inputStyleBase,
             ...(isFocused ? inputFocusStyle : {}),
             ...textFieldStyle,
+            ...(this.props.mobileNumber ? { borderRadius: "5px" } : {})
           }}
           underlineShow={false}
           onFocus={this.handleFocus}

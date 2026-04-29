@@ -56,7 +56,9 @@ export const submitFormError = (formKey, error) => {
 };
 
 export const submitForm = (formKey, saveUrl) => {
-  return async (dispatch, getState) => {
+ 
+  if(formKey !="employeeForgotPasswd"){
+     return async (dispatch, getState) => {
     const state = getState();
     const form = state.form[formKey];
     if (form.loading) {
@@ -79,7 +81,7 @@ export const submitForm = (formKey, saveUrl) => {
             "",
             "password",
             formData.employee.mappedUlb ? formData.employee.mappedUlb :  formData.employee.tenantId,
-            "EMPLOYEE"
+            "EMPLOYEE" 
           );
         } else {
           formResponse = await httpRequest(saveUrl, action, [], formData);
@@ -98,6 +100,37 @@ export const submitForm = (formKey, saveUrl) => {
       dispatch(displayFormErrors(formKey));
     }
   };
+  }
+  else{
+    return async (dispatch, getState) => {
+    const state = getState();
+    const form = state.form[formKey]; 
+    if (form.loading) {
+      return;
+    }
+    const isFormValid = validateForm(form);
+      if (isFormValid) {
+      dispatch(submitFormPending(formKey));
+      const { action } = form;
+      try {
+         const formData = await transformer("viewModelToBusinessModelTransformer", formKey, form, state);
+        let formResponse = {};
+          formResponse = await httpRequest(saveUrl, action, [], formData);
+          dispatch(submitFormComplete(formKey, formResponse, saveUrl));
+      } catch (error) {
+        const { message } = error;
+        // throw new Error(error);
+        dispatch(submitFormError(formKey, message));
+        dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, "error"));
+      }
+      }
+      else {
+      dispatch(displayFormErrors(formKey));
+    }
+    
+  }
+  }
+ 
 };
 
 // file actions

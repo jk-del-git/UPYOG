@@ -6,38 +6,107 @@ import logo from "egov-ui-kit/assets/images/logo_black.png";
 import "./index.css";
 import { CityPicker, CityPickerNew } from "modules/common";
 import FieldNew from "egov-ui-kit/utils/fieldNew";
+import { connect } from "react-redux";
 
-const ForgotPasswd = ({ form, handleFieldChange,logoUrl }) => {
+const ForgotPasswd = ({ form, handleFieldChange,logoUrl,cities }) => {
   const fields = form.fields || {};
+  const city = fields.city || {};
+  const citySelected = city.value || "";
   const submit = form.submit;
+  
+  function groupByParent(data) {
+  if (!Array.isArray(data) || data.length === 0) {
+    return {};
+  }
+
+  const result = {};
+
+  for (const item of data) {
+    if (!item || !item.parent) continue;
+
+    if (!result[item.parent]) {
+      result[item.parent] = [];
+    }
+
+    // Push a shallow copy to avoid mutating original objects
+    result[item.parent].push({ ...item });
+  }
+
+  // Sort each parent's array alphabetically by `name`
+  for (const parentKey in result) {
+    result[parentKey].sort((a, b) => {
+      const nameA = typeof a.name === "string" ? a.name : "";
+      const nameB = typeof b.name === "string" ? b.name : "";
+
+      return nameA.localeCompare(nameB, undefined, {
+        sensitivity: "base", // case-insensitive
+        numeric: true        // "Item 2" < "Item 10"
+      });
+    });
+  }
+
+  return result;
+}
 
   return (
-    <Card
-      className="user-screens-card forgot-passwd-card col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4"
-      textChildren={
-        <div>
-          <div  style={{ marginBottom: "20px", borderBottom: "1px solid #192771", display: "flex", justifyContent: "center", marginTop: "8px" }}>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" style={{ width: "auto", height: "74px", padding: "0px 11px" }} />
-            <h3 style={{ fontSize: "20px", marginLeft: "12px", marginTop: "0px" }}>
-              <strong style={{ color: "#0C3A60", paddingRight: "15px", lineHeight: "1.2" }}>
+    <React.Fragment>
+      <div style={{display:"flex", justifyContent:"center", marginTop:"0%", marginBottom:"2%"}}>
+    <div style={{
+      
+      display: "flex",
+      alignItems: "anchorCenter",}}
+    >
+          <div
+            style={{
+        marginBottom: "20px", 
+        display: "flex",
+        justifyContent: "center",
+        marginTop: "8px",
+        alignItems: "center",
+      }}
+            >
+              
+            <h3 style={{ fontSize: "27px", marginLeft: "12px", marginTop: "17px", fontWeight:"500" }}>
+              <strong style={{ 
+                color: "#0C3A60",
+                // color:"white",
+                 paddingRight: "15px", lineHeight: "1.2" }}>
                 Housing and Urban <br /> Development Deparment
               </strong>
               <br />
-              <p style={{ color: "#000000", fontSize: "14px", marginTop: "5px" }}>
+              <p style={{ 
+                color: "#0C3A60",
+                fontWeight: "500",
+                fontSize: "14px", marginTop: "5px" }}>
                 Government of Jammu & Kashmir
               </p>
             </h3>
           </div>
+        </div>
+    <Card
+      className="user-screens-card col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-4 col-sm-4"
+            style={{
+    gap: "8%",
+    display: "flex",
+    marginLeft:"12%",
+    width: "40%",
+    padding: "25px 28px",
+    borderRadius: "5px"
+    
+  }}
+      textChildren={<React.Fragment>
+        <div style={{width:"100%"}}>
           <Label
-            style={{ marginBottom: "12px" }}
-            className="text-center forgotpasswd"
-            bold={true}
-            dark={true}
-            fontSize={16}
+            className="text-center" color={"rgb(12, 58, 96)"} bolder={true} fontSize={22}
             label="CORE_COMMON_FORGOT_PASSWORD_LABEL"
           />
-          <FieldNew fieldKey="username" field={fields.username} handleFieldChange={handleFieldChange} />
-          <CityPickerNew onChange={handleFieldChange} fieldKey="tenantId" field={fields.tenantId} />
+          <FieldNew mobileNumber={true} fieldKey="username" field={fields.username} handleFieldChange={handleFieldChange} />
+          {/* <CityPickerNew onChange={handleFieldChange} fieldKey="tenantId" field={fields.tenantId} /> */}
+          <CityPickerNew onChange={handleFieldChange} fieldKey="city" field={fields.city} flag={false} />
+          {
+                      Array.isArray(groupByParent(cities)[citySelected]) && groupByParent(cities)[citySelected].length > 0 && 
+                       <CityPickerNew mappedOptions={groupByParent(cities)[citySelected]} onChange={handleFieldChange} flag={true} fieldKey="mappedUlb" field={fields.mappedUlb} />
+                    }
           <Button
            id="login-submit-action"
                 {...submit}
@@ -54,9 +123,15 @@ const ForgotPasswd = ({ form, handleFieldChange,logoUrl }) => {
           </Button>
           {/* <Button id="login-submit-action" primary={true} label="CONTINUE" fullWidth={true} {...submit} /> */}
         </div>
-      }
+      </React.Fragment>}
     />
-  );
+    </div>
+  </React.Fragment>);
 };
 
-export default ForgotPasswd;
+  const mapStateToProps = (state) => ({
+  cities: state.common.cities,
+  selectedCity: state.common.selectedCity
+});
+// export default ForgotPasswd;
+ export default connect(mapStateToProps)(ForgotPasswd)
