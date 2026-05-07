@@ -222,7 +222,7 @@ class CityPickerFieldNew extends React.Component {
                   <div
                     key={i}
                     style={listItemStyle}
-                    onMouseDown={() => this.handleCityClick(city.key, city.name)}
+                    onMouseDown={() => this.handleCityClick(city.key, cityName)}
                   >
                      {cityName}  
                      {/* /* {city.name} */ }
