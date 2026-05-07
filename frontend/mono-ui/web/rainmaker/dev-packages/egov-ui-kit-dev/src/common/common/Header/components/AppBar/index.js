@@ -79,10 +79,16 @@ const EgovAppBar = ({
                 className="screenHeaderLabelStyle appbar-municipal-label"
                 label={ulbName && `TENANT_TENANTS_${ulbName.toUpperCase().replace(/[.]/g, "_")}`}
               /> */}
-              {/* <Label containerStyle={{ marginLeft: "4px" }} className="screenHeaderLabelStyle appbar-municipal-label" label={defaultTitle} /> */}
+              {/* <Label containerStyle={{ marginLeft: "4px" }} className="screenHeaderLabelStyle appbar-municipal-label" label={"TENANT_TENANTS_PG_BATOTE"} /> */}
             </div>}
             <div className="finance-title">
-            <h5>Financial Accounting System</h5>
+            <Label 
+            containerStyle={{display:"flex", justifyContent:"center", 
+              alignItems:"center",marginBottom  : "0rem"}} 
+            labelStyle={{color:"rgb(12, 58, 96)",fontWeight:"800",
+              }} 
+              fontSize={18}
+            label={"CORE_COMMON_FINANCE_HEADER"} />
             </div>
           </div>
         }
