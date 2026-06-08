@@ -73,12 +73,8 @@ function groupByParent(data) {
  
   return (
     <React.Fragment>
-      <div style={{display:"flex", justifyContent:"center", marginTop:"0%", marginBottom:"2%"}}>
-    <div style={{
-      // borderRight: "1px solid black",
-      display: "flex",
-      alignItems: "anchorCenter",}}
-    >
+      <div className="mn-content">
+     <div className="left-emblem">
           <div
             style={{
         marginBottom: "20px", 
@@ -108,18 +104,7 @@ function groupByParent(data) {
           </div>
         </div>
     <Card
-      className="user-screens-card col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-4 col-sm-4"
-      style={{
-    gap: "8%",
-    display: "flex",
-    // marginLeft: "0px",
-    marginLeft:"12%",
-    width: "40%",
-    // height:"80vh",
-    padding: "25px 28px",
-    borderRadius: "5px"
-    
-  }}
+      className="login-card user-screens-card col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-4 col-sm-4"
       textChildren={<React.Fragment>
         <div style={{width:"100%"}}>
           <Label className="text-center" color={"rgb(12, 58, 96)"} bolder={true} fontSize={22} label="CORE_COMMON_LOGIN" />

@@ -1,3 +1,45 @@
 .forgotpasswd {
   margin-bottom: 25px;
 }
+
+
+.mn-content{
+   display: flex;
+   justify-content: center;
+   margin-top: 0;
+   margin-bottom: 2%;
+}
+
+.login-card{
+  gap: 8% !important;
+  display: flex !important;
+  margin-left: 12% !important;
+  width: 40% !important;
+  padding: 25px 28px !important;
+  border-radius: 5px  !important;
+}
+
+.left-emblem{
+  display: flex;
+  align-items: anchor-center;
+}
+
+@media only screen and (max-width: 700px) {
+  .mn-content{
+    flex-direction: column;
+    align-items: center; /* optional */
+    position: relative;
+    top:11rem;
+}
+
+  .login-card{
+    width:100% !important;
+    margin-left: 0% !important;
+  }
+
+  .left-emblem{
+    margin-left: 7%;
+  display: "flex";
+  align-items: "anchor-center";
+}
+}

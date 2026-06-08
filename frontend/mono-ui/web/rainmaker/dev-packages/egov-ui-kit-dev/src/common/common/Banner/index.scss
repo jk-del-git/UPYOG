@@ -71,6 +71,12 @@
   padding: 0 8px;
 }
 
+ @media only screen and (max-width: 500px) {
+  .banner-form-cont {
+    bottom: 26rem;
+  }
+}
+
 @media only screen and (min-width: 768px) {
   .user-screens-wrapper {
     height: 100vh;
@@ -168,4 +174,15 @@
   // background: rgb(255, 255, 255,0.8) !important;
   background: rgba(255, 255, 255,0.8) !important;
   pointer-events: none !important;
+}
+
+
+@media only screen and (max-width:700px){
+  .banner-overlay{
+    background-image: url(https://s7ap1.scene7.com/is/image/incredibleindia/dal-lake-srinagar-jammu-&-kashmir-2-attr-hero?qlt=82&ts=1726816668703);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    position: relative;
+  }
 }

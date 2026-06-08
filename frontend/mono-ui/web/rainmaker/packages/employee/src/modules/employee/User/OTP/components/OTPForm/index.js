@@ -11,12 +11,15 @@ const OTPForm = ({ handleFieldChange, toggleSnackbarAndSetText, form, resendOTP,
   
   return (
     <React.Fragment>
-      <div style={{display:"flex", justifyContent:"center", marginTop:"0%", marginBottom:"2%"}}>
-    <div style={{
+       <div className="mn-content-forget-pss-otp" >
+      {/* <div style={{display:"flex", justifyContent:"center", marginTop:"0%", marginBottom:"2%"}}> */}
+    {/* <div style={{
       
       display: "flex",
       alignItems: "anchorCenter",}}
-    >
+    > */}
+     <div className="left-emblem"
+        >
           <div
             style={{
         marginBottom: "20px", 
@@ -45,16 +48,16 @@ const OTPForm = ({ handleFieldChange, toggleSnackbarAndSetText, form, resendOTP,
           </div>
         </div>
     <Card
-      className="user-screens-card col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-4 col-sm-4"
-      style={{
-    gap: "8%",
-    display: "flex",
-    marginLeft:"12%",
-    width: "40%",
-    padding: "25px 28px",
-    borderRadius: "5px"
+      className="login-card user-screens-card col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-4 col-sm-4"
+  //     style={{
+  //   gap: "8%",
+  //   display: "flex",
+  //   marginLeft:"12%",
+  //   width: "40%",
+  //   padding: "25px 28px",
+  //   borderRadius: "5px"
     
-  }}
+  // }}
       textChildren={
         <React.Fragment>
         <div style={{width:"100%"}}>
