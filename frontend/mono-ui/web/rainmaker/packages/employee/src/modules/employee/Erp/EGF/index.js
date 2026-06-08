@@ -19,24 +19,34 @@ class EGFFinance extends Component {
     subdomainurl,
     domainurl,
     finEnv,
+    financeBaseUrl,
     hostname = loc.hostname,
     winheight = window.innerHeight - 100,
     erp_url,
     tenantId = getTenantId();
     //Reading domain name from the request url
-    domainurl = hostname.substring(hostname.indexOf(".") + 1);
+    // domainurl = hostname.substring(hostname.indexOf(".") + 1);
 	  // Reading environment name (ex: dev, qa, uat, fin-uat etc) from the globalconfigs if exists else reading from the .env file
-    finEnv = this.globalConfigExists() ? window.globalConfigs.getConfig("FIN_ENV") : process.env.REACT_APP_FIN_ENV;
+    // finEnv = this.globalConfigExists() ? window.globalConfigs.getConfig("FIN_ENV") : process.env.REACT_APP_FIN_ENV;
+    // Reading finance base url from the globalconfigs if exists else reading from the .env file
+    financeBaseUrl = this.globalConfigExists()
+  ? window.globalConfigs.getConfig("FINANCE_BASE_URL")
+  : "https://hudd-finance.jk.gov.in";
     // Preparing finance subdomain url using the above environment name and the domain url
-    subdomainurl = !!(finEnv) ? "-" + finEnv + "." + domainurl : "." + domainurl;
+    // subdomainurl = !!(finEnv) ? "-" + finEnv + "." + domainurl : "." + domainurl;
     let finalTenantId = tenantId.includes(".") ? tenantId.split(".")[1] : tenantId;
-    erp_url = loc.protocol + "//" + "jmc" + subdomainurl + 
-    menuUrl+ "?ulb=" + finalTenantId;
+    // erp_url = loc.protocol + "//" + "jmc" + subdomainurl + 
+    // menuUrl+ "?ulb=" + finalTenantId;
     // + tenantId.split(".")[1];
+    // Final erp url based on different globalConfigs
+    // https://hudd-finance.jk.gov.in
+    erp_url = financeBaseUrl + menuUrl + "?ulb=" + finalTenantId;
 
     // Passing ulb as a query parameter to erp url
     // erp_url= 'https://'+"jmc"+"-jk.mycitydemo.in"+menuUrl
     // +"?ulb="+tenantId.split(".")[1];
+    // https://jmc-jk.mycitydemo.in/services/EGF/expensebill/newform?ulb=jmc
+    // https://hudd-finance.jk.gov.in/services/EGF/expensebill/newform?ulb=jmc
 
   
     return (
