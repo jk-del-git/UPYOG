@@ -26,8 +26,38 @@
     cursor: pointer;
   }
 
-  @media (max-width: 768px){
+  .footer-new-style {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+  }
+
+  /* Mobile / responsive */
+@media (max-width: 768px) {
     .footer-new-style {
-      display: none !important;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .copyright-text-partition {
+        display: none; /* hide the | when stacked */
+    }
+}
+  .copyright-text {
+    color:rgb(12, 58, 96) !important;
+    cursor: "pointer" !important;
+    font-size: "16px" !important;
+    font-weight: "400" !important;  
+  }
+
+   @media (max-width: 500px){
+    .copyright-text {
+      color:rgb(12, 58, 96) !important;
+    cursor: "pointer" !important;
+    font-size: "16px" !important;
+    font-weight: "400" !important;  
     }
   }
+
