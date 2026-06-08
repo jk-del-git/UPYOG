@@ -31,7 +31,7 @@ class EGFFinance extends Component {
     // Reading finance base url from the globalconfigs if exists else reading from the .env file
     financeBaseUrl = this.globalConfigExists()
   ? window.globalConfigs.getConfig("FINANCE_BASE_URL")
-  : null;
+  : "https://hudd-finance.jk.gov.in";
     // Preparing finance subdomain url using the above environment name and the domain url
     // subdomainurl = !!(finEnv) ? "-" + finEnv + "." + domainurl : "." + domainurl;
     let finalTenantId = tenantId.includes(".") ? tenantId.split(".")[1] : tenantId;
