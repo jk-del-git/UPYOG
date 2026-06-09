@@ -1,71 +1,103 @@
 .home-screen-appbar {
   background-color: transparent !important;
-  box-shadow: none !important;
-}
+  box-shadow: none !important; }
 
 .citizen-header-logo-label {
-  display: flex;
+  display: flex; 
+  
 }
 
 .icon-button {
   display: flex;
-  align-items: center;
-}
+  align-items: center; }
 
 .notification-icon {
   height: 64px;
   display: flex;
-  align-items: center;
-}
+  align-items: center; }
 
 .appbar-right-logo {
   display: flex !important;
-  align-items: center !important;
-}
+  align-items: center !important; }
 
-.citizen-header-logo>img {
+.citizen-header-logo > img {
   width: 40px;
-  height: 49px;
-}
+  height: 49px; }
 
 .appbar-municipal-label .label-text {
-  text-transform: uppercase !important;
+  text-transform: uppercase !important; }
+
+  @media only screen and (max-width:769px){
+   .citizen-header-logo {
+    display: unset !important;
+  }
 }
 
 @media only screen and (max-width: 768px) {
-
   .app-toolbar,
-  .citizen-header-logo,
+  
   .appbar-right-logo,
   .appbar-municipal-label {
-    display: none !important;
-  }
+    display: none !important; }
 
-  .notification-icon-web {
-    display: none !important;
+  .citizen-header-logo {
+    display: block !important;
   }
-}
+  .notification-icon-web {
+    display: none !important; } }
 
 @media only screen and (min-width: 768px) {
   .appbar-title-label {
-    display: none !important;
-  }
-
+    display: none !important; }
   .notification-icon-mobile {
-    display: none !important;
+    display: none !important; }
+  .notification-icon-web {  
+    margin-right: 50px; } }
+
+
+  .header-h3{
+    transform: translate(12px, -12px)
   }
 
-  .notification-icon-web {
-    margin-right: 50px;
-  }
+.header-h3 strong {
+  font-size: 20px !important;
+  color: rgb(12, 58, 96) !important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 700px) {
   .header-h3 {
-    display: none;
+    display: block;
+    transform: unset !important;
   }
+  .header-h3 strong {
+    font-size: 16px !important;
+  }
+
+  .header-h3 p{
+    display: flex;
+    justify-content: center;
+  }
+   
+  .header-with-drawer > div:nth-child(1) {
+    display: grid !important;
+    place-items: center !important;
+  }
+  .header-with-drawer > div:nth-child(2) {
+  overflow: unset !important;
+}
   .finance-title {
-    display: none;
+    display: block;
+  }
+  .citizen-header-logo-label {
+      display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px !important;
+}
+
+  .rainmaker-displayInline{
+    justify-content: center;
   }
 }
 
@@ -85,3 +117,68 @@
   font-size: large !important;
 }
 
+
+@media (max-width: 700px) {
+  .rainmaker-header{
+    background-image: unset !important;
+    color:"#FFFFFF" !important;
+}
+}
+
+    .rainmaker-header{
+    background-image: unset !important;
+    color:"#FFFFFF" !important;
+}
+
+
+.header-with-drawer{
+  background-color: white !important;
+  min-height: 162px !important;
+}
+
+#icon-hamburger{
+  fill : rgb(12, 58, 96) !important;
+  background-color: white;
+}
+
+#icon-hamburger > div > svg {
+  fill : rgb(12, 58, 96) !important;
+}
+
+
+
+@media (max-width: 768px) {
+  .citizen-header-logo-label .citizen-header-logo{
+  width:23px !important;
+  height: 29px !important;
+}
+  .header-h3 {
+    display: block; }
+  .finance-title {
+    display: block; } }
+
+.finance-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0rem;
+  width: -webkit-fill-available; }
+
+.finance-title h5 {
+  color: #0c3a60;
+  font-weight: 800;
+  font-size: large !important; }
+
+
+  .header-with-drawer{
+  background-color: white !important;
+}
+
+#icon-hamburger{
+  fill : rgb(12, 58, 96) !important;
+}
+
+
+.citizen-header-logo-label .citizen-header-logo{
+  display: block !important;
+}

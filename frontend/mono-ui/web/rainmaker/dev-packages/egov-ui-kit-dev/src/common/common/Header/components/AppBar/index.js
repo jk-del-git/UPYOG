@@ -50,17 +50,18 @@ const EgovAppBar = ({
   logoImage,
   ...rest
 }) => {
+  
   return (
     <div>
       <AppBar
+        style={{backgroundImage:"unset",color:"#FFFFFF"}}
         // className={isHomeScreen && role === "citizen" ? "home-screen-appbar" : className || "header-with-drawer"}
-        className={className || "header-with-drawer"}
+        className={window.innerWidth > 700 ? className : "header-with-drawer"}
         title={
           <div className="citizen-header-logo-label">
-            <div className="citizen-header-logo" style={{ width: "44px", height: "47px" }}>
+            <div id="emblem-lg" className="citizen-header-logo" style={{width: "44px", height: "47px" }}>
               {<img style={{ width: "45px", height: "45px", transform: "translateY(-2px)" }} src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" />}
             </div>
-            <LabelContainer style={{ marginLeft: "12px", color: "#FFFFFF", fontWeight: 700, fontSize: "16px" }} className="screenHeaderLabelStyle appbar-title-label" labelKey={title}/>
             {titleAddon && (
               <Label
                 containerStyle={{ display: "inline-block", marginLeft: 5 }}
@@ -69,17 +70,10 @@ const EgovAppBar = ({
               />
             )}
             {isUserSetting && <div className="rainmaker-displayInline">
-              <h3 className="header-h3" style={{ transform: "translate(12px, -12px)" }}>
-                <strong style={{fontSize: "20px", color: "#0C3A60"}}>Housing and Urban Development Department</strong>
-                {/* <img src={homePageLogo} style={{ height: "30px", marginTop: "2px", marginBottom: "5px" }} /> */}
+              <h3 className="header-h3">
+                <strong >Housing and Urban Development Department</strong>
                 <br /><p style={{ fontSize: "14px", marginTop: "4px", color:"#000000" }}>Government of Jammu & Kashmir</p>
               </h3>
-              {/* <Label
-                containerStyle={{ marginLeft: "10px" }}
-                className="screenHeaderLabelStyle appbar-municipal-label"
-                label={ulbName && `TENANT_TENANTS_${ulbName.toUpperCase().replace(/[.]/g, "_")}`}
-              /> */}
-              {/* <Label containerStyle={{ marginLeft: "4px" }} className="screenHeaderLabelStyle appbar-municipal-label" label={"TENANT_TENANTS_PG_BATOTE"} /> */}
             </div>}
             <div className="finance-title">
             <Label 
@@ -119,9 +113,6 @@ const EgovAppBar = ({
           </div>
         )}
 
-        {/* <div className="appbar-right-logo">
-          <img src={logoImage?logoImage:digitLogo} />
-        </div> */}
         <div className="icon-button">
           {refreshButton && (
             <IconButton style={iconButtonStyle} onClick={(e) => location.reload()}>

@@ -6,7 +6,7 @@ import Label from "../../utils/translationNode";
 import "./index.css";
 
 const iconStyle = {
-  background: "#00bbd3",
+  background: "rgb(248, 154, 63)",
   marginLeft: "15px",
   color: "rgb(255, 255, 255)",
   borderRadius: "50%",
