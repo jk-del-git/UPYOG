@@ -2,3 +2,35 @@
   background-color : transparent !important;
   margin-right:0px !important;
 }
+
+ .tenant-dropdown{
+    @media (max-width: 700px) {
+    width: 235px !important;
+  }
+}
+
+
+.dp-icon-dv {
+    background: rgb(248, 154, 63);
+    position: absolute;
+    right: -5%;
+    bottom: 0px;
+    color: rgb(255, 255, 255);
+    border-radius: 50%;
+    padding: 12px;
+    height: 48px;
+    width: 48px;
+}
+
+
+@media only screen and (max-width: 700px) {
+  .profileContainer > :nth-child(1) {
+    display: flex !important;
+    justify-content: center !important;
+  }
+
+   .dp-icon-dv {
+    bottom : -10%;
+    right: 38%;
+  }
+}

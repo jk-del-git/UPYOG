@@ -84,7 +84,6 @@ function groupByParent(data) {
         alignItems: "center",
       }}
             >
-              {/* <img src="https://e7.pngegg.com/pngimages/121/89/png-clipart-lion-capital-of-ashoka-sarnath-states-and-territories-of-india-state-emblem-of-india-national-symbols-of-india-indian-miscellaneous-white-thumbnail.png" style={{ width: "auto", height: "74px", padding: "0px 11px" }} /> */}
             <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" style={{ width: "auto", height: "103px", padding: "0px 11px" }} />
             <h3 style={{ fontSize: "27px", marginLeft: "12px", marginTop: "17px", fontWeight:"500" }}>
               <strong style={{ 
@@ -134,7 +133,6 @@ function groupByParent(data) {
                       backgroundSize:"cover",
                       backgroundPosition:"center",
                       backgroundRepeat:"no-repeat",
-                      backgroundImage: `url("https://jigyasa-csir.in/v2/auth/assets/captcha-bg.png")`,
                     }}>
                      <span
                   className="captcha"
