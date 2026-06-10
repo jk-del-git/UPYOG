@@ -292,18 +292,6 @@ body.employee-user-profile {
   bottom: 0px;
   width: 100%;
   left: 0;
-  @media only screen and (max-width:700px) {
-    top : 88%;
-    display: flex;
-    justify-content: center;
-  }
-}
-
-@media only screen and (max-width:700px){
-  .responsive-action-button-cont > :nth-child(1){
-    box-shadow: unset !important;
-    min-width: 69% !important;
-  }
 }
 
 .background-white {

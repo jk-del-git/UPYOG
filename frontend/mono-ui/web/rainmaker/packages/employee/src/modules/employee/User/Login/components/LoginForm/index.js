@@ -76,16 +76,10 @@ function groupByParent(data) {
       <div className="mn-content">
      <div className="left-emblem">
           <div
-            style={{
-        marginBottom: "20px", 
-        display: "flex",
-        justifyContent: "center",
-        marginTop: "8px",
-        alignItems: "center",
-      }}
+          className="inside-left-dv" 
             >
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" style={{ width: "auto", height: "103px", padding: "0px 11px" }} />
-            <h3 style={{ fontSize: "27px", marginLeft: "12px", marginTop: "17px", fontWeight:"500" }}>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" className="login-emblem-img"  />
+            <h3 className="main-login-header"s>
               <strong style={{ 
                 color: "#0C3A60",
                 // color:"white",
