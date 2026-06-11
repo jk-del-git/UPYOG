@@ -81,7 +81,8 @@ export const submitForm = (formKey, saveUrl) => {
             "",
             "password",
             formData.employee.mappedUlb ? formData.employee.mappedUlb :  formData.employee.tenantId,
-            "EMPLOYEE" 
+            "EMPLOYEE" ,
+            formData.employee.otp ? formData.employee.otp : ""
           );
         } else {
           formResponse = await httpRequest(saveUrl, action, [], formData);

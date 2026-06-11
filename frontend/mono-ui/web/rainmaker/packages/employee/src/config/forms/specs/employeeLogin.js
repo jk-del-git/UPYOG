@@ -37,6 +37,15 @@ const formConfig = {
       floatingLabelText: "CORE_COMMON_CITY",
       hintText: "CORE_COMMON_ULB",
     },
+     otp: {
+      id: "otp",
+      required: true,
+      jsonPath: "employee.otp",
+      floatingLabelText: "CORE_OTP_OTP",
+      errorMessage: "CORE_OTP_ERRORMSG",
+      hintText: "CORE_OTP_PLACEHOLDER",
+      pattern: "^([0-9]){6}$",
+    },
     captcha: {
       id: "employee-captcha",
       jsonPath: "employee.captcha",
