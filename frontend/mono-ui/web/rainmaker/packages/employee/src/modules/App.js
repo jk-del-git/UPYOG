@@ -92,6 +92,12 @@ class App extends Component {
       dashboardScreen = true;
     }
 
+    // Dont show footer for Edit Profile Screen
+     let isUserProfile = false;
+     if (window.location.pathname.includes('user/profile')) {
+      isUserProfile = true;
+    }
+
     let isFixedFooter=false;
     let otherScreensUrls = []
     /*    DSS Module fixed footer removed since it is already shown in dashboard app internally
@@ -100,7 +106,7 @@ class App extends Component {
       isFixedFooter = true;
     }
     const pdfUrl = "https://pg-egov-assets.s3.ap-south-1.amazonaws.com/Upyog+Code+and+Copyright+License_v1.pdf";
-
+    
     return (
       <div >
       <div style={{minHeight:'calc(100vh - 3em)'}}>
@@ -112,12 +118,12 @@ class App extends Component {
 
         {!loginScreens && !dashboardScreen && isFixedFooter&& 
         <div className={"footer-new-style"}  >
-            <span className="copyright-text" onClick={() => { window.open('https://niua.in/', '_blank').focus();}} > Housing and Urban Development Department</span>
+            <span className="copyright-text" onClick={() => { window.open('https://niua.in/', '_blank').focus();}} >Housing and Urban Development Department</span>
             <span className="copyright-text-partition" >|</span>
             <span className="copyright-text" onClick={() => { window.open(pdfUrl, '_blank').focus();}}> Copyright © 2026 Government of Jammu & Kashmir</span>
         </div>}
 
-        {!loginScreens && !dashboardScreen && !isFixedFooter&&<div style={{ width: '100%', display: 'flex', flexFlow: 'column', position:"fixed", bottom: "0" }}>
+        {!loginScreens && !dashboardScreen && !isFixedFooter&& !isUserProfile && <div style={{ width: '100%', display: 'flex', flexFlow: 'column', position:"fixed", bottom: "0" }}>
           <div className={"footer-new-style"}  >
             <span className="copyright-text" onClick={() => { window.open('https://niua.in/', '_blank').focus();}} >Housing and Urban Development Department</span>
             <span className="copyright-text-partition">|</span>

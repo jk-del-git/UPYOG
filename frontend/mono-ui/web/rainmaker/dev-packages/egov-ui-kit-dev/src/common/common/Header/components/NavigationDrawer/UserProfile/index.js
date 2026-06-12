@@ -1,9 +1,10 @@
-import React from "react";
+import React, {useEffect,useState} from "react";
 import { ProfileSection } from "components";
 import { getCityNameByCode } from "egov-ui-kit/utils/commons";
 import { connect } from "react-redux";
 import get from "lodash/get";
 import emptyFace from "egov-ui-kit/assets/images/download.png";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
 
 const styles = {
   imageStyle: { width: 89, height: 88, margin: "0 auto", marginBottom: "16px" },
@@ -48,7 +49,50 @@ const prepareUserInfo = (userInfo = {}, cities = [],localizationLabels) => {
   return { photo, name, emailId, location };
 };
 
-const UserProfile = ({ role = "citizen", cities = [], userInfo = {} ,localizationLabels}) => {
+const UserProfile = ({ role = "citizen", cities = [], userInfo={}, reduxUserInfo ,localizationLabels}) => {
+   const [profilePhotoUrl, setProfilePhotoUrl] = useState(null);
+    useEffect(() => {
+      const fetchPhoto = async () => {
+        try {
+          const tenantId = reduxUserInfo.tenantId;
+          const uuid = reduxUserInfo.uuid;
+          if (!uuid || !tenantId) return;
+  
+          const userPayload = await httpRequest(
+            "post",
+            "/user/_search",
+            "_search",
+            [],
+            {
+              tenantId,
+              uuid: [uuid],
+            }
+          );      
+  
+          const photoId = userPayload.user[0].photo;
+          if (!photoId) return;
+  
+          const fileResponse = await httpRequest(
+            "get",
+            "/filestore/v1/files/url",
+            "",
+            [
+              { key: "tenantId", value: "pg" },
+              { key: "fileStoreIds", value: photoId },
+            ]
+          );
+  
+          const url = fileResponse.fileStoreIds[0].url;
+          if (url) {
+            setProfilePhotoUrl(url);
+          }
+        } catch (error) {
+          console.error("Error fetching user photo:", error);
+        }
+      };
+  
+      fetchPhoto();
+    }, [userInfo]);
   userInfo = prepareUserInfo(userInfo, cities,localizationLabels);
   return (
     <ProfileSection
@@ -61,7 +105,7 @@ const UserProfile = ({ role = "citizen", cities = [], userInfo = {} ,localizatio
       emailId={role === "citizen" ? userInfo.emailId || "" : ""}
       location={userInfo.location || ""}
       iconStyle={styles.iconStyle}
-      imgSrc={userInfo.photo || emptyFace}
+      imgSrc={profilePhotoUrl || emptyFace}
     />
   );
 };
@@ -70,7 +114,8 @@ const UserProfile = ({ role = "citizen", cities = [], userInfo = {} ,localizatio
 
 const mapStateToProps = (state) => {
   const localizationLabels = get(state.app, "localizationLabels", {});
-  return {  localizationLabels };
+  const reduxUserInfo = get(state.auth, "userInfo", {});
+  return {  localizationLabels, reduxUserInfo };
 };
 
 export default connect(mapStateToProps)(UserProfile);

@@ -43,6 +43,7 @@ import Tooltip from "./Tooltip";
 import UsernameFieldWithIcon from "./UsernameFieldWithIcon";
 import MobileNumberFieldNew from "./MobileNumberFieldNew";
 import TextFieldNew from "egov-ui-kit/components/TextFieldNew";
+import OTPInputField from "./OTPInput";
 
 export {
   Label,
@@ -90,6 +91,7 @@ export {
   FloatingButton,
   UsernameFieldWithIcon,
   MobileNumberFieldNew,
-  TextFieldNew
+  TextFieldNew,
+  OTPInputField
 };
 

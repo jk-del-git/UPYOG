@@ -64,6 +64,27 @@
   align-items: anchor-center;
 }
 
+.login-emblem-img{
+  width: "auto" !important;
+  height: 103px !important; 
+  padding: 0px 11px !important;
+}
+
+.main-login-header{
+  font-size: 27px !important;
+  margin-left: 12px !important; 
+  margin-top: 17px !important;
+  font-weight: 500 !important;
+}
+
+.inside-left-dv{
+   margin-bottom: 20px !important;
+   display:flex !important;
+    justify-content: center !important;
+  margin-top: 8px !important;
+  align-items: center !important;   
+}
+
 @media only screen and (max-width: 700px) {
   .mn-content{
     flex-direction: column;
@@ -78,10 +99,32 @@
   }
 
   .left-emblem{
-    margin-left: 7%;
+    margin-left: 0%;
   display: "flex";
   align-items: "anchor-center";
 }
+
+.login-emblem-img{
+  width: auto !important;
+  height: 88px !important; 
+  padding: 0px 11px !important;
 }
+
+.main-login-header{
+  font-size: 22px !important;
+  margin-left: 12px !important; 
+  margin-top: 17px !important;
+  font-weight: 500 !important;
+}
+.inside-left-dv{
+   margin-bottom: 5px !important;
+   display:flex !important;
+    justify-content: center !important;
+  margin-top: 8px !important;
+  align-items: center !important;   
+}
+}
+
+
 
 

@@ -107,6 +107,7 @@ export const httpRequest = async (
   ignoreTenantId = false,
   isGetMethod = false
 ) => {
+  
   /* const tenantId = getTenantId() || commonConfig.tenantId; */
   /* Fix for central instance to send tenantID in all query params  */
   const tenantId =
@@ -201,7 +202,7 @@ export const uploadFile = async (endPoint, module, file, ulbLevel) => {
   }
 };
 
-export const loginRequest = async (username = null, password = null, refreshToken = "", grantType = "password", tenantId = "", userType) => {
+export const loginRequest = async (username = null, password = null, refreshToken = "", grantType = "password", tenantId = "", userType,otp) => {
   tenantId = tenantId ? tenantId : commonConfig.tenantId;
   const loginInstance = axios.create({
     baseURL: window.location.origin,
@@ -211,7 +212,7 @@ export const loginRequest = async (username = null, password = null, refreshToke
     },
   });
 
-  let apiError = "Api Error";
+  let apiError = "Inavlid Login Credential";
   var params = new URLSearchParams();
   username && params.append("username", username);
   password && params.append("password", password);
@@ -220,6 +221,8 @@ export const loginRequest = async (username = null, password = null, refreshToke
   params.append("scope", "read");
   params.append("tenantId", tenantId);
   userType && params.append("userType", userType);
+  otp && params.append("otp", otp);
+  otp && params.append("otpValidationMandatory", "true");
 
   try {
     const response = await loginInstance.post("/user/oauth/token", params);
@@ -237,6 +240,8 @@ export const loginRequest = async (username = null, password = null, refreshToke
 
   throw new Error(apiError);
 };
+
+
 export const commonApiPost = (
   context,
   queryObject = {},
