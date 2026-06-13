@@ -13,7 +13,8 @@ const containerStyle = {
 
 const inputStyleBase = {
   width: "100%",
-  height: "44px",
+  // height: "44px",
+  height:"51px",
   padding: "12px 15px",
   // padding:"8px 15px",
   border: "1px solid #b3b3b3",
@@ -36,7 +37,8 @@ const inputFocusStyle = {
 const suffixIconStyle = {
   position: "absolute",
   right: "13px",
-  top: "55%",
+  // top: "55%",
+  top:"57%",
   transform: "translateY(-50%)",
   color: "#757575",
   pointerEvents: "none",

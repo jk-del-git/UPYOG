@@ -16,7 +16,8 @@ const containerStyle = {
 
 const inputBoxStyle = {
   width: "100%",
-  height: "44px",
+  // height: "44px",
+  height:"51px",
   padding: "12px 40px 12px 15px",
   border: "1px solid #b3b3b3",
   // borderRadius: "10px",
@@ -38,7 +39,8 @@ const inputFocusStyle = {
 const suffixIconStyle = {
   position: "absolute",
   right: "15px",
-  top: "50%",
+  // top: "50%",
+  top:"52%",
   transform: "translateY(-50%)",
   color: "#757575",
   pointerEvents: "none",
@@ -46,6 +48,31 @@ const suffixIconStyle = {
 };
 
 const dropdownStyle = {
+  zIndex:999, 
+  position: "absolute", 
+  top: "110%", 
+  left: 0, 
+  right: 0, 
+  backgroundColor: "#fff", 
+  border: "1px solid #ddd", 
+  borderRadius: "8px", 
+  boxShadow: "0 4px 8px rgba(0,0,0,0.1)", 
+  overflowY: "auto"
+  // position: "fixed", // instead of absolute
+  // top: "60%", // will be computed dynamically
+  // right: "165px",
+  // width: "383px", // set same width as input
+  // backgroundColor: "#fff",
+  // border: "1px solid #ddd",
+  // borderRadius: "8px",
+  // boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+  // maxHeight: "250px",
+  // overflowY: "auto",
+  // zIndex: 9999,
+};
+
+const dependentDropdownStyle = {
+  zIndex: 999,
   position: "absolute",
   top: "110%",
   left: 0,
@@ -54,9 +81,8 @@ const dropdownStyle = {
   border: "1px solid #ddd",
   borderRadius: "8px",
   boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-  zIndex: 300,
-  maxHeight: "250px",
-  overflowY: "auto",
+  maxHeight: "250px",   // adjust as needed
+  overflowY: "auto",    // enables vertical scrolling
 };
 
 const listItemStyle = {
@@ -202,7 +228,7 @@ class CityPickerFieldNew extends React.Component {
 
 {/* Dependent dropdown */}
         {open && this.props.flag==true  && (
-          <div style={dropdownStyle}>
+          <div style={dependentDropdownStyle}>
             {Array.isArray(this.props.mappedOptions) && (this.props.mappedOptions.length > 0) ? (
               this.props.mappedOptions
               .filter((city,i)=>{
