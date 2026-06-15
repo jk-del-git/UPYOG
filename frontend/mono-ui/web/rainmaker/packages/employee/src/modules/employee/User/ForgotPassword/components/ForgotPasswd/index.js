@@ -85,7 +85,7 @@ const ForgotPasswd = ({ form, handleFieldChange,logoUrl,cities }) => {
       className="login-card user-screens-card col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-4 col-sm-4"
 
       textChildren={<React.Fragment>
-        <div style={{width:"100%"}}>
+        <div className="inside-login-card" style={{width:"100%"}}>
           <Label
             className="text-center" color={"rgb(12, 58, 96)"} bolder={true} fontSize={22}
             label="CORE_COMMON_FORGOT_PASSWORD_LABEL"
