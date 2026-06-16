@@ -82,7 +82,7 @@ const ForgotPasswd = ({ form, handleFieldChange,logoUrl,cities }) => {
           </div>
         </div>
     <Card
-      className="login-card user-screens-card col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-4 col-sm-4"
+      className="forgot-password-card user-screens-card col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-4 col-sm-4"
 
       textChildren={<React.Fragment>
         <div className="inside-login-card" style={{width:"100%"}}>
