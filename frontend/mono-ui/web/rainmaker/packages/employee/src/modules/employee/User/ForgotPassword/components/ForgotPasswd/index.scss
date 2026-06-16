@@ -10,13 +10,14 @@
    margin-bottom: 2%;
 }
 
-.login-card{
+.forgot-password-card{
   gap: 8% !important;
   display: flex !important;
   margin-left: 12% !important;
   width: 40% !important;
   padding: 25px 28px !important;
   border-radius: 5px  !important;
+  height:51vh !important; //for forgot password card
 }
 
 .left-emblem{
@@ -46,9 +47,10 @@
     top:11rem;
 }
 
-  .login-card{
+  .forgot-password-card{
     width:100% !important;
     margin-left: 0% !important;
+    height:42vh !important;
   }
 
   .left-emblem{

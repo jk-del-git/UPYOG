@@ -86,10 +86,11 @@ const dependentDropdownStyle = {
 };
 
 const listItemStyle = {
-  padding: "10px 15px",
+  // padding: "10px 15px",
+  padding:"6px 15px",
   borderBottom: "1px solid #eee",
   cursor: "pointer",
-  fontSize: "16px",
+  fontSize: "15px",
   color: "#484848",
 };
 
