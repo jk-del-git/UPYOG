@@ -4,7 +4,8 @@ import { httpRequest, loginRequest, uploadFile } from "egov-ui-kit/utils/api";
 import { FILE_UPLOAD } from "egov-ui-kit/utils/endPoints";
 import { validateForm } from "./utils";
 import transformer from "config/forms/transformers";
-import { setUserObj } from "../../utils/localStorageUtils";
+import { setUserObj,getAccessToken, clearUserDetails, } from "../../utils/localStorageUtils";
+import { AUTH, USER, OTP } from "egov-ui-kit/utils/endPoints";
 
 export const initForm = (form, recordData) => {
   return {
@@ -91,6 +92,31 @@ export const submitForm = (formKey, saveUrl) => {
           setUserObj(JSON.stringify(formResponse.UserRequest));
         }
         dispatch(submitFormComplete(formKey, formResponse, saveUrl));
+        /* ADD LOGOUT HERE */
+              if (saveUrl === "/user/password/_update") {
+                console.log("MENTION SAVE URL",saveUrl)
+                try {
+                  const authToken = getAccessToken();
+                  if (authToken) {
+        const response = await httpRequest(AUTH.LOGOUT.URL, AUTH.LOGOUT.ACTION, [], { "access_token" : authToken });
+        localStorage.clear()
+        sessionStorage.clear()
+        window.location.replace(`${window.basename}/user/login`)
+      } else {
+        clearUserDetails();
+        process.env.REACT_APP_NAME === "Citizen"
+          ? window.location.replace(`${window.basename}/user/register`)
+          : window.location.replace(`${window.basename}/user/login`);
+        return;
+      }
+                } catch (error) {
+                  const { message } = error;
+                 dispatch(submitFormError(formKey, message));
+                }
+
+                window.location.href = "/user/login";
+              }
+        
       } catch (error) {
         const { message } = error;
         // throw new Error(error);
