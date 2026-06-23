@@ -80,7 +80,11 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
         (fields.city && fields.city.value ? fields.city.value : "");
 
       if (!username || !tenantId) {
-        alert("Please enter username and select city before sending OTP");
+        toggleSnackbarAndSetText(
+        true,
+        { labelKey: "UC_COMMON_USER_NOT_FOUND" },
+        "error"
+      )
         return;
       }
 
@@ -114,14 +118,22 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
       const userData = userSearchResponse.data && userSearchResponse.data.user && userSearchResponse.data.user[0];
 
       if (!userData) {
-        alert("User not found. Please check username and try again.");
+        toggleSnackbarAndSetText(
+        true,
+        { labelKey: "UC_COMMON_USER_NOT_FOUND" },
+        "error"
+      )
         return;
       }
 
       const userMobileNumber = userData.mobileNumber;
 
       if (!userMobileNumber) {
-        alert("Mobile number not found for this user.");
+        toggleSnackbarAndSetText(
+        true,
+        { labelKey: "PT_UPDATE_MOBILE_NO" },
+        "error"
+      )
         return;
       }
 
@@ -156,7 +168,6 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
 
       setShowOTPField(true);
       setIsTimerComplete(false);
-      // alert("CORE_OTP_SENT_MESSAGE" + userMobileNumber);
 
         // Get localized labels
     const localizationLabels = transformById(
@@ -172,7 +183,12 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
       )
 
     } catch (error) {
-      alert("Failed to send OTP. Please try again.");
+      // UC_COMMON_FAILED_OTP_SENT
+      toggleSnackbarAndSetText(
+        true,
+        { labelKey: "UC_COMMON_FAILED_OTP_SENT" },
+        "success"
+      )
     }
   }
 
