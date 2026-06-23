@@ -92,8 +92,8 @@ export const submitForm = (formKey, saveUrl) => {
           setUserObj(JSON.stringify(formResponse.UserRequest));
         }
         dispatch(submitFormComplete(formKey, formResponse, saveUrl));
-        /* ADD LOGOUT HERE */
-              if (saveUrl === "/user/password/_update") {
+        /* ADD LOGOUTON PASSWORD UPDATE */
+              if (saveUrl === "/user/password/_update") { 
                 console.log("MENTION SAVE URL",saveUrl)
                 try {
                   const authToken = getAccessToken();
@@ -101,20 +101,22 @@ export const submitForm = (formKey, saveUrl) => {
         const response = await httpRequest(AUTH.LOGOUT.URL, AUTH.LOGOUT.ACTION, [], { "access_token" : authToken });
         localStorage.clear()
         sessionStorage.clear()
-        window.location.replace(`${window.basename}/user/login`)
+        const base = window.location.pathname.includes("/employee") ? "/employee" : "";
+        // window.location.replace(`${window.basename}/user/login`);
+        window.location.replace(`${base}/user/login`);
+        return;
       } else {
         clearUserDetails();
+        const base = window.location.pathname.includes("/employee") ? "/employee" : "";
         process.env.REACT_APP_NAME === "Citizen"
           ? window.location.replace(`${window.basename}/user/register`)
-          : window.location.replace(`${window.basename}/user/login`);
+          :  window.location.replace(`${base}/user/login`);
         return;
       }
                 } catch (error) {
                   const { message } = error;
                  dispatch(submitFormError(formKey, message));
                 }
-
-                window.location.href = "/user/login";
               }
         
       } catch (error) {
