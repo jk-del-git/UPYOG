@@ -130,6 +130,9 @@ class App extends Component {
             {/* </div> */}
             <span className="copyright-text" onClick={() => { window.open(pdfUrl, '_blank').focus();}}>Copyright © 2026 Government of Jammu & Kashmir</span>
           </div>
+          <div className={"footer-new-style"}  >
+            <span className="btm-cpyrt-txt">An Initiative under the National Urban Digital Mission (NUDM)</span>
+          </div>
         </div>}
         
         {loginScreens && <div style={{ width: '100%', position: 'fixed', bottom: 0 }} >
