@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Card, TextField, Image, UsernameFieldWithIcon, OTPInputField } from "components";
+import { Card, TextField, Image, UsernameFieldWithIcon, OTPInputField, TextArea } from "components";
 import { Button } from "egov-ui-framework/ui-atoms";
 import { CityPickerNew } from "modules/common";
 import Label from "egov-ui-kit/utils/translationNode";
@@ -15,15 +15,20 @@ import { getLocaleLabels, transformById } from "egov-ui-kit/redux/../../../packa
 import { getLocalization, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import formConfig from "../../../../../../config/forms/specs/paymentReceipt";
+import { transform } from "lodash";
+
+const labelContainerStyle = {
+  width: "101px"
+}
 
 const textFieldStyle = {
-  width: "85%",
-  height: "44px",
+  width: "100%",
+  height: "30px",
   padding: "0px 15px",
   marginTop: "4px",
   border: "1px solid #b3b3b3",
   // borderRadius: "10px",
-  borderRadius: "5px",
+  borderRadius: "3px",
   fontSize: "14px !important",
   outline: "none",
   boxSizing: "border-box",
@@ -124,7 +129,7 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
         { key: "tenantId", value: tenantId },
         // { key: "receiptNumber", value: receiptNumber }
       ];
-      console.log("SEE",tenantId)
+      console.log("SEE", tenantId)
       const response = await httpRequest(
         "post",
         "collection-services/payments/_search",
@@ -135,8 +140,8 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
 
       const payment = response.Payments[0];
 
-      console.log("CHECK THE TENANT ID HERE",tenantId);
-      
+      console.log("CHECK THE TENANT ID HERE", tenantId);
+
 
       if (payment) {
         const mapped = mapApiToForm(payment);
@@ -162,40 +167,51 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
 
   return (
     <React.Fragment>
-      <div className="inside-login-card" style={{ width: "70%", marginLeft: "14%" }}>
-        <div style={{ display: "flex",justifyContent:"center", gap: "8px", alignItems: "flex-end", marginBottom: "20px" }}>
-  
-  <div style={{ width: "250px" }}>
-    <Label label="UC_COMMON_ENTER_RECEIPT_NO" />
-    <TextField
-      value={searchReceiptNo}
-      onChange={(e, value) => setSearchReceiptNo(value)}
-      style={{
-        ...textFieldStyle,
-        width: "100%"   // IMPORTANT FIX
-      }}
-      underlineShow={false}
-      required={false}
-      floatingLabelText={[null, null]}
-    />
-  </div>
+      {/* <Label label="Edit Receipt"/> */}
+      <div className="inside-login-card" style={{
+        marginLeft: "1%",
+        paddingLeft: "2%"
+      }}>
+        <div style={{ display: "flex", justifyContent: "center", gap: "8px", alignItems: "flex-end", marginBottom: "20px" }}>
 
-  <Button
-    variant="contained"
-    color="primary"
-    onClick={() => fetchReceipt(searchReceiptNo)}
-    style={{
-      height: "44px",
-      minWidth: "100px"
-    }}
-  >
-    Search
-  </Button>
+          <div style={{ display: "flex", alignItems: "center", width: "50%", gap: "2rem" }}>
+            <Label label="UC_COMMON_ENTER_RECEIPT_NO" />
+            <TextField
+              value={searchReceiptNo}
+              onChange={(e, value) => setSearchReceiptNo(value)}
+              style={{
+                ...textFieldStyle,
+                width: "51%"   // IMPORTANT FIX
+              }}
+              inputStyle={{
+                marginTop: "6px",
+              }}
+              underlineShow={false}
+              required={false}
+              floatingLabelText={[null, null]}
+            />
 
-</div>
+          </div>
+        </div>
+        <div style={{ display: "flex", justifyContent: "center", paddingRight:"8rem" }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => fetchReceipt(searchReceiptNo)}
+            style={{
+              height: "35px",
+              minWidth: "100px",
+              textTransform: "none",
+            }}
+          >
+            Search
+          </Button>
+        </div>
+
         <div style={{
+          marginTop:"4rem",
           display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
+          gridTemplateColumns: "repeat(2, 1fr)",
           gap: "16px",
         }}>
           {renderTextFields.map((item) => {
@@ -204,37 +220,66 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
             return (
               <React.Fragment>
                 <div style={{
-                  display: "flex",
-                  flexDirection: "column",
+                   display: "flex",
+    alignItems: "center",
+    gap: "12px",
                 }}>
-                  <Label label={item.label ? item.label : item.name} />
+                  <Label containerStyle={labelContainerStyle}  label={item.label ? item.label : item.name} />
+                  {item.key === "narration" ? (
+  <TextArea
+    required={false}
+    {...fieldState}
+    disabled={fieldConfig.disabled}
+    value={fieldState.value || ""}
+    rows={4}
+    floatingLabelText={null}
+     hintText=""
+     underlineStyle={{ borderBottom: "none" }}
+  underlineFocusStyle={{ borderBottom: "none" }}
+    style={{
+      ...textFieldStyle,
+      width: "43%",
+      minHeight: "90px",
+      resize: "vertical",
+      backgroundColor: fieldConfig.disabled ? "#f2f2f2" : "#fff",
+      cursor: fieldConfig.disabled ? "not-allowed" : "text",
+    }}
+    onChange={(e, value) => {
+      if (!fieldConfig.disabled) {
+        handleFieldChange(item.key, value);
+      }
+    }}
+  />
+) : (
+  <TextField
+    required={false}
+    {...fieldState}
+    disabled={fieldConfig.disabled}
+    floatingLabelText={[null, null]}
+    hintStyle={{
+      fontSize: "14px",
+      fontWeight: "400",
+      color: "rgb(38,38,38,0.62)",
+    }}
+    inputStyle={{
+      marginTop: "4px",
+      color: fieldConfig.disabled ? "#888" : "#1B1B1B",
+    }}
+    style={{
+      ...textFieldStyle,
+      width: "43%",
+      backgroundColor: fieldConfig.disabled ? "#f2f2f2" : "#fff",
+      cursor: fieldConfig.disabled ? "not-allowed" : "text",
+    }}
+    underlineShow={false}
+    onChange={(e, value) => {
+      if (!fieldConfig.disabled) {
+        handleFieldChange(item.key, value);
+      }
+    }}
+  />
+)}
                   {/* <TextField
-                    required={false}
-                    {...fields[item.key]}
-                    disabled={fields[item.key].disabled}
-                    floatingLabelText={[null, null]}
-                    hintStyle={{
-                      fontSize: "14px",
-                      fontWeight: "400",
-                      color: "rgb(38,38,38,0.62)",
-                    }}
-                    inputStyle={{
-                      marginTop: "4px",
-                      color: fields[item.key].disabled ? "#888" : "#1B1B1B"
-                    }}
-                    style={{
-                      ...textFieldStyle,
-                      backgroundColor: fields[item.key].disabled ? "#f2f2f2" : "#fff",
-                      cursor: fields[item.key].disabled ? "not-allowed" : "text"
-                    }}
-                    underlineShow={false}
-                    onChange={(e, value) => {
-                      if (!fields[item.key].disabled) {
-                        handleFieldChange(item.key, value);
-                      }
-                    }}
-                  /> */}
-                  <TextField
                     required={false}
                     {...fieldState}
                     disabled={fieldConfig.disabled}
@@ -250,6 +295,7 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
                     }}
                     style={{
                       ...textFieldStyle,
+                      width:"43%",
                       backgroundColor: fieldConfig.disabled ? "#f2f2f2" : "#fff",
                       cursor: fieldConfig.disabled ? "not-allowed" : "text"
                     }}
@@ -259,13 +305,13 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
                         handleFieldChange(item.key, value);
                       }
                     }}
-                  />
+                  /> */}
                 </div>
               </React.Fragment>)
           })}
 
         </div>
-        <div style={{ display: "flex", justifyContent: "center", margin: "4rem 0rem" }}>
+        <div style={{ display: "flex", justifyContent: "center", margin: "4rem 0rem", paddingRight:"8rem" }}>
           <Button
             {...submit}
             //  onClick={(e) => {
@@ -274,8 +320,9 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
             //     }
             //   }}
             style={{
-              height: "48px",
-              width: "20%",
+              height: "35px",
+              minWidth: "100px",
+              textTransform: "none",
             }}
             variant={"contained"}
             color={"primary"}
@@ -287,8 +334,8 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
     </React.Fragment>);
 };
 const mapStateToProps = (state) => {
-  console.log("STATE IS",state)
-  return { tenantId : state.auth.tenantId}
+  console.log("STATE IS", state)
+  return { tenantId: state.auth.tenantId }
 };
 
 const mapDispatchToProps = (dispatch) => ({

@@ -5,6 +5,7 @@ import formHoc from "egov-ui-kit/hocs/form";
 import PaymentReceipts from "./components/PaymentReceipts";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import formConfig from "../../../../config/forms/specs/paymentReceipt";
+import "./index.css";
 
 const ReceiptFormHOC = formHoc({formKey:"paymentReceipt"})(PaymentReceipts)
 

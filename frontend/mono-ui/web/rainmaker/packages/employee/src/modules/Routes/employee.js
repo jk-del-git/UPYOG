@@ -34,7 +34,7 @@ const routes = [
     path: "user/receipt",
     component: Receipt,
     needsAuthentication: true,
-    options: { hideFooter: true, title: "CORE_COMMON_EDIT_RECEIPT_HEADER" },
+    // options: { hideFooter: true, title: "CORE_COMMON_EDIT_RECEIPT_HEADER" },
   },
   {
     path: "user/login",
