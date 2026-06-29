@@ -187,8 +187,12 @@ class UserSettings extends Component {
     tenantIdsList = [...new Set(tenantIdsList)];
     tenantIdsList = tenantIdsList.map((tenantId) => {
       return { value: tenantId, label: getLocaleLabels(tenantId, "TENANT_TENANTS_" + getTransformedLocale(tenantId)) };
-    });
-
+    })
+    .sort((a, b) =>
+    (a.label || "").localeCompare(b.label || "", undefined, {
+      sensitivity: "base",
+    })
+  )
     return (
       <div className="userSettingsContainer">
         {isUserSetting && <LogoutDialog
