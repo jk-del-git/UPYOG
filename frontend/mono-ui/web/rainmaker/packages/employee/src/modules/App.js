@@ -116,11 +116,15 @@ class App extends Component {
         {loading && <LoadingIndicator />}
         <CommonShareContainer componentId="rainmaker-common-share" />
 
-        {!loginScreens && !dashboardScreen && isFixedFooter&& 
+        {!loginScreens && !dashboardScreen && isFixedFooter && <div style={{ width: '100%', display: 'flex', flexFlow: 'column', position:"fixed", bottom: "0" }}>
         <div className={"footer-new-style"}  >
             <span className="copyright-text" onClick={() => { window.open('https://niua.in/', '_blank').focus();}} >Housing and Urban Development Department</span>
             <span className="copyright-text-partition" >|</span>
             <span className="copyright-text" onClick={() => { window.open(pdfUrl, '_blank').focus();}}> Copyright © 2026 Government of Jammu & Kashmir</span>
+        </div>
+        <div className={"footer-new-style"}  >
+            <span className="btm-cpyrt-txt">An Initiative under the National Urban Digital Mission (NUDM)</span>
+          </div>
         </div>}
 
         {!loginScreens && !dashboardScreen && !isFixedFooter&& !isUserProfile && <div style={{ width: '100%', display: 'flex', flexFlow: 'column', position:"fixed", bottom: "0" }}>
@@ -135,11 +139,14 @@ class App extends Component {
           </div>
         </div>}
         
-        {loginScreens && <div style={{ width: '100%', position: 'fixed', bottom: 0 }} >
+        {loginScreens && <div style={{ width: '100%', display: 'flex', flexFlow: 'column', position:"fixed", bottom: "0" }}>
           <div className={"footer-new-style"}  >
             <span className="copyright-text" onClick={() => { window.open('https://niua.in/', '_blank').focus();}} >Housing and Urban Development Department</span>
             <span className="copyright-text-partition">|</span>
             <span className="copyright-text" onClick={() => { window.open(pdfUrl, '_blank').focus();}}>Copyright © 2026 Government of Jammu & Kashmir</span>
+          </div>
+          <div className={"footer-new-style"}  >
+            <span className="btm-cpyrt-txt">An Initiative under the National Urban Digital Mission (NUDM)</span>
           </div>
         </div>}
       </div>
