@@ -39,6 +39,7 @@ const textFieldStyle = {
 }
 
 const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, tenantId }) => {
+  const [isEditable, setIsEditable] = useState(false);
   const [generatedCaptcha, setGeneratedCaptcha] = useState("");
   const [errorCaptcha, setErrorCaptcha] = useState(false);
   const [showOTPField, setShowOTPField] = useState(false);
@@ -48,6 +49,24 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
   const city = fields.city || {};
   const citySelected = city.value || "";
   const submit = form.submit;
+
+  const isSameDay = (receiptTimestamp) => {
+  const receiptDate = new Date(receiptTimestamp);
+  const today = new Date();
+
+  return (
+    receiptDate.getDate() === today.getDate() &&
+    receiptDate.getMonth() === today.getMonth() &&
+    receiptDate.getFullYear() === today.getFullYear()
+  );
+};
+
+const isAdminUser = () => {
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+  // Change according to your localStorage structure
+  return userInfo.roles.some(role => role.code === "SUPERUSER");
+};
 
   //   const mapApiToForm = (payment = {}) => {
   //   return {
@@ -175,7 +194,7 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
         <div style={{ display: "flex", justifyContent: "center", gap: "8px", alignItems: "flex-end", marginBottom: "20px" }}>
 
           <div style={{ display: "flex", alignItems: "center", width: "50%", gap: "2rem" }}>
-            <Label label="UC_COMMON_ENTER_RECEIPT_NO" />
+            <Label fontSize={14} label="UC_COMMON_ENTER_RECEIPT_NO" />
             <TextField
               value={searchReceiptNo}
               onChange={(e, value) => setSearchReceiptNo(value)}
@@ -193,7 +212,7 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
 
           </div>
         </div>
-        <div style={{ display: "flex", justifyContent: "center", paddingRight:"8rem" }}>
+        <div style={{ display: "flex", justifyContent: "center", paddingRight:"10rem" }}>
           <Button
             variant="contained"
             color="primary"
@@ -224,7 +243,7 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
     alignItems: "center",
     gap: "12px",
                 }}>
-                  <Label containerStyle={labelContainerStyle}  label={item.label ? item.label : item.name} />
+                  <Label fontSize={14} containerStyle={labelContainerStyle}  label={item.label ? item.label : item.name} />
                   {item.key === "narration" ? (
   <TextArea
     required={false}
@@ -243,6 +262,9 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
       resize: "vertical",
       backgroundColor: fieldConfig.disabled ? "#f2f2f2" : "#fff",
       cursor: fieldConfig.disabled ? "not-allowed" : "text",
+    }}
+    inputStyle={{
+      fontSize:"13px"
     }}
     onChange={(e, value) => {
       if (!fieldConfig.disabled) {
@@ -264,6 +286,7 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
     inputStyle={{
       marginTop: "4px",
       color: fieldConfig.disabled ? "#888" : "#1B1B1B",
+      fontSize:"13px"
     }}
     style={{
       ...textFieldStyle,
