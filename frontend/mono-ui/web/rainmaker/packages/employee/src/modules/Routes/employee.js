@@ -23,6 +23,7 @@ import pgrRoutes from "pgr-employee/Routes/pgr-routes";
 import ptRoutes from "pt-employee/Routes/pt-routes";
 import frameworkScreens from "./frameworkScreens";
 import externalRoutes from "./exterenalURL";
+import Dashboard from "modules/employee/Dashboard";
 
 // import PTHome from "modules/employee/PropertyTax/PTHome";
 
@@ -179,6 +180,16 @@ const routes = [
       title: "CS_PGR_REPORTS_HEADER",
       hideTitle: true,
       redirectionUrl,
+    },
+  },
+   {
+    path: "mis-dashboard",
+    component: Dashboard,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      hideTitle: true,
+      isHomeScreen: true,
     },
   },
   {
