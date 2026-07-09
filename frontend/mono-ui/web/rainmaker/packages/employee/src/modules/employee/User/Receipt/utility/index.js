@@ -37,7 +37,7 @@ export   const mapApiToForm = (payment = {}) => {
       totalAmountPaid: payment.totalAmountPaid || "",
       payerName: payment.payerName || "",
       payerAddress: payment.payerAddress || "",
-      wardNo: payment.additionalDetails.wardNo || "",
+      wardNo: payment.additionalDetails.wardNo || payment.additionalDetails.ward || "",
       narration: payment.additionalDetails.narration || "",
       transactionNumber: payment.transactionNumber || "",
       

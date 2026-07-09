@@ -56,7 +56,7 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
     if (!fields.payerName.value || !fields.payerName.value.trim()) {
       toggleSnackbarAndSetText(
         true,
-        { labelKey: "Payer's name is mandatory." },
+        { labelKey: "UC_COMMON_PAYER_NAME_MANDATORY" },
         "error"
       );
       return;
@@ -65,7 +65,7 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
     if (!canEditReceipt()) {
       toggleSnackbarAndSetText(
         true,
-        { labelKey: "You are not authorized to update receipts." },
+        { labelKey: "UC_COMMON_NOT_AUTHORISED_USER_EDIT" },
         "error"
       );
       return;
@@ -94,7 +94,8 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
           payerAddress: fields.payerAddress.value,
           additionalDetails: {
             ward: fields.wardNo.value,
-            narration: fields.narration.value
+            wardNo: fields.wardNo.value,
+            narration: fields.narration.value,
           },
           paymentDetails: [...paymentResponse.paymentDetails]
         }
@@ -110,7 +111,7 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
 
       toggleSnackbarAndSetText(
         true,
-        { labelKey: "Receipt updated successfully." },
+        { labelKey: "UC_COMMON_RECEIPT_UPDATE_MESSAGE" },
         "success"
       );
     } catch (error) {
@@ -272,8 +273,8 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
               fontWeight: 500,
               textAlign: "center",
             }}
-          >
-            {errorMessage}
+          >            
+          {errorMessage}
           </div>
         )}
 
@@ -312,6 +313,7 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
             >
               <React.Fragment>
                 <div style={{
+                  padding: "0 0 0 7.5rem",
                   marginTop: "4rem",
                   display: "grid",
                   gridTemplateColumns: "repeat(2, 1fr)",
