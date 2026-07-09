@@ -4,7 +4,8 @@ import { httpRequest, loginRequest, uploadFile } from "egov-ui-kit/utils/api";
 import { FILE_UPLOAD } from "egov-ui-kit/utils/endPoints";
 import { validateForm } from "./utils";
 import transformer from "config/forms/transformers";
-import { setUserObj } from "../../utils/localStorageUtils";
+import { setUserObj,getAccessToken, clearUserDetails, } from "../../utils/localStorageUtils";
+import { AUTH, USER, OTP } from "egov-ui-kit/utils/endPoints";
 
 export const initForm = (form, recordData) => {
   return {
@@ -91,6 +92,33 @@ export const submitForm = (formKey, saveUrl) => {
           setUserObj(JSON.stringify(formResponse.UserRequest));
         }
         dispatch(submitFormComplete(formKey, formResponse, saveUrl));
+        /* ADD LOGOUTON PASSWORD UPDATE */
+              if (saveUrl === "/user/password/_update") { 
+                console.log("MENTION SAVE URL",saveUrl)
+                try {
+                  const authToken = getAccessToken();
+                  if (authToken) {
+        const response = await httpRequest(AUTH.LOGOUT.URL, AUTH.LOGOUT.ACTION, [], { "access_token" : authToken });
+        localStorage.clear()
+        sessionStorage.clear()
+        const base = window.location.pathname.includes("/employee") ? "/employee" : "";
+        // window.location.replace(`${window.basename}/user/login`);
+        window.location.replace(`${base}/user/login`);
+        return;
+      } else {
+        clearUserDetails();
+        const base = window.location.pathname.includes("/employee") ? "/employee" : "";
+        process.env.REACT_APP_NAME === "Citizen"
+          ? window.location.replace(`${window.basename}/user/register`)
+          :  window.location.replace(`${base}/user/login`);
+        return;
+      }
+                } catch (error) {
+                  const { message } = error;
+                 dispatch(submitFormError(formKey, message));
+                }
+              }
+        
       } catch (error) {
         const { message } = error;
         // throw new Error(error);

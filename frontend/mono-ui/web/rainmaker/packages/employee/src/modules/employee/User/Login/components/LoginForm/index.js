@@ -1,8 +1,8 @@
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Card, TextField, Image, UsernameFieldWithIcon, OTPInputField } from "components";
 import { Button } from "egov-ui-framework/ui-atoms";
-import {  CityPickerNew} from "modules/common";
+import { CityPickerNew } from "modules/common";
 import Label from "egov-ui-kit/utils/translationNode";
 import logo from "egov-ui-kit/assets/images/logo_black.png";
 import "./index.css";
@@ -80,7 +80,11 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
         (fields.city && fields.city.value ? fields.city.value : "");
 
       if (!username || !tenantId) {
-        alert("Please enter username and select city before sending OTP");
+        toggleSnackbarAndSetText(
+          true,
+          { labelKey: "UC_COMMON_USER_NOT_FOUND" },
+          "error"
+        )
         return;
       }
 
@@ -114,16 +118,31 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
       const userData = userSearchResponse.data && userSearchResponse.data.user && userSearchResponse.data.user[0];
 
       if (!userData) {
-        alert("User not found. Please check username and try again.");
+        toggleSnackbarAndSetText(
+          true,
+          { labelKey: "UC_COMMON_USER_NOT_FOUND" },
+          "error"
+        )
         return;
       }
 
       const userMobileNumber = userData.mobileNumber;
 
+      
+
       if (!userMobileNumber) {
-        alert("Mobile number not found for this user.");
+        toggleSnackbarAndSetText(
+          true,
+          { labelKey: "PT_UPDATE_MOBILE_NO" },
+          "error"
+        )
         return;
       }
+
+      const maskedNumber =
+        userMobileNumber.slice(0, 2) +
+        "*".repeat(Math.max(0, userMobileNumber.length - 5)) +
+        userMobileNumber.slice(-3);
 
       // ===== STEP 2: Call user-otp/v1/_send API =====
       const otpSendRequestBody = {
@@ -156,15 +175,14 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
 
       setShowOTPField(true);
       setIsTimerComplete(false);
-      // alert("CORE_OTP_SENT_MESSAGE" + userMobileNumber);
 
-        // Get localized labels
-    const localizationLabels = transformById(
-      JSON.parse(getLocalization(`localization_${getLocale()}`)),
-      "code"
-    );
-    const translatedMessage = getLocaleLabels("CORE_OTP_SENT_MESSAGE", localizationLabels);
-    const finalMessage = `${translatedMessage} ${userMobileNumber}`;
+      // Get localized labels
+      const localizationLabels = transformById(
+        JSON.parse(getLocalization(`localization_${getLocale()}`)),
+        "code"
+      );
+      const translatedMessage = getLocaleLabels("CORE_OTP_SENT_MESSAGE", localizationLabels);
+      const finalMessage = `${translatedMessage} ${maskedNumber}`;
       toggleSnackbarAndSetText(
         true,
         { labelKey: finalMessage },
@@ -172,7 +190,12 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
       )
 
     } catch (error) {
-      alert("Failed to send OTP. Please try again.");
+      // UC_COMMON_FAILED_OTP_SENT
+      toggleSnackbarAndSetText(
+        true,
+        { labelKey: "UC_COMMON_FAILED_OTP_SENT" },
+        "success"
+      )
     }
   }
 
@@ -186,11 +209,11 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
   return (
     <React.Fragment>
       <div className="mn-content" >
-         <div className="left-emblem"
+        <div className="left-emblem"
         >
           <div
-          className="inside-left-dv"
-            
+            className="inside-left-dv"
+
           >
             <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" className="login-emblem-img" />
             <h3 className="main-login-header">
@@ -230,30 +253,30 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
               {showOTPField && (<div>
                 {!isTimerComplete ? (
                   <React.Fragment>
-                  <div style={{ display: "flex" }}>
-                    <React.Fragment>
-                      <Label id="otp-resend" className="otp-prompt" label="CORE_ANOTHER_OTP" />
-                      <CountdownTimer
-                        timeLeft={30000}
-                        tickCallback={(remainingTime) => {
-                          if (remainingTime <= 0) {
-                            setIsTimerComplete(true);
-                          }
-                        }}
-                      />
-                      <Label id="otp-resend" className="otp-timer" label="CORE_OTP_SECONDS" />
-                    </React.Fragment>
-                  </div>
-                  <OTPInputField
-                  length={6}
-                  onChange={(value) => handleFieldChange("otp", value)}
-                />
-                </React.Fragment>
+                    <div style={{ display: "flex" }}>
+                      <React.Fragment>
+                        <Label id="otp-resend" className="otp-prompt" label="CORE_ANOTHER_OTP" />
+                        <CountdownTimer
+                          timeLeft={30000}
+                          tickCallback={(remainingTime) => {
+                            if (remainingTime <= 0) {
+                              setIsTimerComplete(true);
+                            }
+                          }}
+                        />
+                        <Label id="otp-resend" className="otp-timer" label="CORE_OTP_SECONDS" />
+                      </React.Fragment>
+                    </div>
+                    <OTPInputField
+                      length={6}
+                      onChange={(value) => handleFieldChange("otp", value)}
+                    />
+                  </React.Fragment>
                 ) : null}
-                </div>)
-          }
-                
-               <div className="get-otp-btn">
+              </div>)
+              }
+
+              <div className="get-otp-btn">
                 {(!showOTPField || isTimerComplete) && <Button style={{
                   height: "48px",
                   width: "100%",
