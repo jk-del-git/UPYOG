@@ -6,6 +6,7 @@ import ChangePassword from "modules/employee/User/ChangePassword";
 import Profile from "modules/employee/User/Profile";
 import ForgotPassword from "modules/employee/User/ForgotPassword";
 import PushLocalization from "modules/employee/PushLocalization";
+import Receipt from "modules/employee/User/Receipt";
 
 // Employee specific routes
 import { TrackLocation } from "modules/common";
@@ -31,6 +32,12 @@ import Dashboard from "modules/employee/Dashboard";
 const redirectionUrl = "/user/login";
 
 const routes = [
+  {
+    path: "editreceipt",
+    component: Receipt,
+    needsAuthentication: true,
+    // options: { hideFooter: true, title: "CORE_COMMON_EDIT_RECEIPT_HEADER" },
+  },
   {
     path: "user/login",
     component: Login,

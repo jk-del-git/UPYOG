@@ -1,0 +1,18 @@
+.receipt-table{
+    margin-left: 1%;
+    justify-content: center;
+    display: flex;
+    width: 98%;
+}
+
+.search-btn{
+    display: flex;
+    justify-content: center;
+}
+
+.receipt-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 16px;
+}
