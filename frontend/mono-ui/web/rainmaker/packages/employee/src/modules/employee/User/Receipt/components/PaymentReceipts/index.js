@@ -223,6 +223,10 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
         marginLeft: "1%",
         paddingLeft: "2%"
       }}>
+        {/* Header */}
+        <div>
+          <Label fontSize={18} labelStyle={{fontWeight:500,color:"black"}} label="CORE_COMMON_EDIT_RECEIPT_HEADER" />
+        </div>
         <div style={{ display: "flex", justifyContent: "center", gap: "8px", alignItems: "flex-end", marginBottom: "20px" }}>
 
           <div style={{ display: "flex", alignItems: "center", width: "50%", gap: "2rem" }}>
