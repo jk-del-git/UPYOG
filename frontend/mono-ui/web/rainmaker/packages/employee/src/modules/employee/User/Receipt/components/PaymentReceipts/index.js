@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { Card, TextField, Image, UsernameFieldWithIcon, OTPInputField, TextArea } from "components";
+import React, { useState } from "react";
+import { TextField, TextArea } from "components";
 import { Button } from "egov-ui-framework/ui-atoms";
-import { CityPickerNew } from "modules/common";
 import Label from "egov-ui-kit/utils/translationNode";
-import logo from "egov-ui-kit/assets/images/logo_black.png";
 import "./index.css";
 import { connect } from "react-redux";
-import axios from "axios";
-import { CountdownTimer } from "egov-ui-framework/ui-atoms/index";
-import { Toast } from "components";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
-import { getLocaleLabels, transformById } from "egov-ui-kit/redux/../../../packages/employee/src/ui-utils/commons";
-import { getLocalization, getLocale, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getAccessToken } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import formConfig from "../../../../../../config/forms/specs/paymentReceipt";
-import { transform } from "lodash";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { isSameDay, mapApiToForm, renderTextFields } from "../../utility";
+import {
+  hasReceiptAdminRole,
+  hasReceiptUserRole,
+  canEditReceipt,
+} from "../../utility";
+
+
 
 const labelContainerStyle = {
   width: "101px"
@@ -27,7 +28,6 @@ const textFieldStyle = {
   padding: "0px 15px",
   marginTop: "4px",
   border: "1px solid #b3b3b3",
-  // borderRadius: "10px",
   borderRadius: "3px",
   fontSize: "14px !important",
   outline: "none",
@@ -39,168 +39,147 @@ const textFieldStyle = {
 }
 
 const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, tenantId }) => {
+  const [loading, setLoading] = useState(false);
   const [isEditAllowed, setIsEditAllowed] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [paymentResponse,setPaymentResponse] = useState()
   const [paymentId, setPaymentId] = useState();
-  const [generatedCaptcha, setGeneratedCaptcha] = useState("");
-  const [errorCaptcha, setErrorCaptcha] = useState(false);
-  const [showOTPField, setShowOTPField] = useState(false);
-  const [isTimerComplete, setIsTimerComplete] = useState(false);
   const [searchReceiptNo, setSearchReceiptNo] = useState("");
   const fields = form.fields || {};
-  const city = fields.city || {};
-  const citySelected = city.value || "";
   const submit = form.submit;
 
-  const isSameDay = (receiptTimestamp) => {
-    const receiptDate = new Date(receiptTimestamp);
-    const today = new Date();
+  const userInfo = JSON.parse(localStorage.getItem("user-info"));
 
-    return (
-      receiptDate.getDate() === today.getDate() &&
-      receiptDate.getMonth() === today.getMonth() &&
-      receiptDate.getFullYear() === today.getFullYear()
-    );
-  };
-
-  const isAdminUser = () => {
-    const userInfo = JSON.parse(localStorage.getItem("user-info"));
-
-    // Change according to your localStorage structure
-    return userInfo.roles.some(role => role.code === "XYZ");
-  };
 
   //Update API
-//   const updateReceipt = async () => {
-//   try {
-//     setErrorMessage("");
+  const updateReceipt = async () => {
+    if (!fields.payerName.value || !fields.payerName.value.trim()) {
+      toggleSnackbarAndSetText(
+        true,
+        { labelKey: "Payer's name is mandatory." },
+        "error"
+      );
+      return;
+    }
 
-//     const payload = {
-//       RequestInfo: {
-//         apiId: "collection-services",
-//         authToken: JSON.parse(localStorage.getItem("user-info")).access_token, // or wherever your auth token is stored
-//         userInfo: {
-//           id: JSON.parse(localStorage.getItem("user-info")).id,
-//           uuid: JSON.parse(localStorage.getItem("user-info")).uuid,
-//           type: "EMPLOYEE",
-//           roles: JSON.parse(localStorage.getItem("user-info")).roles
-//         }
-//       },
-//       Payment: {
-//         id: fields.id.value, // You'll need to save this when fetching
-//         tenantId: getTenantId(),
-//         paymentMode: "CASH", // or fields.paymentMode.value
-//         totalAmountPaid: Number(fields.totalAmountPaid.value),
-//         paidBy: fields.payerName.value,
-//         payerName: fields.payerName.value,
-//         payerAddress: fields.payerAddress.value,
-//         additionalDetails: {
-//           ward: fields.wardNo.value,
-//           narration: fields.narration.value
-//         },
-//         paymentDetails: []
-//       }
-//     };
-
-//     const response = await httpRequest(
-//       "post",
-//       "collection-services/payments/_update",
-//       "_update",
-//       [],
-//       payload
-//     );
-
-//     console.log("Update Response:", response);
-
-//     toggleSnackbarAndSetText(
-//       true,
-//       "Receipt updated successfully.",
-//       "success"
-//     );
-//   } catch (error) {
-//     console.error("Update Error:", error);
-
-//     toggleSnackbarAndSetText(
-//       true,
-//       "Failed to update receipt.",
-//       "error"
-//     );
-//   }
-// };
-
-  //   const mapApiToForm = (payment = {}) => {
-  //   return {
-  //     receiptNumber: payment.receiptNumber || "",
-  //     totalAmountPaid: payment.totalAmountPaid || "",
-  //     payerName: payment.payerName || "",
-  //     payerAddress: payment.payerAddress || "",
-  //     wardNo: payment.wardNo || "",
-  //     narration: payment.narration || "",
-  //     transactionNumber: payment.transactionNumber || ""
-  //   };
-  // };
-
-  const formatDate = (timestamp) => {
-    if (!timestamp) return "";
-
-    const date = new Date(timestamp);
-
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-
-    return `${day}/${month}/${year}`;
-  };
-
-  const mapApiToForm = (payment = {}) => {
-    const paymentDetail = payment && payment.paymentDetails[0] || {};
-
-    return {
-      receiptNumber: paymentDetail.receiptNumber || "",
-      receiptDate: formatDate(paymentDetail.receiptDate),
-      totalAmountPaid: payment.totalAmountPaid || "",
-      payerName: payment.payerName || "",
-      payerAddress: payment.payerAddress || "",
-      wardNo: payment.additionalDetails.wardNo || "",
-      narration: payment.additionalDetails.narration || "",
-      transactionNumber: payment.transactionNumber || "",
-      
-    };
-  };
-
-  const fetchReceipt = async (receiptNumber) => {
+    if (!canEditReceipt()) {
+      toggleSnackbarAndSetText(
+        true,
+        { labelKey: "You are not authorized to update receipts." },
+        "error"
+      );
+      return;
+    }
     try {
+      setLoading(true);
       setErrorMessage("");
+      const payload = {
+        RequestInfo: {
+          apiId: "collection-services",
+          authToken: getAccessToken(), // or wherever your auth token is stored
+          userInfo: {
+            id: JSON.parse(localStorage.getItem("user-info")).id,
+            uuid: JSON.parse(localStorage.getItem("user-info")).uuid,
+            type: "EMPLOYEE",
+            roles: userInfo.roles || []
+          }
+        },
+        Payment: {
+          id: paymentResponse && paymentResponse.id, // You'll need to save this when fetching
+          tenantId: getTenantId(),
+          paymentMode: paymentResponse && paymentResponse.paymentMode, // or fields.paymentMode.value
+          totalAmountPaid: Number(fields.totalAmountPaid.value),
+          paidBy: fields.payerName.value,
+          payerName: fields.payerName.value,
+          payerAddress: fields.payerAddress.value,
+          additionalDetails: {
+            ward: fields.wardNo.value,
+            narration: fields.narration.value
+          },
+          paymentDetails: [...paymentResponse.paymentDetails]
+        }
+      };
+
+      const response = await httpRequest(
+        "post",
+        "collection-services/payments/_update",
+        "_update",
+        [],
+        payload
+      );
+
+      toggleSnackbarAndSetText(
+        true,
+        { labelKey: "Receipt updated successfully." },
+        "success"
+      );
+    } catch (error) {
+      toggleSnackbarAndSetText(
+        true,
+        { labelKey: error.message || "Something went wrong while updating receipt." },
+        "error"
+      );
+    }
+    finally {
+      setLoading(false);
+    }
+  };
+  
+  const fetchReceipt = async (receiptNumber) => {
+    if (!receiptNumber.trim()) {
+      setErrorMessage("Please enter a receipt number.");
+      return;
+    }
+
+    // Authorization check before API call
+    if (!canEditReceipt()) {
+      setErrorMessage("You are not authorized to edit receipts.");
       setIsEditAllowed(false);
+      return;
+    }
+
+    setLoading(true);
+    setErrorMessage("");
+    setIsEditAllowed(false);
+
+    try {
+      const userInfo = JSON.parse(localStorage.getItem("user-info"));
 
       const queryParams = [
         { key: "tenantId", value: getTenantId() },
-        { key: "receiptNumbers", value: receiptNumber }
+        { key: "receiptNumbers", value: receiptNumber.trim() }
       ];
 
       const response = await httpRequest(
         "post",
-        "collection-services/payments/_search",
-        // "collection-services/payments/_receiptsearch",
+        "collection-services/payments/_receiptsearch",
         "_search",
         queryParams,
         {
-
+          apiId: "collection-services",
+          authToken: getAccessToken(),
+          userInfo: {
+            id: userInfo.id,
+            uuid: userInfo.uuid,
+            type: userInfo.type,
+            roles: userInfo.roles || []
+          }
         }
       );
 
-      const payment = response  && response.Payments[0];
+      const payment = response && response.Payments[0];
 
       if (!payment) {
         setErrorMessage("Receipt not found.");
         return;
       }
-      
-      const admin = isAdminUser();
-      const receiptDate = payment.paymentDetails && payment.paymentDetails[0] && payment.paymentDetails[0].receiptDate;
+
+      setPaymentResponse(payment)
+
+      const receiptDate = payment && payment.paymentDetails[0] && payment.paymentDetails[0].receiptDate;
 
       // Admin can edit any receipt
-      if (admin) {
+      if (hasReceiptAdminRole()) {
         const mapped = mapApiToForm(payment);
 
         Object.keys(mapped).forEach((key) => {
@@ -211,8 +190,15 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
         return;
       }
 
-      // Non-admin can edit only same-day receipt
-      if (isSameDay(receiptDate)) {
+      // EDIT_RECEIPT_USER can edit only same-day receipts
+      if (hasReceiptUserRole()) {
+        if (!isSameDay(receiptDate)) {
+          setErrorMessage(
+            "This receipt can only be edited on the day it was generated."
+          );
+          return;
+        }
+
         const mapped = mapApiToForm(payment);
 
         Object.keys(mapped).forEach((key) => {
@@ -220,32 +206,19 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
         });
 
         setIsEditAllowed(true);
-      } else {
-        setErrorMessage(
-          "This receipt cannot be edited because it was not generated on the current date."
-        );
       }
     } catch (error) {
-      console.error("Error fetching receipt:", error);
 
-      setIsEditAllowed(false);
-      setErrorMessage("Something went wrong while fetching the receipt.");
+      setErrorMessage(
+        error.message || "Something went wrong while fetching the receipt."
+      );
+    } finally {
+      setLoading(false);
     }
   };
-  const renderTextFields = [
-    { key: "receiptNumber", name: "Receipt Number", label: "UC_COMMON_TABLE_COL_RECEIPT_NO" },
-    { key: "receiptDate", name: "Receipt Date", label: "UC_COMMON_TABLE_COL_DATE" },
-    { key: "totalAmountPaid", name: "Total Amount Paid", label: "TL_LOCALIZATION_TOTAL_AMOUNT_PAID" },
-    { key: "payerName", name: "Payer Name", label: "PT_RECEIPT_PAYER_NAME" },
-    { key: "payerAddress", name: "Payer Address", label: "PDF_STATIC_LABEL_CONSOLIDATED_BILL_PAYER_ADDRESS" },
-    { key: "wardNo", name: "Ward Number", label: "UC_MOHALLA_LABEL" },
-    { key: "narration", name: "Narration", label: "UC_COMMON_NARRATION" },
-    { key: "transactionNumber", name: "Transaction Number", label: "ES_COMMON_TRANSANCTION_NO" }
-  ];
 
   return (
     <React.Fragment>
-      {/* <Label label="Edit Receipt"/> */}
       <div className="inside-login-card" style={{
         marginLeft: "1%",
         paddingLeft: "2%"
@@ -273,6 +246,7 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
         </div>
         <div style={{ display: "flex", justifyContent: "center", paddingRight: "10rem" }}>
           <Button
+            // disabled={searchReceiptNo==""}
             variant="contained"
             color="primary"
             onClick={() => fetchReceipt(searchReceiptNo)}
@@ -299,141 +273,153 @@ const PaymentReceipts = ({ handleFieldChange, form, toggleSnackbarAndSetText, te
           </div>
         )}
 
+
+
+        {loading && (
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              background: "rgba(255,255,255,0.35)",
+              backdropFilter: "blur(0.2px)",
+              zIndex: 1000,
+            }}
+          >
+            <CircularProgress size={35} />
+          </div>
+        )}
         {isEditAllowed && (
-          <React.Fragment>
-        <div style={{
-          marginTop: "4rem",
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
-          gap: "16px",
-        }}>
-          {renderTextFields.map((item) => {
-            const fieldConfig = formConfig && formConfig.fields[item.key] || {};
-            const fieldState = fields && fields[item.key] || {};
-            return (
+
+          <div
+            style={{
+              position: "relative",
+              marginTop: "4rem",
+            }}
+          >
+            <div
+              style={{
+                filter: loading ? "blur(2px)" : "none",
+                pointerEvents: loading ? "none" : "auto",
+                transition: "0.2s ease",
+              }}
+            >
               <React.Fragment>
                 <div style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
+                  marginTop: "4rem",
+                  display: "grid",
+                  gridTemplateColumns: "repeat(2, 1fr)",
+                  gap: "16px",
                 }}>
-                  <Label fontSize={14} containerStyle={labelContainerStyle} label={item.label ? item.label : item.name} />
-                  {item.key === "narration" ? (
-                    <TextArea
-                      required={false}
-                      {...fieldState}
-                      disabled={fieldConfig.disabled}
-                      value={fieldState.value || ""}
-                      rows={4}
-                      floatingLabelText={null}
-                      hintText=""
-                      underlineStyle={{ borderBottom: "none" }}
-                      underlineFocusStyle={{ borderBottom: "none" }}
-                      style={{
-                        ...textFieldStyle,
-                        width: "43%",
-                        minHeight: "90px",
-                        resize: "vertical",
-                        backgroundColor: fieldConfig.disabled ? "#f2f2f2" : "#fff",
-                        cursor: fieldConfig.disabled ? "not-allowed" : "text",
-                      }}
-                      inputStyle={{
-                        fontSize: "13px"
-                      }}
-                      onChange={(e, value) => {
-                        if (!fieldConfig.disabled) {
-                          handleFieldChange(item.key, value);
-                        }
-                      }}
-                    />
-                  ) : (
-                    <TextField
-                      required={false}
-                      {...fieldState}
-                      disabled={fieldConfig.disabled}
-                      floatingLabelText={[null, null]}
-                      hintStyle={{
-                        fontSize: "14px",
-                        fontWeight: "400",
-                        color: "rgb(38,38,38,0.62)",
-                      }}
-                      inputStyle={{
-                        marginTop: "4px",
-                        color: fieldConfig.disabled ? "#888" : "#1B1B1B",
-                        fontSize: "13px"
-                      }}
-                      style={{
-                        ...textFieldStyle,
-                        width: "43%",
-                        backgroundColor: fieldConfig.disabled ? "#f2f2f2" : "#fff",
-                        cursor: fieldConfig.disabled ? "not-allowed" : "text",
-                      }}
-                      underlineShow={false}
-                      onChange={(e, value) => {
-                        if (!fieldConfig.disabled) {
-                          handleFieldChange(item.key, value);
-                        }
-                      }}
-                    />
-                  )}
-                  {/* <TextField
-                    required={false}
-                    {...fieldState}
-                    disabled={fieldConfig.disabled}
-                    floatingLabelText={[null, null]}
-                    hintStyle={{
-                      fontSize: "14px",
-                      fontWeight: "400",
-                      color: "rgb(38,38,38,0.62)",
-                    }}
-                    inputStyle={{
-                      marginTop: "4px",
-                      color: fieldConfig.disabled ? "#888" : "#1B1B1B"
-                    }}
-                    style={{
-                      ...textFieldStyle,
-                      width:"43%",
-                      backgroundColor: fieldConfig.disabled ? "#f2f2f2" : "#fff",
-                      cursor: fieldConfig.disabled ? "not-allowed" : "text"
-                    }}
-                    underlineShow={false}
-                    onChange={(e, value) => {
-                      if (!fieldConfig.disabled) {
-                        handleFieldChange(item.key, value);
-                      }
-                    }}
-                  /> */}
-                </div>
-              </React.Fragment>)
-          })}
 
-        </div>
-        <div style={{ display: "flex", justifyContent: "center", margin: "4rem 0rem", paddingRight: "8rem" }}>
-          <Button
-            {...submit}
-            // onClick={updateReceipt}
-            //  onClick={(e) => {
-            //     if (generatedCaptcha !== fields.captcha.value) {
-            //       e.preventDefault();
-            //     }
-            //   }}
-            style={{
-              height: "35px",
-              minWidth: "100px",
-              textTransform: "none",
-            }}
-            variant={"contained"}
-            color={"primary"}
-          >
-            <Label buttonLabel={true} labelStyle={{ fontWeight: 500 }} label="ES_COMMON_UPDATE" />
-          </Button>
-        </div>
-        </React.Fragment>)}
+                  {renderTextFields.map((item) => {
+                    const fieldConfig = formConfig && formConfig.fields[item.key] || {};
+                    const fieldState = fields && fields[item.key] || {};
+                    return (
+                      <React.Fragment>
+                        <div style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "12px",
+                        }}>
+
+                          <div style={{ display: "flex", alignItems: "center" }}>
+                            <Label
+                              fontSize={14}
+                              containerStyle={labelContainerStyle}
+                              label={item.label ? item.label : item.name}
+                              required={item.key=="payerName"}
+                            />
+                            
+                          </div>
+                          {item.key === "narration" ? (
+                            <TextArea
+                              required={false}
+                              {...fieldState}
+                              disabled={fieldConfig.disabled}
+                              value={fieldState.value || ""}
+                              rows={4}
+                              floatingLabelText={null}
+                              hintText=""
+                              underlineStyle={{ borderBottom: "none" }}
+                              underlineFocusStyle={{ borderBottom: "none" }}
+                              style={{
+                                ...textFieldStyle,
+                                width: "43%",
+                                minHeight: "90px",
+                                resize: "vertical",
+                                backgroundColor: fieldConfig.disabled ? "#f2f2f2" : "#fff",
+                                cursor: fieldConfig.disabled ? "not-allowed" : "text",
+                              }}
+                              inputStyle={{
+                                fontSize: "13px"
+                              }}
+                              onChange={(e, value) => {
+                                if (!fieldConfig.disabled) {
+                                  handleFieldChange(item.key, value);
+                                }
+                              }}
+                            />
+                          ) : (
+                            <TextField
+                              required={false}
+                              {...fieldState}
+                              disabled={fieldConfig.disabled}
+                              floatingLabelText={[null, null]}
+                              hintStyle={{
+                                fontSize: "14px",
+                                fontWeight: "400",
+                                color: "rgb(38,38,38,0.62)",
+                              }}
+                              inputStyle={{
+                                marginTop: "4px",
+                                color: fieldConfig.disabled ? "#888" : "#1B1B1B",
+                                fontSize: "13px"
+                              }}
+                              style={{
+                                ...textFieldStyle,
+                                width: "43%",
+                                backgroundColor: fieldConfig.disabled ? "#f2f2f2" : "#fff",
+                                cursor: fieldConfig.disabled ? "not-allowed" : "text",
+                              }}
+                              underlineShow={false}
+                              onChange={(e, value) => {
+                                if (!fieldConfig.disabled) {
+                                  handleFieldChange(item.key, value);
+                                }
+                              }}
+                            />
+                          )}
+                        </div>
+                      </React.Fragment>)
+                  })}
+
+                </div>
+                <div style={{ display: "flex", justifyContent: "center", margin: "4rem 0rem", paddingRight: "8rem" }}>
+                  <Button
+                    disabled={loading}
+                    // {...submit}
+                    onClick={updateReceipt}
+                    style={{
+                      height: "35px",
+                      minWidth: "100px",
+                      textTransform: "none",
+                    }}
+                    variant={"contained"}
+                    color={"primary"}
+                  >
+                    <Label buttonLabel={true} labelStyle={{ fontWeight: 500 }} label="ES_COMMON_UPDATE" />
+                  </Button>
+                </div>
+              </React.Fragment>
+            </div>
+          </div>)}
       </div>
     </React.Fragment>);
 };
 const mapStateToProps = (state) => {
-  console.log("STATE IS", state)
   return { tenantId: state.auth.tenantId }
 };
 
