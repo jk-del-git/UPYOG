@@ -190,7 +190,7 @@ const routes = [
     },
   },
    {
-    path: "mis-dashboard",
+    path: "mis-dashboard-be",
     component: Dashboard,
     needsAuthentication: true,
     options: {
