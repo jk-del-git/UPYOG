@@ -33,7 +33,7 @@ const redirectionUrl = "/user/login";
 
 const routes = [
   {
-    path: "editreceipt",
+    path: "services/collection/receipts/editreceipt",
     component: Receipt,
     needsAuthentication: true,
     // options: { hideFooter: true, title: "CORE_COMMON_EDIT_RECEIPT_HEADER" },
