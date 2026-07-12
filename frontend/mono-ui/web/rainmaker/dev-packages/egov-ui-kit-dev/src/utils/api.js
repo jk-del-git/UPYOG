@@ -236,9 +236,10 @@ export const loginRequest = async (username = null, password = null, refreshToke
     if (status === 400) {
       apiError = (data.hasOwnProperty("error_description") && data.error_description) || apiError;
     }
+    throw new Error(data.error_description);
   }
 
-  throw new Error(apiError);
+  
 };
 
 

@@ -69,7 +69,7 @@ const ForgotPasswd = ({ form, handleFieldChange,logoUrl,cities }) => {
                 color: "#0C3A60",
                 // color:"white",
                  paddingRight: "15px", lineHeight: "1.2" }}>
-                Housing and Urban <br /> Development Deparment
+                Housing and Urban <br /> Development Department
               </strong>
               <br />
               <p style={{ 

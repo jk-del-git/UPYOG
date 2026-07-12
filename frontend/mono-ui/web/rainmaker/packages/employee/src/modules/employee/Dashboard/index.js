@@ -42,7 +42,7 @@ class Dashboard extends Component {
   ? window.globalConfigs.getConfig("BASE_ENDPOINT")
   : "jkhudd.mycitydemo.in";
 
-    erp_url = loc.protocol + "//" + baseEndpoint + menuUrl;
+    erp_url = loc.protocol + "//" + "jkhudd.mycitydemo.in" + menuUrl;
 
     function navigateToRoute(routePath) {
       const iframe = document.getElementById("erp_iframe");

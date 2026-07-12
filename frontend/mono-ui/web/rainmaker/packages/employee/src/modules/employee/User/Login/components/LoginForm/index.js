@@ -222,7 +222,7 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
                 // color:"white",
                 paddingRight: "15px", lineHeight: "1.2"
               }}>
-                Housing and Urban <br /> Development Deparment
+                Housing and Urban <br /> Development Department
               </strong>
               <br />
               <p style={{
