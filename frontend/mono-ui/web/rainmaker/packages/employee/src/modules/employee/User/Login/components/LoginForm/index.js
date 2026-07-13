@@ -89,79 +89,44 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
       }
 
       // ===== STEP 1: Call user/v1/_search API =====
-      const userSearchRequestBody = {
-        RequestInfo: {
-          apiId: "ap.public",
-          ver: "1",
-          ts: null,
-          action: "POST",
-          did: "null",
-          key: "null",
-          authToken: null,
-        },
-        username: username,
-        tenantId: tenantId,
-      };
-
-      const userSearchResponse = await axios.post(
-        "/user/v1/_search",
-        userSearchRequestBody,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-
-      // Extract user details from response
-      const userData = userSearchResponse.data && userSearchResponse.data.user && userSearchResponse.data.user[0];
-
-      if (!userData) {
-        toggleSnackbarAndSetText(
-          true,
-          { labelKey: "UC_COMMON_USER_NOT_FOUND" },
-          "error"
-        )
-        return;
-      }
-
-      const userMobileNumber = userData.mobileNumber;
-
       
-
-      if (!userMobileNumber) {
-        toggleSnackbarAndSetText(
-          true,
-          { labelKey: "PT_UPDATE_MOBILE_NO" },
-          "error"
-        )
-        return;
-      }
-
-      const maskedNumber =
-        userMobileNumber.slice(0, 2) +
-        "*".repeat(Math.max(0, userMobileNumber.length - 5)) +
-        userMobileNumber.slice(-3);
 
       // ===== STEP 2: Call user-otp/v1/_send API =====
       const otpSendRequestBody = {
-        RequestInfo: {
-          api_id: "1",
-          ver: "1",
-          ts: null,
-          action: "create",
-          did: "",
-          key: "",
-          msg_id: "",
-          requester_id: "",
-          auth_token: null,
-        },
-        otp: {
-          tenantId: tenantId,
-          mobileNumber: userMobileNumber,
-        }
-      };
+        RequestInfo:
+        {api_id:"1",
+        ver:1,
+        ts:null,
+        action:"create",
+        did:"",
+        key:"",
+        msg_id:"",
+        requester_id:"",
+        auth_token:null
+      }, 
+      otp:{
+    userName:username, 
+    tenantId:tenantId, 
+    type:"LOGIN", 
+    userType:"EMPLOYEE"
+  }
+}
+        // RequestInfo: {
+        //   api_id: "1",
+        //   ver: "1",
+        //   ts: null,
+        //   action: "create",
+        //   did: "",
+        //   key: "",
+        //   msg_id: "",
+        //   requester_id: "",
+        //   auth_token: null,
+        // },
+        // otp: {
+        //   tenantId: tenantId,
+        //   mobileNumber: userMobileNumber,
+        // }
+      
 
       const otpSendResponse = await axios.post(
         "/user-otp/v1/_send",
@@ -181,8 +146,8 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
         JSON.parse(getLocalization(`localization_${getLocale()}`)),
         "code"
       );
-      const translatedMessage = getLocaleLabels("CORE_OTP_SENT_MESSAGE", localizationLabels);
-      const finalMessage = `${translatedMessage} ${maskedNumber}`;
+      // const translatedMessage = getLocaleLabels("CORE_OTP_SENT_MESSAGE", localizationLabels);
+      const finalMessage = "OTP sent to your registered mobile number";
       toggleSnackbarAndSetText(
         true,
         { labelKey: finalMessage },
@@ -194,7 +159,7 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
       toggleSnackbarAndSetText(
         true,
         { labelKey: "UC_COMMON_FAILED_OTP_SENT" },
-        "success"
+        "error"
       )
     }
   }
