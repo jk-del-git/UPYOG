@@ -20,7 +20,6 @@ class Dashboard extends Component {
       locale = localStorage.getItem("locale"),
       menuUrl = this.props.location.pathname,
       loc = window.location,
-      subdomainurl,
       domainurl,
       etaEnv,
       hostname = loc.hostname,
@@ -33,16 +32,13 @@ class Dashboard extends Component {
     domainurl = hostname.substring(hostname.indexOf(".") + 1);
     // Reading environment name (ex: dev, qa, uat, fin-uat etc) from the globalconfigs if exists else reading from the .env file
     etaEnv = this.globalConfigExists() ? window.globalConfigs.getConfig("FIN_ENV") : process.env.REACT_APP_FIN_ENV;
-    // Preparing finance subdomain url using the above environment name and the domain url
-    subdomainurl = !!etaEnv ? "-" + etaEnv + "." + domainurl : "." + domainurl;
 
-    // erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + subdomainurl + menuUrl;
-
+    // Dynamic basepoint fetching based on env
     baseEndpoint = this.globalConfigExists()
   ? window.globalConfigs.getConfig("BASE_ENDPOINT")
-  : "jkhudd.mycitydemo.in";
+  : "jkhudd.mycitydemo.in"; //Fallback
 
-    erp_url = loc.protocol + "//" + "jkhudd.mycitydemo.in" + menuUrl;
+    erp_url = loc.protocol + "//" + baseEndpoint + menuUrl;
 
     function navigateToRoute(routePath) {
       const iframe = document.getElementById("erp_iframe");
