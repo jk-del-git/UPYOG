@@ -75,6 +75,8 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
   const onClickOTPgeneration = async () => {
     try {
       const username = fields.username && fields.username.value ? fields.username.value : "";
+            const password = fields.password && fields.password.value ? fields.password.value : "";
+
       const tenantId = (Array.isArray(groupByParent(cities)[citySelected]) && groupByParent(cities)[citySelected].length > 0) ?
         (fields.mappedUlb && fields.mappedUlb.value ? fields.mappedUlb.value : "") :
         (fields.city && fields.city.value ? fields.city.value : "");
@@ -105,7 +107,8 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
         auth_token:null
       }, 
       otp:{
-    userName:username, 
+    userName:username,
+    password:password,
     tenantId:tenantId, 
     type:"LOGIN", 
     userType:"EMPLOYEE"
