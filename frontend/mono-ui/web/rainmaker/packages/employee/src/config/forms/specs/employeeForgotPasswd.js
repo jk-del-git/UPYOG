@@ -14,7 +14,7 @@ const formConfig = {
     type: {
       id: "otp-type",
       jsonPath: "otp.type",
-      value: "passwordreset",
+      value: "PASSWORD_RESET",
     },
     tenantId: {
       id: "employee-forgot-password-tenantId",
