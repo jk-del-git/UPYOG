@@ -143,6 +143,11 @@ export const submitForm = (formKey, saveUrl) => {
       const { action } = form;
       try {
          const formData = await transformer("viewModelToBusinessModelTransformer", formKey, form, state);
+         // Override tenantId based on mappedUlb priority
+if (formData.otp) {
+  formData.otp.tenantId =
+    formData.otp.mappedUlb || formData.otp.tenantId;
+}
         let formResponse = {};
           formResponse = await httpRequest(saveUrl, action, [], formData);
           dispatch(submitFormComplete(formKey, formResponse, saveUrl));
