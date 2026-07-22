@@ -1041,9 +1041,10 @@ export const downloadFromLink = async (link,filename="help.pdf") => {
 
 
 export const getModuleName = () => {
+  
   const pathName = window.location.pathname;
   if (pathName.indexOf("inbox") > -1) {
-    return "rainmaker-common,rainmaker-noc,rainmaker-pgr,rainmaker-uc";
+    return "rainmaker-common,rainmaker-noc";
   } else if (pathName.indexOf("dss") > -1) {
     return "rainmaker-dss";
   } else if (pathName.indexOf("receipts") > -1) {
@@ -1081,9 +1082,9 @@ export const getModuleName = () => {
   } else if (pathName.indexOf("dss/home") > -1) {
     return "rainmaker-dss";
   } else if (pathName.indexOf("language-selection") > -1) {
-    return "rainmaker-common,rainmaker-noc,rainmaker-pgr,rainmaker-uc";
+    return "rainmaker-common,rainmaker-noc";
   } else if (pathName.indexOf("login") > -1) {
-    return "rainmaker-common,rainmaker-noc,rainmaker-pgr,rainmaker-uc";
+    return "rainmaker-common,rainmaker-noc";
   } else if (pathName.indexOf("pay") > -1) {
     return "rainmaker-noc";
   } else if (pathName.indexOf("abg") > -1) {
@@ -1110,7 +1111,7 @@ export const getModuleName = () => {
   ) {
     return "rainmaker-bnd";
   }else {
-    return "rainmaker-common,rainmaker-noc,rainmaker-pgr";
+    return "rainmaker-common,rainmaker-noc";
   }
 };
 

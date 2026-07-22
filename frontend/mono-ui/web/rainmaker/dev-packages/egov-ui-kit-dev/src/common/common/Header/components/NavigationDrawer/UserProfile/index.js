@@ -49,6 +49,8 @@ const prepareUserInfo = (userInfo = {}, cities = [],localizationLabels) => {
   return { photo, name, emailId, location };
 };
 
+
+// check below one
 const UserProfile = ({ role = "citizen", cities = [], userInfo={}, reduxUserInfo ,localizationLabels}) => {
    const [profilePhotoUrl, setProfilePhotoUrl] = useState(null);
     useEffect(() => {
@@ -92,7 +94,7 @@ const UserProfile = ({ role = "citizen", cities = [], userInfo={}, reduxUserInfo
       };
   
       fetchPhoto();
-    }, [userInfo]);
+    }, []);
   userInfo = prepareUserInfo(userInfo, cities,localizationLabels);
   return (
     <ProfileSection

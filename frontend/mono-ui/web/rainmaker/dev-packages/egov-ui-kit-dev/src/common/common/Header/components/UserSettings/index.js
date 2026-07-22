@@ -60,53 +60,55 @@ class UserSettings extends Component {
       marginBottom: "24px",
     },
   };
-  componentDidMount() {
-    this.fetchUserPhoto();
-  }
-  fetchUserPhoto = async () => {
-    try {
-      const { userInfo } = this.props;
-      console.log("user6661",userInfo)
-      const tenantId = userInfo.tenantId;
-      const uuid = userInfo.uuid;
+  // componentDidMount() {
+    // this.fetchUserPhoto();
+  // }
+  // fetchUserPhoto = async () => {
+  //   console.log("Another fetchUserPhoto");
+    
+  //   try {
+  //     const { userInfo } = this.props;
+  //     console.log("user6661",userInfo)
+  //     const tenantId = userInfo.tenantId;
+  //     const uuid = userInfo.uuid;
 
-      if (!uuid || !tenantId) return;
+  //     if (!uuid || !tenantId) return;
 
-      const userPayload = await httpRequest(
-        "/user/_search", 
-        "search",        
-        [],              
-        {
-          uuid: [uuid],
-          tenantId
-        }
-      );
-        console.log("userPayyyy",userPayload)
-      const photoId = userPayload.user[0].photo;
-      if (!photoId) return;
+  //     const userPayload = await httpRequest(
+  //       "/user/_search", 
+  //       "search",        
+  //       [],              
+  //       {
+  //         uuid: [uuid],
+  //         tenantId
+  //       }
+  //     );
+  //       console.log("userPayyyy",userPayload)
+  //     const photoId = userPayload.user[0].photo;
+  //     if (!photoId) return;
 
-      const fileResponse = await httpRequest(
-        "/filestore/v1/files/url",
-        "",
-        [
-          { key: "tenantId", value: "pg" },
-          { key: "fileStoreIds", value: photoId }
-        ],
-        {},
-        {},
-        {},
-        true, 
-        true 
-      );
-        console.log("fileRess567",fileResponse)
-      const fileUrl = fileResponse.fileStoreIds[0].url;
-      if (fileUrl) {
-        this.setState({ profilePic: fileUrl });
-      }
-    } catch (err) {
-      console.error("Failed to fetch profile photo", err);
-    }
-  };
+  //     const fileResponse = await httpRequest(
+  //       "/filestore/v1/files/url",
+  //       "",
+  //       [
+  //         { key: "tenantId", value: "pg" },
+  //         { key: "fileStoreIds", value: photoId }
+  //       ],
+  //       {},
+  //       {},
+  //       {},
+  //       true, 
+  //       true 
+  //     );
+  //       console.log("fileRess567",fileResponse)
+  //     const fileUrl = fileResponse.fileStoreIds[0].url;
+  //     if (fileUrl) {
+  //       this.setState({ profilePic: fileUrl });
+  //     }
+  //   } catch (err) {
+  //     console.error("Failed to fetch profile photo", err);
+  //   }
+  // };
   onChange = (event, index, value) => {
     this.setState({ ...this.state, languageSelected: value });
     this.props.fetchLocalizationLabel(value);
