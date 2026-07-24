@@ -8,53 +8,53 @@ import "./index.css";
 const ProfileForm = ({ form, handleFieldChange, onClickAddPic, img, profilePic, localProfilePreview, userInfo,
 }) => {
   const [profilePhotoUrl, setProfilePhotoUrl] = useState(null);
-  useEffect(() => {
-    const fetchPhoto = async () => {
-      try {
-        const tenantId = userInfo.tenantId;
-        const uuid = userInfo.uuid;
-        if (!uuid || !tenantId) return;
+  // useEffect(() => {
+  //   const fetchPhoto = async () => {
+  //     try {
+  //       const tenantId = userInfo.tenantId;
+  //       const uuid = userInfo.uuid;
+  //       if (!uuid || !tenantId) return;
 
-        const userPayload = await httpRequest(
-          "post",
-          "/user/_search",
-          "_search",
-          [],
-          {
-            tenantId,
-            uuid: [uuid],
-          }
-        );
+  //       const userPayload = await httpRequest(
+  //         "post",
+  //         "/user/_search",
+  //         "_search",
+  //         [],
+  //         {
+  //           tenantId,
+  //           uuid: [uuid],
+  //         }
+  //       );
 
-        const userObj = userPayload.user && userPayload.user[0];        
-        if (userObj.gender) {
-          handleFieldChange("gender", userObj.gender);
-        }
+  //       const userObj = userPayload.user && userPayload.user[0];        
+  //       if (userObj.gender) {
+  //         handleFieldChange("gender", userObj.gender);
+  //       }
 
-        const photoId = userPayload.user[0].photo;
-        if (!photoId) return;
+  //       const photoId = userPayload.user[0].photo;
+  //       if (!photoId) return;
 
-        const fileResponse = await httpRequest(
-          "get",
-          "/filestore/v1/files/url",
-          "",
-          [
-            { key: "tenantId", value: "pg" },
-            { key: "fileStoreIds", value: photoId },
-          ]
-        );
+  //       const fileResponse = await httpRequest(
+  //         "get",
+  //         "/filestore/v1/files/url",
+  //         "",
+  //         [
+  //           { key: "tenantId", value: "pg" },
+  //           { key: "fileStoreIds", value: photoId },
+  //         ]
+  //       );
 
-        const url = fileResponse.fileStoreIds[0].url;
-        if (url) {
-          setProfilePhotoUrl(url);
-        }
-      } catch (error) {
-        console.error("Error fetching user photo:", error);
-      }
-    };
+  //       const url = fileResponse.fileStoreIds[0].url;
+  //       if (url) {
+  //         setProfilePhotoUrl(url);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching user photo:", error);
+  //     }
+  //   };
 
-    fetchPhoto();
-  }, [userInfo]);
+  //   fetchPhoto();
+  // }, [userInfo]);
 
   const fields = form.fields || {};
   console.log("filedss",fields)

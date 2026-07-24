@@ -14,9 +14,8 @@ const withData = (Component) => {
     componentDidMount() {
       const { searchUser, fetchComplaintCategories, authenticated, fetchpgrConstants, fetchUiCommonConfig, fetchUiCommonConstants, fetchGeneralMDMSData } = this.props;
       if (getAccessToken()) {
-        
         searchUser();
-        fetchUiCommonConstants();
+        // fetchUiCommonConstants();
 /*         fetchpgrConstants();
         fetchUiCommonConfig();
         fetchComplaintCategories();

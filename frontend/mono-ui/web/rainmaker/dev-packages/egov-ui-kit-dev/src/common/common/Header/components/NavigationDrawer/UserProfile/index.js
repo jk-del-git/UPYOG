@@ -4,7 +4,6 @@ import { getCityNameByCode } from "egov-ui-kit/utils/commons";
 import { connect } from "react-redux";
 import get from "lodash/get";
 import emptyFace from "egov-ui-kit/assets/images/download.png";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
 
 const styles = {
   imageStyle: { width: 89, height: 88, margin: "0 auto", marginBottom: "16px" },
@@ -49,6 +48,8 @@ const prepareUserInfo = (userInfo = {}, cities = [],localizationLabels) => {
   return { photo, name, emailId, location };
 };
 
+
+// check below one
 const UserProfile = ({ role = "citizen", cities = [], userInfo={}, reduxUserInfo ,localizationLabels}) => {
    const [profilePhotoUrl, setProfilePhotoUrl] = useState(null);
     useEffect(() => {
@@ -92,7 +93,7 @@ const UserProfile = ({ role = "citizen", cities = [], userInfo={}, reduxUserInfo
       };
   
       fetchPhoto();
-    }, [userInfo]);
+    }, []);
   userInfo = prepareUserInfo(userInfo, cities,localizationLabels);
   return (
     <ProfileSection
