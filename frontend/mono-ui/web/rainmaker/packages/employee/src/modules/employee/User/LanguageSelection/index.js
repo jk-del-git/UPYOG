@@ -1,11 +1,27 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Banner } from "modules/common";
-import { LanguageSelectionForm } from "modules/common";
+// import Banner from "egov-ui-kit/common/common/Banner";
+// import LanguageSelectionForm from "egov-ui-kit/common/User/components/LanguageSelectionForm";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-// import { banner1, banner2, banner3, banner4 } from "egov-ui-kit/common/common/Header/components/AppBar/bannerImages";
+import Loadable from "react-loadable";
+
+const Loading = () => <h1>...loading</h1>;
+
+
+const Banner = Loadable({
+  loader: () =>
+    import("egov-ui-kit/common/common/Banner"),
+  loading: Loading,
+});
+
+
+const LanguageSelectionForm = Loadable({
+  loader: () =>
+    import("egov-ui-kit/common/User/components/LanguageSelectionForm"),
+  loading: Loading,
+});
 
 class LanguageSelection extends Component {
   state = {

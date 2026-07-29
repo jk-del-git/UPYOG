@@ -1,8 +1,8 @@
 import React from "react";
 import { withRouter } from "react-router";
-import { Icon, Image } from "components";
-import logo from "egov-ui-kit/assets/images/punjab-logo.png";
+import { Icon } from "components";
 import "./index.css";
+import MountainBg from "egov-ui-kit/assets/MountainBg.jpg";
 
 const SLIDE_DURATION = 5000; // 3 seconds
 class Banner extends React.Component {
@@ -71,8 +71,8 @@ class Banner extends React.Component {
             className={`banner-image ${this.state.animate ? "banner-fade-animate" : ""}`}
             style={
               activeBannerUrl && {
-                // backgroundImage: `url(${activeBannerUrl})`,
-                backgroundImage: `url("https://s7ap1.scene7.com/is/image/incredibleindia/dal-lake-srinagar-jammu-&-kashmir-2-attr-hero?qlt=82&ts=1726816668703")`,
+                backgroundImage: `url(${MountainBg})`,
+                // backgroundImage: `url("https://s7ap1.scene7.com/is/image/incredibleindia/dal-lake-srinagar-jammu-&-kashmir-2-attr-hero?qlt=82&ts=1726816668703")`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",

@@ -1,8 +1,8 @@
 import React from "react";
-import { ButtonGroup, Card, Image } from "components";
+import { ButtonGroup, Card } from "components";
 import { Button } from "egov-ui-framework/ui-atoms";
 import Label from "egov-ui-kit/utils/translationNode";
-import logo from "egov-ui-kit/assets/images/logo_black.png";
+import EmblemIndia from "egov-ui-kit/assets/EmblemIndia.svg";
 import "./index.css";
 
 const selectedLabelStyle = {
@@ -40,7 +40,7 @@ const LanguageSelectionForm = ({ items, onLanguageSelect, value, onClick, logoUr
       textChildren={
         <div>
           <div  style={{ marginBottom: "20px", borderBottom: "1px solid #192771", display: "flex", justifyContent: "center", marginTop: "8px" }}>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" style={{ width: "auto", height: "74px", padding: "0px 11px" }} />
+            <img src={EmblemIndia} style={{ width: "auto", height: "74px", padding: "0px 11px" }} />
             <h3 style={{ fontSize: "20px", marginLeft: "12px", marginTop: "0px" }}>
               <strong style={{ color: "#0C3A60", paddingRight: "15px", lineHeight: "1.2" }}>
                 Housing and Urban <br /> Development Department
@@ -104,4 +104,5 @@ const LanguageSelectionForm = ({ items, onLanguageSelect, value, onClick, logoUr
   );
 };
 
-export default LanguageSelectionForm;
+// export default LanguageSelectionForm;
+export default React.memo(LanguageSelectionForm);

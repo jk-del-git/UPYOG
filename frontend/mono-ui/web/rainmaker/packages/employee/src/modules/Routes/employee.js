@@ -1,32 +1,80 @@
-// User related routes
-import Login from "modules/employee/User/Login";
-import OTP from "modules/employee/User/OTP";
-import LanguageSelection from "modules/employee/User/LanguageSelection";
-import ChangePassword from "modules/employee/User/ChangePassword";
-import Profile from "modules/employee/User/Profile";
-import ForgotPassword from "modules/employee/User/ForgotPassword";
-import PushLocalization from "modules/employee/PushLocalization";
-import Receipt from "modules/employee/User/Receipt";
-
-// Employee specific routes
-import { TrackLocation } from "modules/common";
-import { ImageModalDisplay } from "modules/common";
-import { PrivacyPolicy } from "modules/common";
-import LandingPage from "modules/employee/LandingPage";
-import Inbox from "modules/employee/Inbox";
-import FireNocInbox from "modules/employee/Inbox/inbox";
-import MDMS from "modules/common/MDMS";
-import Home from "modules/employee/Home";
-import Report from "modules/employee/reports/report";
-import EGFFinance from "modules/employee/Erp/EGF";
-import Notifications from "modules/employee/Notifications";
-// import pgrRoutes from "pgr-employee/Routes/pgr-routes";
-// import ptRoutes from "pt-employee/Routes/pt-routes";
+import Loadable from "react-loadable";
+// Keep these as normal imports
+// because they are route definitions, not screens
 import frameworkScreens from "./frameworkScreens";
 import externalRoutes from "./exterenalURL";
-import Dashboard from "modules/employee/Dashboard";
 
-// import PTHome from "modules/employee/PropertyTax/PTHome";
+// Generic loader
+const Loading = () => null;
+
+const lazyLoad = (loader) =>
+  Loadable({
+    loader,
+    loading: Loading,
+  });
+
+
+// User related routes
+const Login = lazyLoad(() =>
+  import("modules/employee/User/Login")
+);
+
+const OTP = lazyLoad(() =>
+  import("modules/employee/User/OTP")
+);
+
+const LanguageSelection = lazyLoad(() =>
+  import("modules/employee/User/LanguageSelection")
+);
+
+const ChangePassword = lazyLoad(() =>
+  import("modules/employee/User/ChangePassword")
+);
+
+const Profile = lazyLoad(() =>
+  import("modules/employee/User/Profile")
+);
+
+const ForgotPassword = lazyLoad(() =>
+  import("modules/employee/User/ForgotPassword")
+);
+
+const Receipt = lazyLoad(() =>
+  import("modules/employee/User/Receipt")
+);
+
+
+
+const LandingPage = lazyLoad(() =>
+  import("modules/employee/LandingPage")
+);
+
+const Inbox = lazyLoad(() =>
+  import("modules/employee/Inbox")
+);
+
+const MDMS = lazyLoad(() =>
+  import("modules/common/MDMS")
+);
+
+const Home = lazyLoad(() =>
+  import("modules/employee/Home")
+);
+
+const Report = lazyLoad(() =>
+  import("modules/employee/reports/report")
+);
+
+const EGFFinance = lazyLoad(() =>
+  import("modules/employee/Erp/EGF")
+);
+
+const Dashboard = lazyLoad(() =>
+  import("modules/employee/Dashboard")
+);
+
+
+
 
 //Redirection Url
 const redirectionUrl = "/user/login";
@@ -62,12 +110,12 @@ const routes = [
     needsAuthentication: false,
     redirectionUrl: "/user/login",
   },
-  {
-    path: "privacy-policy",
-    component: PrivacyPolicy,
-    needsAuthentication: false,
-    redirectionUrl: "/",
-  },
+  // {
+  //   path: "privacy-policy",
+  //   component: PrivacyPolicy,
+  //   needsAuthentication: false,
+  //   redirectionUrl: "/",
+  // },
   {
     path: "user/change-password",
     component: ChangePassword,
@@ -80,18 +128,7 @@ const routes = [
     needsAuthentication: true,
     options: { hideFooter: true, title: "CS_HOME_HEADER_PROFILE" },
   },
-  {
-    path: "notifications",
-    component: Notifications,
-    needsAuthentication: true,
-    options: {
-      hideFooter: true,
-      hideTitle: true,
-      isHomeScreen: true,
-      hideFor: "ao",
-      customFor: "csr",
-    },
-  },
+
   {
     path: "services/*",
     component: EGFFinance,
@@ -128,28 +165,7 @@ const routes = [
       isHomeScreen: true,
     },
   },
-  {
-    path: "fire-noc/inbox",
-    component: FireNocInbox,
-    needsAuthentication: true,
-    options: {
-      hideFooter: true,
-      redirectionUrl,
-      title: "fire-noc/inbox",
-      hideTitle: true,
-      isHomeScreen: true,
-    },
-  },
-  {
-    path: "image",
-    component: ImageModalDisplay,
-    needsAuthentication: true,
-    options: {
-      hideFooter: true,
-      hideTitle: true,
-      hideHeader: true,
-    },
-  },
+ 
   {
     path: "mdms/:moduleName/:masterName",
     component: MDMS,
@@ -171,12 +187,12 @@ const routes = [
       //isHomeScreen: true,
     },
   },
-  {
-    path: "map",
-    component: TrackLocation,
-    needsAuthentication: true,
-    options: { hideHeader: true, hideFooter: true, title: "CS_HEADER_TRACK_LOCATION", hideTitle: true, hideActionMenu: true },
-  },
+  // {
+  //   path: "map",
+  //   component: TrackLocation,
+  //   needsAuthentication: true,
+  //   options: { hideHeader: true, hideFooter: true, title: "CS_HEADER_TRACK_LOCATION", hideTitle: true, hideActionMenu: true },
+  // },
   {
     path: "report/:moduleName/:reportName",
     component: Report,
@@ -199,20 +215,6 @@ const routes = [
       isHomeScreen: true,
     },
   },
-  {
-    path: "push-localization",
-    component: PushLocalization,
-    needsAuthentication: true,
-
-    options: {
-      hideFooter: true,
-      title: "CS_PUSH_LOCALIZATION",
-      hideTitle: true,
-      redirectionUrl,
-    },
-  },
-  // ...pgrRoutes,
-  // ...ptRoutes,
   ...frameworkScreens,
   ...externalRoutes,
 ];
