@@ -13,7 +13,6 @@ import { Toast } from "components";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { getLocaleLabels, transformById } from "egov-ui-kit/redux/../../../packages/employee/src/ui-utils/commons";
 import { getLocalization, getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import EmblemIndia from "egov-ui-kit/assets/EmblemIndia.svg";
 
 
 const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, cities, toggleSnackbarAndSetText }) => {
@@ -184,7 +183,7 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
             className="inside-left-dv"
 
           >
-            <img src={EmblemIndia} className="login-emblem-img" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" className="login-emblem-img" />
             <h3 className="main-login-header">
               <strong style={{
                 color: "#0C3A60",

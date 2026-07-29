@@ -7,7 +7,6 @@ import "./index.css";
 import { CityPicker, CityPickerNew } from "modules/common";
 import FieldNew from "egov-ui-kit/utils/fieldNew";
 import { connect } from "react-redux";
-import EmblemIndia from "egov-ui-kit/assets/EmblemIndia.svg";
 
 const ForgotPasswd = ({ form, handleFieldChange,logoUrl,cities }) => {
   const fields = form.fields || {};
@@ -64,7 +63,7 @@ const ForgotPasswd = ({ form, handleFieldChange,logoUrl,cities }) => {
         alignItems: "center",
       }}
             >
-              <img src={EmblemIndia} style={{ width: "auto", height: "103px", padding: "0px 11px" }} />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" style={{ width: "auto", height: "103px", padding: "0px 11px" }} />
             <h3 style={{ fontSize: "27px", marginLeft: "12px", marginTop: "17px", fontWeight:"500" }}>
               <strong style={{ 
                 color: "#0C3A60",

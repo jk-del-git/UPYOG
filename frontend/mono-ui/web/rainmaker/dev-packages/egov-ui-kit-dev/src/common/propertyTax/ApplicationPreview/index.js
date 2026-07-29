@@ -375,9 +375,9 @@ class ApplicationPreview extends Component {
         <PTHeader header={header} subHeaderTitle='PT_PROPERTY_APPLICATION_NO' subHeaderValue={applicationNumber} />
         <div className="form-without-button-cont-generic" >
           <div>
-            {/* <WorkFlowContainer dataPath={applicationType.dataPath}
+            <WorkFlowContainer dataPath={applicationType.dataPath}
               moduleName={applicationType.moduleName}
-              updateUrl={applicationType.updateUrl}></WorkFlowContainer> */}
+              updateUrl={applicationType.updateUrl}></WorkFlowContainer>
             <Card
               textChildren={
                 <div className="col-sm-12 col-xs-12" id="property-application-review-form" style={{ alignItems: "center" }}>

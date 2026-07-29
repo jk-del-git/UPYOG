@@ -12,7 +12,6 @@ import "./index.css";
 import { connect } from "react-redux";
 import get from "lodash/get";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
-import EmblemIndia from "egov-ui-kit/assets/EmblemIndia.svg";
 
 const styles = {
   titleStyle: { fontSize: "20px", fontWeight: 500, marginLeft: "-17px" },
@@ -61,8 +60,7 @@ const EgovAppBar = ({
         title={
           <div className="citizen-header-logo-label">
             <div id="emblem-lg" className="citizen-header-logo" style={{width: "44px", height: "47px" }}>
-              {<img style={{ width: "45px", height: "45px", transform: "translateY(-2px)" }} 
-              src={EmblemIndia} />}
+              {<img style={{ width: "45px", height: "45px", transform: "translateY(-2px)" }} src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" />}
             </div>
             {titleAddon && (
               <Label
