@@ -1,21 +1,10 @@
 import React from "react";
 import formHoc from "egov-ui-kit/hocs/form";
-// import { Banner } from "modules/common";
+import { Banner } from "modules/common";
 import ForgotPasswd from "./components/ForgotPasswd";
 import { connect } from "react-redux";
 import get from "lodash/get";
 import { banner1, banner2, banner3, banner4 } from "egov-ui-kit/common/common/Header/components/AppBar/bannerImages";
-import Loadable from "react-loadable";
-
-const Loading = () => <h1>...loading</h1>;
-
-
-const Banner = Loadable({
-  loader: () =>
-    import("egov-ui-kit/common/common/Banner"),
-  loading: Loading,
-});
-
 
 const ForgotPasswdHOC = formHoc({ formKey: "employeeForgotPasswd" })(ForgotPasswd);
 

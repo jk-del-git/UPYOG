@@ -3,7 +3,6 @@ import { Button, Card, TextField, Image } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import logo from "egov-ui-kit/assets/images/logo_black.png"
 import "./index.css";
-import EmblemIndia from "egov-ui-kit/assets/EmblemIndia.svg";
 
 const OTPForm = ({ handleFieldChange, toggleSnackbarAndSetText, form, resendOTP, phoneNumber,logoUrl }) => {
   const fields = form.fields || {};
@@ -30,7 +29,7 @@ const OTPForm = ({ handleFieldChange, toggleSnackbarAndSetText, form, resendOTP,
         alignItems: "center",
       }}
             >
-              <img src={EmblemIndia} style={{ width: "auto", height: "103px", padding: "0px 11px" }} />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" style={{ width: "auto", height: "103px", padding: "0px 11px" }} />
             <h3 style={{ fontSize: "27px", marginLeft: "12px", marginTop: "17px", fontWeight:"500" }}>
               <strong style={{ 
                 color: "#0C3A60",
