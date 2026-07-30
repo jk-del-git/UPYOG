@@ -16,7 +16,7 @@
 # #       image-name: < Docker image name  >
 # # -
 # # -
-# config:
+config:
 # # Business Services
 #   - name: "builds/upyog/business-services/billing-service"
 #     build:
