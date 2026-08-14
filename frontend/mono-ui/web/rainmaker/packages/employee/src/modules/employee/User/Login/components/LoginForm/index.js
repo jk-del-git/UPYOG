@@ -183,7 +183,7 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
             className="inside-left-dv"
 
           >
-            <img src="/emblem_of_India.webp" alt="Emblem of India" className="login-emblem-img" />
+            <img src={`${process.env.PUBLIC_URL}/emblem_of_India.webp`} alt="Emblem of India" className="login-emblem-img" />
             <h3 className="main-login-header">
               <strong style={{
                 color: "#0C3A60",

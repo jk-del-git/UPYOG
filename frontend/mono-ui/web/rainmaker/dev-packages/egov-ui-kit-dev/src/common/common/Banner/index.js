@@ -81,7 +81,7 @@ class Banner extends React.Component {
             //   }
             // }
              style={{
-                backgroundImage: `url("/dal-lake-srinagar-jammu-&-kashmir.webp")`,
+                backgroundImage: `url("${process.env.PUBLIC_URL}/dal_lake_jk.webp")`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
