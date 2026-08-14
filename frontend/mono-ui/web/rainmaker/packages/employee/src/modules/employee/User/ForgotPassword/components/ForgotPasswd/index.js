@@ -63,7 +63,7 @@ const ForgotPasswd = ({ form, handleFieldChange,logoUrl,cities }) => {
         alignItems: "center",
       }}
             >
-              <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" style={{ width: "auto", height: "103px", padding: "0px 11px" }} />
+            <img src="/emblem_of_India.webp" alt="Emblem of India" style={{ width: "auto", height: "103px", padding: "0px 11px" }} />
             <h3 style={{ fontSize: "27px", marginLeft: "12px", marginTop: "17px", fontWeight:"500" }}>
               <strong style={{ 
                 color: "#0C3A60",

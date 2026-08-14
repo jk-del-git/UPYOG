@@ -1,11 +1,32 @@
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+// import pdfMake from "pdfmake/build/pdfmake"; // lazy load this 
+// import pdfFonts from "pdfmake/build/vfs_fonts"; // lazy load this 
 import QRCode from "qrcode";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getMessageFromLocalization } from "./receiptTransformer";
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+// pdfMake.vfs = pdfFonts.pdfMake.vfs; // lazy load this 
+
+
+let pdfMakePromise;
+
+const getPdfMake = () => {
+  if (!pdfMakePromise) {
+    pdfMakePromise = Promise.all([
+      import("pdfmake/build/pdfmake"),
+      import("pdfmake/build/vfs_fonts"),
+    ]).then(([pdfMakeModule, pdfFontsModule]) => {
+      const pdfMake = pdfMakeModule.default;
+      const pdfFonts = pdfFontsModule.default;
+
+      pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+      return pdfMake;
+    });
+  }
+
+  return pdfMakePromise;
+};
 
 const getOwners = data => {
   let retowners = [];
@@ -1108,6 +1129,7 @@ const getApplicationData = async (transformedData, ulbLogo, type) => {
 };
 
 const generatePdf = async (state, dispatch, type) => {
+  const pdfMake = await getPdfMake();
   let applicationData = get(
     state.screenConfiguration.preparedFinalObject,
     "applicationDataForPdf",

@@ -2,7 +2,8 @@ import pdfMakeCustom from "pdfmake/build/pdfmake";
 import {getLocaleLabels} from "egov-ui-framework/ui-utils/commons.js";
 import _ from "lodash";
 import {getMessageFromLocalization} from "./receiptTransformer";
-import pdfFonts from "./vfs_fonts";
+// import pdfFonts from "./vfs_fonts";
+import pdfFonts from "pdfmake/build/vfs_fonts";
 // pdfMakeCustom.vfs = pdfFonts.vfs;
 import {
   getLocale

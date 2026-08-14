@@ -4,12 +4,13 @@ import store from "egov-ui-framework/ui-redux/store";
 import { appendModulePrefix } from "egov-ui-framework/ui-utils/commons";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 import { set } from "lodash";
-import pdfMake from "pdfmake/build/pdfmake";
+// import pdfMake from "pdfmake/build/pdfmake";//lazy load this one
 import { downloadPdfFile } from "../api";
 import { getLocale } from "../localStorageUtils";
 import { getFromObject } from "../PTCommon/FormWizardUtils/formUtils";
 import logoNotFound from './logoNotFound.png';
-import pdfFonts from "./vfs_fonts";
+// import pdfFonts from "./vfs_fonts";
+// import pdfFonts from "pdfmake/build/vfs_fonts"; //lazy load this one
 
 // const getLogoUrl = (tenantId)=>{
 //     let logoUrl=`/${commonConfig.tenantId}-egov-assets/${tenantId}/logo.png`;
@@ -22,7 +23,7 @@ import pdfFonts from "./vfs_fonts";
 //     return logoUrl;
 // }
 
-const vfs = { ...pdfFonts.vfs }
+// const vfs = { ...pdfFonts.vfs }
 const font = {
     Camby: {
         normal: 'Cambay-Regular.ttf',
@@ -61,8 +62,29 @@ const font = {
         bolditalics: 'Roboto-Regular.ttf',
     }
 };
-pdfMake.vfs = vfs;
-pdfMake.fonts = font;
+// pdfMake.vfs = vfs;
+// pdfMake.fonts = font;
+
+let pdfMakePromise;
+
+const getPdfMake = () => {
+  if (!pdfMakePromise) {
+    pdfMakePromise = Promise.all([
+      import("pdfmake/build/pdfmake"),
+      import("pdfmake/build/vfs_fonts"),
+    ]).then(([pdfMakeModule, pdfFontsModule]) => {
+      const pdfMake = pdfMakeModule.default;
+      const pdfFonts = pdfFontsModule.default;
+
+      pdfMake.vfs = pdfFonts.pdfMake.vfs;
+      pdfMake.fonts = font;
+
+      return pdfMake;
+    });
+  }
+
+  return pdfMakePromise;
+};
 const getLabel = (value, type = 'key') => {
     let label = {}
     switch (type) {
@@ -526,7 +548,7 @@ const getHeaderCard = (applicationData, logo) => {
     return applicationHeader
 
 }
-export const generatePDF = (logo, applicationData = {}, fileName, isCustomforBillamend = false) => {
+export const generatePDF = async(logo, applicationData = {}, fileName, isCustomforBillamend = false) => {
     logo = logo || localStorage.getItem("UlbLogoForPdf");
     let data;
     let tableborder = {
@@ -765,7 +787,8 @@ export const generatePDF = (logo, applicationData = {}, fileName, isCustomforBil
     })
     let locale = getLocale() || 'en_IN';
     let Camby = font[locale] || font["Camby"];
-    pdfMake.vfs = vfs;
+    const pdfMake = await getPdfMake();
+    // pdfMake.vfs = vfs;
     pdfMake.fonts = { ...font, Camby: { ...Camby } };
     try {
         if (fileName != 'print') {

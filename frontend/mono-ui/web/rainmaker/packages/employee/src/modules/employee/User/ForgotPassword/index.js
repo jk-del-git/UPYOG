@@ -4,14 +4,14 @@ import { Banner } from "modules/common";
 import ForgotPasswd from "./components/ForgotPasswd";
 import { connect } from "react-redux";
 import get from "lodash/get";
-import { banner1, banner2, banner3, banner4 } from "egov-ui-kit/common/common/Header/components/AppBar/bannerImages";
+// import { banner1, banner2, banner3, banner4 } from "egov-ui-kit/common/common/Header/components/AppBar/bannerImages"; // Not required
 
 const ForgotPasswdHOC = formHoc({ formKey: "employeeForgotPasswd" })(ForgotPasswd);
 
 const ForgotPassword = ({ bannerUrl, logoUrl }) => {
-  let allImages = [banner1, banner2, banner3, banner4];
+  // let allImages = [banner1, banner2, banner3, banner4];
   return (
-    <Banner hideBackButton={false} bannerUrl={allImages} logoUrl={logoUrl}>
+    <Banner hideBackButton={false}  logoUrl={logoUrl}>
       <ForgotPasswdHOC logoUrl={logoUrl} />
     </Banner>
   );

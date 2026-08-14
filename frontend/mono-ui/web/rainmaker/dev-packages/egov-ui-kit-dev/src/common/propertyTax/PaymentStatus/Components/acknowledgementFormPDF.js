@@ -1,19 +1,19 @@
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 import msevaLogo from "egov-ui-kit/assets/images/pblogo.png";
-import pdfMake from "pdfmake/build/pdfmake";
-//import pdfFonts from "pdfmake/build/vfs_fonts";
-import pdfFonts from "./vfs_fonts";
-pdfMake.vfs = pdfFonts.vfs;
+// import pdfMake from "pdfmake/build/pdfmake";
+// import pdfFonts from "pdfmake/build/vfs_fonts";
+// import pdfFonts from "./vfs_fonts";
+// pdfMake.vfs = pdfFonts.vfs;
 
-pdfMake.fonts = {
-  Camby: {
-    normal: 'Cambay-Regular.ttf',
-    bold: 'Cambay-Regular.ttf',
-    italics: 'Cambay-Regular.ttf',
-    bolditalics: 'Cambay-Regular.ttf'
-  },
+// pdfMake.fonts = {
+//   Camby: {
+//     normal: 'Cambay-Regular.ttf',
+//     bold: 'Cambay-Regular.ttf',
+//     italics: 'Cambay-Regular.ttf',
+//     bolditalics: 'Cambay-Regular.ttf'
+//   },
 
-};
+// };
 
 let ulbLogo = {}
 
@@ -478,9 +478,9 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
       break;
     default:
   }
-  pdfMake.vfs = pdfFonts.vfs;
+  // pdfMake.vfs = pdfFonts.vfs;
   // data && pdfMake.createPdf(data).download(`${propertyDetails[0].assessmentNumber}.pdf`);
-  data && pdfMake.createPdf(data).open();
+  // data && pdfMake.createPdf(data).open();
 };
 
 export default generateAcknowledgementForm;

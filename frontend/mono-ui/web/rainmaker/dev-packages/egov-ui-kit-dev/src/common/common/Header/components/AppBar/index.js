@@ -60,7 +60,7 @@ const EgovAppBar = ({
         title={
           <div className="citizen-header-logo-label">
             <div id="emblem-lg" className="citizen-header-logo" style={{width: "44px", height: "47px" }}>
-              {<img style={{ width: "45px", height: "45px", transform: "translateY(-2px)" }} src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" />}
+              <img style={{ width: "45px", height: "45px", transform: "translateY(-2px)" }} alt="Emblem of India" src="/emblem_of_India.webp"/>
             </div>
             {titleAddon && (
               <Label

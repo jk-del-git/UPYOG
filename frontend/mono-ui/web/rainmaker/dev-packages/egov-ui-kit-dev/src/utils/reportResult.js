@@ -19,16 +19,18 @@ import JSZip from "jszip/dist/jszip";
 import _ from "lodash";
 import get from "lodash/get";
 import RaisedButton from "material-ui/RaisedButton";
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+// import pdfMake from "pdfmake/build/pdfmake"; //lazy load this lib
+// import pdfFonts from "pdfmake/build/vfs_fonts"; // lazy load this lib
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getResultUrl, translate } from "./commons";
 import "./index.css";
 import { downloadPDFFileUsingBase64 } from "./pdfUtils/generatePDF";
 
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+// pdfMake.vfs = pdfFonts.pdfMake.vfs; // lazy load this lib
 window.JSZip = JSZip;
+
+let pdfMakePromise;
 
 var sumColumn = [];
 var footerexist = false;
@@ -56,6 +58,24 @@ const formatLocaleKeys = (key = "") => {
   key = (key.toUpperCase && key.toUpperCase()) || key;
   key = key.replace(/[.:-\s\/]/g, "_") || key;
   return key;
+};
+
+const getPdfMake = () => {
+  if (!pdfMakePromise) {
+    pdfMakePromise = Promise.all([
+      import("pdfmake/build/pdfmake"),
+      import("pdfmake/build/vfs_fonts"),
+    ]).then(([pdfMakeModule, pdfFontsModule]) => {
+      const pdfMake = pdfMakeModule.default;
+      const pdfFonts = pdfFontsModule.default;
+
+      pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+      return pdfMake;
+    });
+  }
+
+  return pdfMakePromise;
 };
 
 // Excel - Pre-defined strings to build a basic XLSX file
@@ -484,7 +504,7 @@ class ShowField extends Component {
         orientation: orientation,
         pageSize: pageSize,
         footer: true,
-        customize: function (doc) {
+        customize: async function (doc) {
           doc.content[0].text = [];
           doc.content[0].text.push({ text: "UPYOG System Reports\n\n", bold: true, fontSize: 20 });
           doc.content[0].text.push({ text: reportTitle, fontSize: 18 });
@@ -518,6 +538,7 @@ class ShowField extends Component {
           }
 
           if (window && window.mSewaApp && window.mSewaApp.isMsewaApp && window.mSewaApp.isMsewaApp() && window.mSewaApp.downloadBase64File) {
+            const pdfMake = await getPdfMake();
             const pdfData = pdfMake.createPdf(doc);
             downloadPDFFileUsingBase64(pdfData, `${_this.state.reportName}.pdf`);
             return;

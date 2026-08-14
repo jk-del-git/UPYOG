@@ -69,17 +69,25 @@ class Banner extends React.Component {
         <div className={`${className} user-screens-wrapper`}>
           <div
             className={`banner-image ${this.state.animate ? "banner-fade-animate" : ""}`}
-            style={
-              activeBannerUrl && {
-                // backgroundImage: `url(${activeBannerUrl})`,
-                backgroundImage: `url("https://s7ap1.scene7.com/is/image/incredibleindia/dal-lake-srinagar-jammu-&-kashmir-2-attr-hero?qlt=82&ts=1726816668703")`,
+            // style={
+            //   activeBannerUrl && {
+            //     // backgroundImage: `url(${activeBannerUrl})`,
+            //     backgroundImage: `url("https://s7ap1.scene7.com/is/image/incredibleindia/dal-lake-srinagar-jammu-&-kashmir-2-attr-hero?qlt=82&ts=1726816668703")`,
+            //     backgroundSize: "cover",
+            //     backgroundPosition: "center",
+            //     backgroundRepeat: "no-repeat",
+            //     position: "relative",
+            //     // background:"linear-gradient(to left, #155cd1 105%,#05ae70 )"
+            //   }
+            // }
+             style={{
+                backgroundImage: `url("/dal-lake-srinagar-jammu-&-kashmir.webp")`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
                 position: "relative",
                 // background:"linear-gradient(to left, #155cd1 105%,#05ae70 )"
-              }
-            }
+            }}
           >
             <div className="banner-overlay" />
             <div className="banner-main-content">

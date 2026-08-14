@@ -61,9 +61,9 @@ const Home = lazyLoad(() =>
   import("modules/employee/Home")
 );
 
-const Report = lazyLoad(() =>
-  import("modules/employee/reports/report")
-);
+// const Report = lazyLoad(() =>
+//   import("modules/employee/reports/report")
+// );
 
 const EGFFinance = lazyLoad(() =>
   import("modules/employee/Erp/EGF")
@@ -193,18 +193,18 @@ const routes = [
   //   needsAuthentication: true,
   //   options: { hideHeader: true, hideFooter: true, title: "CS_HEADER_TRACK_LOCATION", hideTitle: true, hideActionMenu: true },
   // },
-  {
-    path: "report/:moduleName/:reportName",
-    component: Report,
-    needsAuthentication: true,
+  // {
+  //   path: "report/:moduleName/:reportName",
+  //   component: Report,
+  //   needsAuthentication: true,
 
-    options: {
-      hideFooter: true,
-      title: "CS_PGR_REPORTS_HEADER",
-      hideTitle: true,
-      redirectionUrl,
-    },
-  },
+  //   options: {
+  //     hideFooter: true,
+  //     title: "CS_PGR_REPORTS_HEADER",
+  //     hideTitle: true,
+  //     redirectionUrl,
+  //   },
+  // },
    {
     path: "mis-dashboard",
     component: Dashboard,

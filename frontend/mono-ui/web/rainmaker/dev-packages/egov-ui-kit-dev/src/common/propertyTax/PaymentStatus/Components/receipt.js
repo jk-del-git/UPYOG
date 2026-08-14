@@ -1,7 +1,7 @@
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+// import pdfMake from "pdfmake/build/pdfmake"; //change here
+// import pdfFonts from "pdfmake/build/vfs_fonts";
 import msevaLogo from "egov-ui-kit/assets/images/pblogo.png";
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+// pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, isEmployeeReceipt) => {
   let data;
@@ -450,7 +450,7 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
       break;
     default:
   }
-  data && pdfMake.createPdf(data).download(`${details.ReceiptNo}.pdf`);
+  // data && pdfMake.createPdf(data).download(`${details.ReceiptNo}.pdf`);
 };
 
 export default generateReceipt;

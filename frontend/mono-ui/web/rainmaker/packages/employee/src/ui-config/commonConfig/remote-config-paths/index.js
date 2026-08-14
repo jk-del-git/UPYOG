@@ -2,9 +2,9 @@ const remoteConfigPath = (path, screenKey) => {
   let config = {};
   switch (path) {
 
-    case "hrms":
-      config = require(`egov-hrms/ui-config/screens/specs/${path}/${screenKey}`).default;
-      break;
+    // case "hrms":
+    //   config = require(`egov-hrms/ui-config/screens/specs/${path}/${screenKey}`).default;
+    //   break;
     case "egov-common":
       config = require(`egov-common/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
