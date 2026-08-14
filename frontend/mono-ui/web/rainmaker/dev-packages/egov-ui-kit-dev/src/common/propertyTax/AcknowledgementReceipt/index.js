@@ -1,18 +1,18 @@
-import pdfMake from "pdfmake/build/pdfmake";
-//import pdfFonts from "pdfmake/build/vfs_fonts";
-import pdfFonts from "./vfs_fonts";
+// import pdfMake from "pdfmake/build/pdfmake";
+// import pdfFonts from "pdfmake/build/vfs_fonts";
+// import pdfFonts from "./vfs_fonts";
 import msevaLogo from "egov-ui-kit/assets/images/pblogo.png";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
-pdfMake.vfs = pdfFonts.vfs;
+// pdfMake.vfs = pdfFonts.vfs;
 
-pdfMake.fonts = {
-  Camby: {
-    normal: "Cambay-Regular.ttf",
-    bold: "Cambay-Regular.ttf",
-    italics: "Cambay-Regular.ttf",
-    bolditalics: "Cambay-Regular.ttf",
-  },
-};
+// pdfMake.fonts = {
+//   Camby: {
+//     normal: "Cambay-Regular.ttf",
+//     bold: "Cambay-Regular.ttf",
+//     italics: "Cambay-Regular.ttf",
+//     bolditalics: "Cambay-Regular.ttf",
+//   },
+// };
 
 export const AcknowledgementReceipt = (role, details, generalMDMSDataById, receiptImageUrl, isEmployeeReceipt) => {
   console.log("details--" + details);
@@ -549,5 +549,5 @@ export const AcknowledgementReceipt = (role, details, generalMDMSDataById, recei
     default:
   }
   // data && pdfMake.createPdf(data).download(`${propertyDetails[0].assessmentNumber}.pdf`);
-  data && pdfMake.createPdf(data).open();
+  // data && pdfMake.createPdf(data).open();
 };

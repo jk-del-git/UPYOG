@@ -15,8 +15,8 @@ import _ from "lodash";
 // import "datatables.net-responsive-dt";
 import JSZip from "jszip/dist/jszip";
 import get from "lodash/get";
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+// import pdfMake from "pdfmake/build/pdfmake";//lazy load this one
+// import pdfFonts from "pdfmake/build/vfs_fonts"; //lazy load this one
 // import "datatables.net-buttons/js/buttons.html5.js"; // HTML 5 file export
 // import "datatables.net-buttons/js/buttons.flash.js"; // Flash file export
 // import "datatables.net-buttons/js/buttons.colVis.min.js";
@@ -27,8 +27,28 @@ import { getTenantId, setReturnUrl, localStorageSet } from "egov-ui-kit/utils/lo
 import { getLocaleLabels ,getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import "./index.css";
 
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+// pdfMake.vfs = pdfFonts.pdfMake.vfs; //lazy load this one
 window.JSZip = JSZip;
+
+let pdfMakePromise;
+
+const getPdfMake = () => {
+  if (!pdfMakePromise) {
+    pdfMakePromise = Promise.all([
+      import("pdfmake/build/pdfmake"),
+      import("pdfmake/build/vfs_fonts"),
+    ]).then(([pdfMakeModule, pdfFontsModule]) => {
+      const pdfMake = pdfMakeModule.default;
+      const pdfFonts = pdfFontsModule.default;
+
+      pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+      return pdfMake;
+    });
+  }
+
+  return pdfMakePromise;
+};
 
 var sumColumn = [];
 var footerexist = false;
