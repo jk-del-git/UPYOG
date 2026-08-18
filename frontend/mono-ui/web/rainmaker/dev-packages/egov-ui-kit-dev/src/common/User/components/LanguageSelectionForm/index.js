@@ -41,7 +41,7 @@ const LanguageSelectionForm = ({ items, onLanguageSelect, value, onClick, logoUr
       textChildren={
         <div>
           <div  style={{ marginBottom: "20px", borderBottom: "1px solid #192771", display: "flex", justifyContent: "center", marginTop: "8px" }}>
-            <img src="/emblem_of_India.webp" alt="Emblem of India" style={{ width: "auto", height: "74px", padding: "0px 11px" }} />
+            <img src={`${process.env.PUBLIC_URL}/emblem_of_India.webp`} alt="Emblem of India" style={{ width: "auto", height: "74px", padding: "0px 11px" }} />
             <h3 style={{ fontSize: "20px", marginLeft: "12px", marginTop: "0px" }}>
               <strong style={{ color: "#0C3A60", paddingRight: "15px", lineHeight: "1.2" }}>
                 Housing and Urban <br /> Development Department
