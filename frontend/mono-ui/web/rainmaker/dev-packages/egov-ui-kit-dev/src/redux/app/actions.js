@@ -119,7 +119,7 @@ export const fetchLocalizationLabel = (locale, module, tenantId, isFromModule) =
         (label) => normalizedList.includes(label.module)
       );
 
-      console.log('Filtered Result Array:', filteredResultArray);
+      // console.log('Filtered Result Array:', filteredResultArray);
 
       if (filteredResultArray.length > 0) {
         // Clear previous localization in local storage
