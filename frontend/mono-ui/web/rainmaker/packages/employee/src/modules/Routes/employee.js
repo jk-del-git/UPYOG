@@ -3,6 +3,7 @@ import Loadable from "react-loadable";
 // because they are route definitions, not screens
 import frameworkScreens from "./frameworkScreens";
 import externalRoutes from "./exterenalURL";
+import EGFFinance from "modules/employee/Erp/EGF"
 
 // Generic loader
 const Loading = () => null;
@@ -65,9 +66,9 @@ const Home = lazyLoad(() =>
 //   import("modules/employee/reports/report")
 // );
 
-const EGFFinance = lazyLoad(() =>
-  import("modules/employee/Erp/EGF")
-);
+// const EGFFinance = lazyLoad(() =>
+//   import("modules/employee/Erp/EGF")
+// );
 
 const Dashboard = lazyLoad(() =>
   import("modules/employee/Dashboard")

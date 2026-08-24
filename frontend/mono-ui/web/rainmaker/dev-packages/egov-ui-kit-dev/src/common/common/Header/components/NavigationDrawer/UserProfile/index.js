@@ -52,48 +52,48 @@ const prepareUserInfo = (userInfo = {}, cities = [],localizationLabels) => {
 // check below one
 const UserProfile = ({ role = "citizen", cities = [], userInfo={}, reduxUserInfo ,localizationLabels}) => {
    const [profilePhotoUrl, setProfilePhotoUrl] = useState(null);
-    useEffect(() => {
-      const fetchPhoto = async () => {
-        try {
-          const tenantId = reduxUserInfo.tenantId;
-          const uuid = reduxUserInfo.uuid;
-          if (!uuid || !tenantId) return;
+    // useEffect(() => {
+    //   const fetchPhoto = async () => {
+    //     try {
+    //       const tenantId = reduxUserInfo.tenantId;
+    //       const uuid = reduxUserInfo.uuid;
+    //       if (!uuid || !tenantId) return;
   
-          const userPayload = await httpRequest(
-            "post",
-            "/user/_search",
-            "_search",
-            [],
-            {
-              tenantId,
-              uuid: [uuid],
-            }
-          );      
+    //       const userPayload = await httpRequest(
+    //         "post",
+    //         "/user/_search",
+    //         "_search",
+    //         [],
+    //         {
+    //           tenantId,
+    //           uuid: [uuid],
+    //         }
+    //       );      
   
-          const photoId = userPayload.user[0].photo;
-          if (!photoId) return;
+    //       const photoId = userPayload.user[0].photo;
+    //       if (!photoId) return;
   
-          const fileResponse = await httpRequest(
-            "get",
-            "/filestore/v1/files/url",
-            "",
-            [
-              { key: "tenantId", value: "pg" },
-              { key: "fileStoreIds", value: photoId },
-            ]
-          );
+    //       const fileResponse = await httpRequest(
+    //         "get",
+    //         "/filestore/v1/files/url",
+    //         "",
+    //         [
+    //           { key: "tenantId", value: "pg" },
+    //           { key: "fileStoreIds", value: photoId },
+    //         ]
+    //       );
   
-          const url = fileResponse.fileStoreIds[0].url;
-          if (url) {
-            setProfilePhotoUrl(url);
-          }
-        } catch (error) {
-          console.error("Error fetching user photo:", error);
-        }
-      };
+    //       const url = fileResponse.fileStoreIds[0].url;
+    //       if (url) {
+    //         setProfilePhotoUrl(url);
+    //       }
+    //     } catch (error) {
+    //       console.error("Error fetching user photo:", error);
+    //     }
+    //   };
   
-      fetchPhoto();
-    }, []);
+    //   fetchPhoto();
+    // }, []);
   userInfo = prepareUserInfo(userInfo, cities,localizationLabels);
   return (
     <ProfileSection
