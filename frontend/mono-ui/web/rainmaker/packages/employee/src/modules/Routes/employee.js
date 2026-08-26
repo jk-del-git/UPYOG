@@ -4,6 +4,7 @@ import Loadable from "react-loadable";
 import frameworkScreens from "./frameworkScreens";
 import externalRoutes from "./exterenalURL";
 import EGFFinance from "modules/employee/Erp/EGF"
+import Dashboard from "modules/employee/Dashboard";
 
 // Generic loader
 const Loading = () => null;
@@ -70,9 +71,9 @@ const Home = lazyLoad(() =>
 //   import("modules/employee/Erp/EGF")
 // );
 
-const Dashboard = lazyLoad(() =>
-  import("modules/employee/Dashboard")
-);
+// const Dashboard = lazyLoad(() =>
+//   import("modules/employee/Dashboard")
+// );
 
 
 
