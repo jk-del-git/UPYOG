@@ -207,6 +207,7 @@ const OTPForm = ({ handleFieldChange, toggleSnackbarAndSetText, form, resendOTP,
                   );
                 }
               }}
+              style={{marginBottom:"20px"}}
               fullWidth={true}
               primary={true}
             />
