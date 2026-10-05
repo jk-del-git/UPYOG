@@ -86,7 +86,16 @@ export const submitForm = (formKey, saveUrl) => {
             formData.employee.otp ? formData.employee.otp : ""
           );
         } else {
+          const form = state.form["employeeForgotPasswd"];
+          const {city} = form && form.fields
+           formData.tenantId= city && city.value
           formResponse = await httpRequest(saveUrl, action, [], formData);
+          if (formResponse && formResponse.responseInfo && formResponse.responseInfo.status === "200") {
+            const message = "Password has been changed successfully";
+            dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, "success"));
+            // let the success snackbar be visible
+            await new Promise((resolve) => setTimeout(resolve, 1500));
+          }
         }
         if(saveUrl=="/user/citizen/_create"&&formResponse&&formResponse.hasOwnProperty("UserRequest")){
           setUserObj(JSON.stringify(formResponse.UserRequest));
