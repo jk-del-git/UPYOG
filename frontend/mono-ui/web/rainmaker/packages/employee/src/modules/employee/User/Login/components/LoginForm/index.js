@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Card, TextField, Image, UsernameFieldWithIcon, OTPInputField } from "components";
+import { Card, TextField, Image, UsernameFieldWithIcon, OTPInputField, UsernamePasswordFieldWithIcon } from "components";
 import { Button } from "egov-ui-framework/ui-atoms";
 import { CityPickerNew } from "modules/common";
 import Label from "egov-ui-kit/utils/translationNode";
@@ -14,6 +14,36 @@ import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { getLocaleLabels, transformById } from "egov-ui-kit/redux/../../../packages/employee/src/ui-utils/commons";
 import { getLocalization, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
+// --------------------------------------styles-------------------------
+
+const STYLES = {
+  title: {
+    color: "#0C3A60",
+    paddingRight: "15px",
+    lineHeight: "1.2",
+  },
+  subTitle: {
+    color: "#0C3A60",
+    fontWeight: "500",
+    fontSize: "14px",
+    marginTop: "5px",
+  },
+  otpBox: { display: "flex" },
+  getOtpBtn: {
+    height: "48px",
+    width: "100%",
+    margin: "10px 0px",
+  },
+  forgotPasswordBtn: {
+    height: "48px",
+    width: "100%",
+  },
+  forgotPasswordLabelBox: { float: "left" },
+  forgotPasswordBtnLabelContainer: { cursor: "pointer", position: "relative", zIndex: 10 },
+  forgotPasswordLabel: { marginBottom: "12px" },
+};
+
+//----------------------------------------------------------------------
 
 const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, cities, toggleSnackbarAndSetText }) => {
   const [generatedCaptcha, setGeneratedCaptcha] = useState("");
@@ -24,25 +54,24 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
   const city = fields.city || {};
   const citySelected = city.value || "";
   const submit = form.submit;
-  const generate = () => {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    const length = 6;
-    let captcha = "";//
 
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * chars.length);
-      captcha += chars[randomIndex];
-    }
-
-    localStorage.setItem("captcha", captcha);
-    setGeneratedCaptcha(captcha);
-  };
+  //captcha generate
+  // const generate = () => {
+  //   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  //   const length = 6;
+  //   let captcha = "";
+  //   for (let i = 0; i < length; i++) {
+  //     const randomIndex = Math.floor(Math.random() * chars.length);
+  //     captcha += chars[randomIndex];
+  //   }
+  //   localStorage.setItem("captcha", captcha);
+  //   setGeneratedCaptcha(captcha);
+  // };
 
   function groupByParent(data) {
     if (!Array.isArray(data) || data.length === 0) {
       return {};
     }
-
     const result = {};
 
     for (const item of data) {
@@ -64,7 +93,7 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
 
         return nameA.localeCompare(nameB, undefined, {
           sensitivity: "base", // case-insensitive
-          numeric: true        // "Item 2" < "Item 10"
+          numeric: true, // "Item 2" < "Item 10"
         });
       });
     }
@@ -75,195 +104,173 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
   const onClickOTPgeneration = async () => {
     try {
       const username = fields.username && fields.username.value ? fields.username.value : "";
-            const password = fields.password && fields.password.value ? fields.password.value : "";
+      const password = fields.password && fields.password.value ? fields.password.value : "";
 
-      const tenantId = (Array.isArray(groupByParent(cities)[citySelected]) && groupByParent(cities)[citySelected].length > 0) ?
-        (fields.mappedUlb && fields.mappedUlb.value ? fields.mappedUlb.value : "") :
-        (fields.city && fields.city.value ? fields.city.value : "");
+      const tenantId =
+        Array.isArray(groupByParent(cities)[citySelected]) && groupByParent(cities)[citySelected].length > 0
+          ? fields.mappedUlb && fields.mappedUlb.value
+            ? fields.mappedUlb.value
+            : ""
+          : fields.city && fields.city.value
+            ? fields.city.value
+            : "";
 
-      if (!username || !tenantId) {
-        toggleSnackbarAndSetText(
-          true,
-          { labelKey: "UC_COMMON_USER_NOT_FOUND" },
-          "error"
-        )
+      if (!username) {
+        toggleSnackbarAndSetText(true, { labelKey: "CORE_LOGIN_USERNAME_PLACEHOLDER" }, "error");
+        return;
+      }
+      if (!password) {
+        toggleSnackbarAndSetText(true, { labelKey: "CORE_LOGIN_PASSWORD_PLACEHOLDER" }, "error");
+        return;
+      }
+      if (!tenantId) {
+        toggleSnackbarAndSetText(true, { labelKey: "UC_COMMON_ORGANISATION" }, "error");
         return;
       }
 
-      // ===== STEP 1: Call user/v1/_search API =====
-      
-
       // ===== STEP 2: Call user-otp/v1/_send API =====
       const otpSendRequestBody = {
-        RequestInfo:
-        {api_id:"1",
-        ver:1,
-        ts:null,
-        action:"create",
-        did:"",
-        key:"",
-        msg_id:"",
-        requester_id:"",
-        auth_token:null
-      }, 
-      otp:{
-    userName:username,
-    password:password,
-    tenantId:tenantId, 
-    type:"LOGIN", 
-    userType:"EMPLOYEE"
-  }
-}
-        // RequestInfo: {
-        //   api_id: "1",
-        //   ver: "1",
-        //   ts: null,
-        //   action: "create",
-        //   did: "",
-        //   key: "",
-        //   msg_id: "",
-        //   requester_id: "",
-        //   auth_token: null,
-        // },
-        // otp: {
-        //   tenantId: tenantId,
-        //   mobileNumber: userMobileNumber,
-        // }
-      
+        RequestInfo: { api_id: "1", ver: 1, ts: null, action: "create", did: "", key: "", msg_id: "", requester_id: "", auth_token: null },
+        otp: {
+          userName: username,
+          password: password,
+          tenantId: tenantId,
+          type: "LOGIN",
+          userType: "EMPLOYEE",
+        },
+      };
 
-      const otpSendResponse = await axios.post(
-        "/user-otp/v1/_send",
-        otpSendRequestBody,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const otpSendResponse = await axios.post("/user-otp/v1/_send", otpSendRequestBody, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       setShowOTPField(true);
       setIsTimerComplete(false);
 
       // Get localized labels
-      const localizationLabels = transformById(
-        JSON.parse(getLocalization(`localization_${getLocale()}`)),
-        "code"
-      );
+      // const localizationLabels = transformById(
+      //   JSON.parse(getLocalization(`localization_${getLocale()}`)),
+      //   "code"
+      // );
       // const translatedMessage = getLocaleLabels("CORE_OTP_SENT_MESSAGE", localizationLabels);
-      const finalMessage = "OTP sent to your registered mobile number";
-      toggleSnackbarAndSetText(
-        true,
-        { labelKey: finalMessage },
-        "success"
-      )
+      // const finalMessage = "OTP sent to your registered mobile number";
 
+      toggleSnackbarAndSetText(true, { labelKey: "CORE_OTP_SENT_MESSAGE" }, "success");
     } catch (error) {
-      // UC_COMMON_FAILED_OTP_SENT
-      toggleSnackbarAndSetText(
-        true,
-        { labelKey: "UC_COMMON_FAILED_OTP_SENT" },
-        "error"
-      )
+      // handle error scenarios like user not found, organization not found
+      let errorMessage = "Failed to send OTP";
+
+      if (error && error.response && error.response.data && error.response.data.error) {
+        const apiError = error.response.data.error;
+
+        if (apiError.fields && apiError.fields.length > 0 && apiError.fields[0].message) {
+          errorMessage = apiError.fields[0].message;
+        } else if (apiError.message) {
+          errorMessage = apiError.message;
+        }
+      }
+      toggleSnackbarAndSetText(true, { labelKey: `${errorMessage}` }, "error");
     }
-  }
+  };
 
+  // useEffect(() => {
+  //   generate();
+  // }, []);
 
-  useEffect(() => {
-    generate();
-
-  }, []);
-
+  const groupedCities = groupByParent(cities);
+  const childOptions = groupedCities[citySelected];
 
   return (
     <React.Fragment>
-      <div className="mn-content" >
-        <div className="left-emblem"
-        >
-          <div
-            className="inside-left-dv"
-
-          >
+      <div className="mn-content">
+        <div className="left-emblem">
+          <div className="inside-left-dv">
             <img src={`${process.env.PUBLIC_URL}/emblem_of_India.webp`} alt="Emblem of India" className="login-emblem-img" />
             <h3 className="main-login-header">
-              <strong style={{
-                color: "#0C3A60",
-                // color:"white",
-                paddingRight: "15px", lineHeight: "1.2"
-              }}>
+              <strong style={STYLES.title}>
                 Housing and Urban <br /> Development Department
               </strong>
               <br />
-              <p style={{
-                color: "#0C3A60",
-                fontWeight: "500",
-                fontSize: "14px", marginTop: "5px"
-              }}>
-                Government of Jammu & Kashmir
-              </p>
+              <p style={STYLES.subTitle}>Government of Jammu & Kashmir</p>
             </h3>
           </div>
         </div>
         <Card
           className="login-card user-screens-card col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-4 col-sm-4"
-          textChildren={<React.Fragment>
-            <div className="inside-login-card" style={{ width: "100%" }}>
-              <Label className="text-center" color={"rgb(12, 58, 96)"} bolder={true} fontSize={22} label="CORE_COMMON_LOGIN" />
-              <UsernameFieldWithIcon onChange={(e, value) => handleFieldChange("username", value)} {...fields.username} />
-              <UsernameFieldWithIcon onChange={(e, value) => handleFieldChange("password", value)} {...fields.password} />
-              <CityPickerNew onChange={handleFieldChange} fieldKey="city" field={fields.city} flag={false} />
-              {/* Adding one more dropdown */}
-              {
+          textChildren={
+            <React.Fragment>
+              <div className="inside-login-card" style={{ width: "100%" }}>
+                <Label className="text-center" color={"rgb(12, 58, 96)"} bolder={true} fontSize={22} label="CORE_COMMON_LOGIN" />
+                <UsernameFieldWithIcon onChange={(e, value) => handleFieldChange("username", value)} {...fields.username} />
+                {/* <UsernameFieldWithIcon onChange={(e, value) => handleFieldChange("password", value)} {...fields.password} /> */}
+                <UsernamePasswordFieldWithIcon onChange={(e, value) => handleFieldChange("password", value)} {...fields.password} />
+                {/* <CityPickerNew onChange={handleFieldChange} fieldKey="city" field={fields.city} flag={false} /> */}
+                <CityPickerNew
+                  onChange={handleFieldChange}
+                  fieldKey="city"
+                  field={fields.city}
+                  flag={false}
+                  excludeKeys={["pg.testing"]}
+                  // searchable={false} // remove this line to keep type-to-search
+                />
+                {/* Adding one more dropdown */}
+                {/* {
                 Array.isArray(groupByParent(cities)[citySelected]) && groupByParent(cities)[citySelected].length > 0 &&
                 <CityPickerNew mappedOptions={groupByParent(cities)[citySelected]} onChange={handleFieldChange} flag={true} fieldKey="mappedUlb" field={fields.mappedUlb} />
-              }
-              {/* OTP Field */}
-
-              {showOTPField && (<div>
-                {!isTimerComplete ? (
-                  <React.Fragment>
-                    <div style={{ display: "flex" }}>
-                      <React.Fragment>
-                        <Label id="otp-resend" className="otp-prompt" label="CORE_ANOTHER_OTP" />
-                        <CountdownTimer
-                          timeLeft={30000}
-                          tickCallback={(remainingTime) => {
-                            if (remainingTime <= 0) {
-                              setIsTimerComplete(true);
-                            }
-                          }}
-                        />
-                        <Label id="otp-resend" className="otp-timer" label="CORE_OTP_SECONDS" />
-                      </React.Fragment>
-                    </div>
-                    <OTPInputField
-                      length={6}
-                      onChange={(value) => handleFieldChange("otp", value)}
-                    />
-                  </React.Fragment>
-                ) : null}
-              </div>)
-              }
-
-              <div className="get-otp-btn">
-                {(!showOTPField || isTimerComplete) && <Button style={{
-                  height: "48px",
-                  width: "100%",
-                  margin: "10px 0px"
-                }}
-                  variant={"contained"}
-                  color={"primary"} onClick={() => onClickOTPgeneration()}>
-                  <Label
-                    buttonLabel={true} labelStyle={{ fontWeight: 500 }}
-                    // label="CORE_GET_OTP_BUTTON"
-                    label={!isTimerComplete ? "CORE_GET_OTP_BUTTON" : "CORE_OTP_RESEND"}
+              } */}
+                {Array.isArray(childOptions) && childOptions.length > 0 && (
+                  <CityPickerNew
+                    mappedOptions={childOptions}
+                    onChange={handleFieldChange}
+                    fieldKey="mappedUlb"
+                    field={fields.mappedUlb}
+                    flag={true}
+                    // searchable={false} // remove this line to keep type-to-search
                   />
-                </Button>}
+                )}
+                {/* OTP Field */}
 
-              </div>
-              {/* --------------------- */}
-              {/* ------------ Captcha section start ------------- */}
+                {showOTPField && (
+                  <div>
+                    {!isTimerComplete ? (
+                      <React.Fragment>
+                        <div style={STYLES.otpBox}>
+                          <React.Fragment>
+                            <Label id="otp-resend" className="otp-prompt" label="CORE_ANOTHER_OTP" />
+                            <CountdownTimer
+                              timeLeft={30000}
+                              tickCallback={(remainingTime) => {
+                                if (remainingTime <= 0) {
+                                  setIsTimerComplete(true);
+                                }
+                              }}
+                            />
+                            <Label id="otp-resend" className="otp-timer" label="CORE_OTP_SECONDS" />
+                          </React.Fragment>
+                        </div>
+                        <OTPInputField length={6} onChange={(value) => handleFieldChange("otp", value)} />
+                      </React.Fragment>
+                    ) : null}
+                  </div>
+                )}
 
-              {/* <div
+                <div className="get-otp-btn">
+                  {(!showOTPField || isTimerComplete) && (
+                    <Button style={STYLES.getOtpBtn} variant={"contained"} color={"primary"} onClick={() => onClickOTPgeneration()}>
+                      <Label
+                        buttonLabel={true}
+                        labelStyle={{ fontWeight: 500 }}
+                        label={!isTimerComplete ? "CORE_GET_OTP_BUTTON" : "CORE_OTP_RESEND"}
+                      />
+                    </Button>
+                  )}
+                </div>
+                {/* --------------------- */}
+                {/* ------------ Captcha section start ------------- */}
+
+                {/* <div
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -288,113 +295,113 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
                     fontSize: "29px",
                     fontWeight: "400",
                   }}
->
+                  >
                   {generatedCaptcha}
-</span></div>
-</div>
-
-<div style={{display:"grid", gridTemplateColumns:"9fr 1fr",  marginTop:"4%",
-                      marginBottom:"4%"}}>
-<div>
- <TextField
- required={false}
-  {...fields.captcha}
- floatingLabelText={[null,null]}
- hintStyle={{
-  fontSize: "14px",
-  fontWeight:"400",
-  color:"rgb(38,38,38,0.62)",
- }}
- inputStyle={{marginTop:"4px",}}
- style={{
-  width: "100%",
-  height: "44px",
-  padding: "0px 15px",
-  marginTop:"4px",
-  border: "1px solid #b3b3b3",
-  // borderRadius: "10px",
-  borderRadius: "5px",
-  fontSize: "14px !important",
-  outline: "none",
-  boxSizing: "border-box",
-  transition: "all 0.2s ease",
-  backgroundColor: "#fff",
-  color: "#1B1B1B",
-  letterSpacing: "0.7px",}} 
-  underlineShow={false}
- onChange={(e, value) => {
-   if(value !== generatedCaptcha) {
-    setErrorCaptcha(true);
-   }else{
-    setErrorCaptcha(false)
-   }
-   handleFieldChange("captcha", value)
- }
- 
-}
-                  />
-</div>
-                <div className="refresh-loop-div" style={{width:"100%", display:"flex", justifyContent:"end", alignItems:"center"}}>
-<span
-                    className="reload"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      generate();
-                    }}
->
-<i class="material-icons">loop</i>
-</span>
-</div>
-
-</div> */}
-              {/* <div className="login__field field_disabled">
-<Label fieldKey="captcha" field={fields.captcha} handleFieldChange={handleFieldChange} />
-              {errorCaptcha && <span style={{ fontSize: "12px", color: "red" }}>Invalid Captcha</span> }
-</div> */}
-              {/* --------------Captcha section end */}
-              {showOTPField && !isTimerComplete && (<Button
-                {...submit}
-                //  onClick={(e) => {
-                //     if (generatedCaptcha !== fields.captcha.value) {
-                //       e.preventDefault();
-                //     }
-                //   }}
-                style={{
-                  height: "48px",
-                  width: "100%",
-                }}
-                variant={"contained"}
-                color={"primary"}
-              >
-                <Label buttonLabel={true} labelStyle={{ fontWeight: 500 }} label="CORE_COMMON_CONTINUE" />
-              </Button>)}
-              <Link to="/forgot-password">
-                <div style={{ float: "left" }}>
-                  <Label
-                    containerStyle={{ cursor: "pointer", position: "relative", zIndex: 10 }}
-                    labelStyle={{ marginBottom: "12px" }}
-                    className="forgot-passwd"
-                    fontSize={14}
-                    label="CORE_COMMON_FORGOT_PASSWORD"
-                  />
+                </span></div>
                 </div>
-              </Link>
-              {/* <Button {...submit} fullWidth={true} primary={true} /> */}
-            </div>
-          </React.Fragment>}
+
+                <div style={{display:"grid", gridTemplateColumns:"9fr 1fr",  marginTop:"4%",
+                                      marginBottom:"4%"}}>
+                <div>
+                <TextField
+                required={false}
+                  {...fields.captcha}
+                floatingLabelText={[null,null]}
+                hintStyle={{
+                  fontSize: "14px",
+                  fontWeight:"400",
+                  color:"rgb(38,38,38,0.62)",
+                }}
+                inputStyle={{marginTop:"4px",}}
+                style={{
+                  width: "100%",
+                  height: "44px",
+                  padding: "0px 15px",
+                  marginTop:"4px",
+                  border: "1px solid #b3b3b3",
+                  // borderRadius: "10px",
+                  borderRadius: "5px",
+                  fontSize: "14px !important",
+                  outline: "none",
+                  boxSizing: "border-box",
+                  transition: "all 0.2s ease",
+                  backgroundColor: "#fff",
+                  color: "#1B1B1B",
+                  letterSpacing: "0.7px",}} 
+                  underlineShow={false}
+                onChange={(e, value) => {
+                  if(value !== generatedCaptcha) {
+                    setErrorCaptcha(true);
+                  }else{
+                    setErrorCaptcha(false)
+                  }
+                  handleFieldChange("captcha", value)
+                }
+                
+                }
+                />
+                </div>
+                <div className="refresh-loop-div" style={{width:"100%", display:"flex", justifyContent:"end", alignItems:"center"}}>
+                <span
+                  className="reload"
+                  onClick={(event) => {
+                  event.stopPropagation();
+                  generate();
+                }}
+                >
+                <i class="material-icons">loop</i>
+                </span>
+                </div>
+
+                </div> */}
+                {/* <div className="login__field field_disabled">
+              <Label fieldKey="captcha" field={fields.captcha} handleFieldChange={handleFieldChange} />
+                {errorCaptcha && <span style={{ fontSize: "12px", color: "red" }}>Invalid Captcha</span> }
+                </div> */}
+                {/* --------------Captcha section end */}
+                {showOTPField && !isTimerComplete && (
+                  <Button
+                    {...submit}
+                    //  onClick={(e) => {
+                    //     if (generatedCaptcha !== fields.captcha.value) {
+                    //       e.preventDefault();
+                    //     }
+                    //   }}
+                    style={STYLES.forgotPasswordBtn}
+                    variant={"contained"}
+                    color={"primary"}
+                  >
+                    <Label buttonLabel={true} labelStyle={{ fontWeight: 500 }} label="CORE_COMMON_CONTINUE" />
+                  </Button>
+                )}
+                <Link to="/forgot-password">
+                  <div style={STYLES.forgotPasswordLabelBox}>
+                    <Label
+                      containerStyle={STYLES.forgotPasswordBtnLabelContainer}
+                      labelStyle={STYLES.forgotPasswordLabel}
+                      className="forgot-passwd"
+                      fontSize={14}
+                      label="CORE_COMMON_FORGOT_PASSWORD"
+                    />
+                  </div>
+                </Link>
+                {/* <Button {...submit} fullWidth={true} primary={true} /> */}
+              </div>
+            </React.Fragment>
+          }
         />
       </div>
-    </React.Fragment>);
+    </React.Fragment>
+  );
 };
 const mapStateToProps = (state) => ({
   cities: state.common.cities,
-  selectedCity: state.common.selectedCity
+  selectedCity: state.common.selectedCity,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  toggleSnackbarAndSetText: (open, message, variant) =>
-    dispatch(toggleSnackbarAndSetText(open, message, variant))
+  toggleSnackbarAndSetText: (open, message, variant) => dispatch(toggleSnackbarAndSetText(open, message, variant)),
 });
 
 // export default LoginForm;
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm)
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

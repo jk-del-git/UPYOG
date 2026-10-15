@@ -41,6 +41,7 @@ import Receipt from "./Receipt";
 import ShareButton from "./ShareButton";
 import Tooltip from "./Tooltip";
 import UsernameFieldWithIcon from "./UsernameFieldWithIcon";
+import UsernamePasswordFieldWithIcon from "./UsernamePasswordFieldWithIcon";
 import MobileNumberFieldNew from "./MobileNumberFieldNew";
 import TextFieldNew from "egov-ui-kit/components/TextFieldNew";
 import OTPInputField from "./OTPInput";
@@ -90,6 +91,7 @@ export {
   CommonShare,
   FloatingButton,
   UsernameFieldWithIcon,
+  UsernamePasswordFieldWithIcon,
   MobileNumberFieldNew,
   TextFieldNew,
   OTPInputField
