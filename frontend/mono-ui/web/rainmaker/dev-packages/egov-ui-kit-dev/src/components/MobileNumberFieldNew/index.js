@@ -1,9 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import TextField from "../TextField";
-import {
-  getLocaleLabels
-} from "egov-ui-framework/ui-utils/commons";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import PhoneAndroidIcon from "@material-ui/icons/PhoneAndroid";
 
 const containerStyle = {
@@ -29,7 +27,7 @@ const prefixStyleBase = {
 
 const inputStyleBase = {
   width: "100%",
-  height: "44px",
+  height: "50px",
   padding: "12px 15px 12px 15px", // left padding for prefix
   border: "1px solid #b3b3b3",
   borderRadius: "10px",
@@ -57,6 +55,14 @@ const suffixIconStyle = {
   fontSize: "20px",
 };
 
+const errorTextStyleBase = {
+  color: "#E54D42",
+  fontSize: "12px",
+  lineHeight: "16px",
+  marginTop: "4px",
+  textAlign: "left",
+};
+
 class MobileNumberFieldNew extends React.Component {
   constructor(props) {
     super(props);
@@ -68,30 +74,70 @@ class MobileNumberFieldNew extends React.Component {
   handleFocus = () => this.setState({ isFocused: true });
   handleBlur = () => this.setState({ isFocused: false });
 
+  // Keep digits only, max 10. Handles (e, value), (e) and (value) call shapes.
+  handleChange = (...args) => {
+    const { onChange } = this.props;
+    const [first, second] = args;
+
+    let raw = "";
+    if (typeof second === "string") {
+      raw = second;
+    } else if (first && first.target) {
+      raw = first.target.value;
+    } else if (typeof first === "string") {
+      raw = first;
+    }
+
+    const sanitized = String(raw).replace(/\D/g, "").slice(0, 10);
+
+    if (!onChange) return;
+    if (first && first.target) {
+      onChange(first, sanitized);
+    } else {
+      onChange(sanitized);
+    }
+  };
+
   render() {
-    const { className, prefix = "+91", prefixStyle = {}, textFieldStyle = {}, ...textFieldProps } = this.props;
+    const {
+      className,
+      prefix = "+91",
+      prefixStyle = {},
+      textFieldStyle = {},
+      errorText,
+      errorStyle = {},
+      onChange, // taken out so it can't override handleChange
+      ...textFieldProps
+    } = this.props;
     const { isFocused } = this.state;
     return (
-      <div style={containerStyle}>
-        <div style={{ ...prefixStyleBase, ...prefixStyle }}>{prefix}</div>
-        <TextField
-          className={`mobile-number-field ${className}`}
-          type="tel"
-          maxLength={10}
-          minLength={10}
-          placeholder={getLocaleLabels("NOC_ENTER_APPLICANT_MOBILE_NO_PLACEHOLDER", "NOC_ENTER_APPLICANT_MOBILE_NO_PLACEHOLDER")}
-          inputStyle={{
-            ...inputStyleBase,
-            ...(isFocused ? inputFocusStyle : {}),
-            ...textFieldStyle,
-            ...(this.props.mobileNumber ? { borderRadius: "5px" } : {})
-          }}
-          underlineShow={false}
-          onFocus={this.handleFocus}
-          onBlur={this.handleBlur}
-          {...textFieldProps}
-        />
-        <PhoneAndroidIcon style={suffixIconStyle} />
+      <div style={{ width: "100%" }}>
+        <div style={containerStyle}>
+          <div style={{ ...prefixStyleBase, ...prefixStyle }}>{prefix}</div>
+          <TextField
+            className={`mobile-number-field ${className}`}
+            type="tel"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            maxLength={10}
+            minLength={10}
+            placeholder={getLocaleLabels("NOC_ENTER_APPLICANT_MOBILE_NO_PLACEHOLDER", "NOC_ENTER_APPLICANT_MOBILE_NO_PLACEHOLDER")}
+            inputStyle={{
+              ...inputStyleBase,
+              ...(isFocused ? inputFocusStyle : {}),
+              ...(errorText ? { borderColor: "#E54D42" } : {}),
+              ...textFieldStyle,
+              ...(this.props.mobileNumber ? { borderRadius: "5px" } : {}),
+            }}
+            underlineShow={false}
+            onFocus={this.handleFocus}
+            onBlur={this.handleBlur}
+            {...textFieldProps}
+            onChange={this.handleChange}
+          />
+          <PhoneAndroidIcon style={suffixIconStyle} />
+        </div>
+        {errorText && <div style={{ ...errorTextStyleBase, ...errorStyle }}>{errorText}</div>}
       </div>
     );
   }

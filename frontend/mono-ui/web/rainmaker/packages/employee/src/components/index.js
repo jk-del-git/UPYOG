@@ -43,6 +43,7 @@ import UpdateMobile from 'egov-ui-kit/common/propertyTax/UpdateMobile/updateMobi
 import VerifyMobile  from 'egov-ui-kit/common/propertyTax/AlternateMobile';
 import WarningPopup  from 'egov-ui-kit/common/propertyTax/AlternateMobile/warningPopup';
 import UsernameFieldWithIcon from "egov-ui-kit/components/UsernameFieldWithIcon";
+import UsernamePasswordFieldWithIcon from "egov-ui-kit/components/UsernamePasswordFieldWithIcon";
 import OTPInputField from "egov-ui-kit/components/OTPInput";
 
 
@@ -93,6 +94,7 @@ export {
   ShareButton,
   CommonShareContainer,
   UsernameFieldWithIcon,
+  UsernamePasswordFieldWithIcon,
   OTPInputField
 };
 

@@ -1,0 +1,20 @@
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+input:invalid {
+  box-shadow: none;
+}
+
+/*
+ * It's also possible to overwrite the styles for certain validation rules.
+ */
+input:required {
+  box-shadow: none;
+}
+
+/* Hide Edge's native password reveal button */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
