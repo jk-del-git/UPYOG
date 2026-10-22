@@ -193,6 +193,31 @@ export const SelectPaymentType = (props) => {
   
   
   // TODO:
+
+
+  const postToGateway = (redirectUrl) => {
+    const url = new URL(redirectUrl);
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = `${url.origin}${url.pathname}`; // URL without the query string
+    form.target = "_top";
+    form.style.display = "none";
+
+    // each query param becomes a hidden field (values are decoded by URLSearchParams)
+    url.searchParams.forEach((value, key) => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = key;
+      input.value = value;
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+};
+
+
     const onSubmit1 = async (d) => {
     if (inFlight.current) return;
 
@@ -243,10 +268,10 @@ export const SelectPaymentType = (props) => {
 
       if (paymentType === "BILLDESK") {
         // BillDesk: redirectUrl is the complete SDK URL, open it unchanged (do not split/decode it)
-        if (redirectUrl) {
-          window.location.assign(redirectUrl);
+          if (redirectUrl) {
+          postToGateway(redirectUrl);
           return;
-        }
+      }
 
         // Fallback: backend returned the BillDesk SDK bootstrap page as an HTML string
         if (typeof data === "string" && data.includes('id="bdOrderId"')) {
