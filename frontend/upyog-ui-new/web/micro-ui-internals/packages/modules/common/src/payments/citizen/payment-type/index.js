@@ -247,6 +247,8 @@ export const SelectPaymentType = (props) => {
           },
         ],
         user: {
+          userName: userInfo?.info?.userName,
+          uuid: userInfo?.info?.uuid,
           name: name || userInfo?.info?.name || billDetails?.payerName,
           mobileNumber: mobileNumber || userInfo?.info?.mobileNumber || billDetails?.mobileNumber,
           tenantId: billDetails?.tenantId,
