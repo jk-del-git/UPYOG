@@ -29,7 +29,7 @@ export const convertEpochToDate = (dateEpoch) => {
  const WrapPaymentComponent = (props) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const { eg_pg_txnid: egId, workflow: workflw, propertyId } = Digit.Hooks.useQueryParams();
+  const { orderid: egId, workflow: workflw, propertyId } = Digit.Hooks.useQueryParams();
   const [printing, setPrinting] = useState(false);
   const [allowFetchBill, setallowFetchBill] = useState(false);
   const { businessService: business_service, consumerCode, tenantId } = useParams();
