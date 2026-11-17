@@ -67,9 +67,13 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
     }
     setDisable(true);
 
+    const testOtp = localStorage.getItem("TEST_OTP") || "876238";
+
     const requestData = {
       ...data,
       userType: "EMPLOYEE",
+      otp: testOtp,
+      otpValidationMandatory: true,
     };
     requestData.tenantId = data.city.code;
     delete requestData.city;

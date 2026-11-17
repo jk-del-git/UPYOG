@@ -26,7 +26,7 @@ import { newConfig as newConfigEDCR } from "../../config/edcrConfig";
 import CreateAnonymousEDCR from "./Home/EDCR";
 import EDCRAcknowledgement from "./Home/EDCR/EDCRAcknowledgement";
 
-//FIXME:
+
 const sidebarHiddenFor = [
   "upyog-ui/citizen/register/name",
   "/upyog-ui/citizen/select-language",
