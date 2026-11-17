@@ -151,7 +151,7 @@ const BillDetails = ({ paymentRules, businessService }) => {
         : amount || businessService === "FSM.TRIP_CHARGES"
         ? application?.pdfData?.advanceAmount
         : amount;
-      // FIXME:
+
     if (window.location.href.includes("mcollect")) {
       history.push(`/upyog-ui/citizen/payment/collect/${businessService}/${consumerCode}?workflow=mcollect`, {
         paymentAmount,
