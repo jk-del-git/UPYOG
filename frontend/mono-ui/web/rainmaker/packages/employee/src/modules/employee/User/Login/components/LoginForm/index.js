@@ -240,7 +240,7 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl, citi
                           <React.Fragment>
                             <Label id="otp-resend" className="otp-prompt" label="CORE_ANOTHER_OTP" />
                             <CountdownTimer
-                              timeLeft={30000}
+                              timeLeft={90000}
                               tickCallback={(remainingTime) => {
                                 if (remainingTime <= 0) {
                                   setIsTimerComplete(true);
