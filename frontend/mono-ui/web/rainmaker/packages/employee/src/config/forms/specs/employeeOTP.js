@@ -1,3 +1,4 @@
+import {getLocaleLabels} from "egov-ui-framework/ui-utils/commons.js";
 const formConfig = {
   name: "employeeOTP",
   fields: {
@@ -55,6 +56,7 @@ const formConfig = {
     id: "forgot-password-submit-action",
   },
   saveUrl: "/user/password/nologin/_update",
+  toast: getLocaleLabels("Password changed successfully!","CS_COMMON_EMPLOYEEOTP_CHANGED_PASSWORD_SUCCESS"),
   redirectionRoute: "/user/login",
   action: "_update",
 };

@@ -131,7 +131,11 @@ const transformer = (formKey, form = {}, state = {}) => {
       const type = process.env.REACT_APP_NAME === "Citizen" ? "CITIZEN" : "EMPLOYEE";
      
       const userInfo = JSON.parse(getUserInfo());
-       const tenantId = userInfo.tenantId;
+      // const tenantId = userInfo.tenantId;
+      const tenantId =
+        get(auth, "userInfo.tenantId") ||
+        getTenantId() ||
+        (userInfo && userInfo.tenantId);
       formData.tenantId = tenantId;
       formData.username = username;
       formData.type = type;

@@ -1,3 +1,4 @@
+import {getLocaleLabels} from "egov-ui-framework/ui-utils/commons.js";
 const formConfig = {
   name: "employeeChangePassword",
   fields: {
@@ -41,6 +42,7 @@ const formConfig = {
     id: "employee-change-password-submit-action",
   },
   saveUrl: "/user/password/_update",
+  toast: getLocaleLabels("Password changed successfully!","CS_COMMON_EMPLOYEEOTP_CHANGED_PASSWORD_SUCCESS"),
   redirectionRoute: "/hrms/acknowledgement?purpose=updatepassword&status=success",
   action: "_update",
 };

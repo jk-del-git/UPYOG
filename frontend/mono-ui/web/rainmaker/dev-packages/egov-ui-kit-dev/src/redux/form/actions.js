@@ -4,7 +4,7 @@ import { httpRequest, loginRequest, uploadFile } from "egov-ui-kit/utils/api";
 import { FILE_UPLOAD } from "egov-ui-kit/utils/endPoints";
 import { validateForm } from "./utils";
 import transformer from "config/forms/transformers";
-import { setUserObj,getAccessToken, clearUserDetails, } from "../../utils/localStorageUtils";
+import { setUserObj, getAccessToken, clearUserDetails, getTenantId, getUserInfo } from "../../utils/localStorageUtils";
 import { AUTH, USER, OTP } from "egov-ui-kit/utils/endPoints";
 
 export const initForm = (form, recordData) => {
@@ -57,123 +57,143 @@ export const submitFormError = (formKey, error) => {
 };
 
 export const submitForm = (formKey, saveUrl) => {
- 
-  if(formKey !="employeeForgotPasswd"){
-     return async (dispatch, getState) => {
-    const state = getState();
-    const form = state.form[formKey];
-    if (form.loading) {
-      return;
-    }
-    const isFormValid = validateForm(form);
-    if (isFormValid) {
-      dispatch(submitFormPending(formKey));
-      const { action } = form;
-      try {
-        const formData = await transformer("viewModelToBusinessModelTransformer", formKey, form, state);
-        let formResponse = {};
-        // this will eventually moved out to the auth action; bit messy
-        if (formData.hasOwnProperty("login")) {
-          formResponse = await loginRequest(formData.login.username, formData.login.password, "", "password", "", "CITIZEN");
-        } else if (formData.hasOwnProperty("employee")) {
-          formResponse = await loginRequest(
-            formData.employee.username,
-            formData.employee.password,
-            "",
-            "password",
-            formData.employee.mappedUlb ? formData.employee.mappedUlb :  formData.employee.tenantId,
-            "EMPLOYEE" ,
-            formData.employee.otp ? formData.employee.otp : ""
-          );
-        } else {
-          const form = state.form["employeeForgotPasswd"];
-          const {city} = form && form.fields
-           formData.tenantId= city && city.value
-          formResponse = await httpRequest(saveUrl, action, [], formData);
-          if (formResponse && formResponse.responseInfo && formResponse.responseInfo.status === "200") {
-            const message = "Password has been changed successfully";
-            dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, "success"));
-            // let the success snackbar be visible
-            await new Promise((resolve) => setTimeout(resolve, 1500));
-          }
-        }
-        if(saveUrl=="/user/citizen/_create"&&formResponse&&formResponse.hasOwnProperty("UserRequest")){
-          setUserObj(JSON.stringify(formResponse.UserRequest));
-        }
-        dispatch(submitFormComplete(formKey, formResponse, saveUrl));
-        /* ADD LOGOUTON PASSWORD UPDATE */
-              if (saveUrl === "/user/password/_update") { 
-                console.log("MENTION SAVE URL",saveUrl)
-                try {
-                  const authToken = getAccessToken();
-                  if (authToken) {
-        const response = await httpRequest(AUTH.LOGOUT.URL, AUTH.LOGOUT.ACTION, [], { "access_token" : authToken });
-        localStorage.clear()
-        sessionStorage.clear()
-        const base = window.location.pathname.includes("/employee") ? "/employee" : "";
-        // window.location.replace(`${window.basename}/user/login`);
-        window.location.replace(`${base}/user/login`);
-        return;
-      } else {
-        clearUserDetails();
-        const base = window.location.pathname.includes("/employee") ? "/employee" : "";
-        process.env.REACT_APP_NAME === "Citizen"
-          ? window.location.replace(`${window.basename}/user/register`)
-          :  window.location.replace(`${base}/user/login`);
-        return;
-      }
-                } catch (error) {
-                  const { message } = error;
-                 dispatch(submitFormError(formKey, message));
-                }
-              }
-        
-      } catch (error) {
-        const { message } = error;
-        // throw new Error(error);
-        dispatch(submitFormError(formKey, message));
-        dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, "error"));
-      }
-    } else {
-      dispatch(displayFormErrors(formKey));
-    }
-  };
-  }
-  else{
+  if (formKey != "employeeForgotPasswd") {
     return async (dispatch, getState) => {
-    const state = getState();
-    const form = state.form[formKey]; 
-    if (form.loading) {
-      return;
-    }
-    const isFormValid = validateForm(form);
+      const state = getState();
+      const form = state.form[formKey];
+      if (form.loading) {
+        return;
+      }
+      const isFormValid = validateForm(form);
       if (isFormValid) {
-      dispatch(submitFormPending(formKey));
-      const { action } = form;
-      try {
-         const formData = await transformer("viewModelToBusinessModelTransformer", formKey, form, state);
-         // Override tenantId based on mappedUlb priority
-if (formData.otp) {
-  formData.otp.tenantId =
-    formData.otp.mappedUlb || formData.otp.tenantId;
-}
-        let formResponse = {};
+        dispatch(submitFormPending(formKey));
+        const { action } = form;
+        try {
+          const formData = await transformer("viewModelToBusinessModelTransformer", formKey, form, state);
+          let formResponse = {};
+          // this will eventually moved out to the auth action; bit messy
+          if (formData.hasOwnProperty("login")) {
+            formResponse = await loginRequest(formData.login.username, formData.login.password, "", "password", "", "CITIZEN");
+          } else if (formData.hasOwnProperty("employee")) {
+            formResponse = await loginRequest(
+              formData.employee.username,
+              formData.employee.password,
+              "",
+              "password",
+              formData.employee.mappedUlb ? formData.employee.mappedUlb : formData.employee.tenantId,
+              "EMPLOYEE",
+              formData.employee.otp ? formData.employee.otp : ""
+            );
+          } else {
+
+            if (saveUrl === "/user/profile/_update") {
+              // profile page: no forgot-password form in store, fall back to the logged-in user's tenant
+              if (!formData.tenantId) {
+                const authUser = state.auth && state.auth.userInfo;
+                formData.tenantId = authUser && authUser.tenantId;
+              }
+            } 
+            else if (saveUrl === "/user/password/_update") {
+              // Password update must retain the tenantId produced by its transformer.
+              // Fallback to Redux auth, namespaced user-info storage, or tenant-id storage.
+              if (!formData.tenantId) {
+                const authUser = state.auth && state.auth.userInfo;
+                let storedUserInfo = null;
+
+                try {
+                  const rawUserInfo = getUserInfo();
+                  storedUserInfo = rawUserInfo ? JSON.parse(rawUserInfo) : null;
+                } catch (error) {
+                  storedUserInfo = null;
+                }
+
+                formData.tenantId = (authUser && authUser.tenantId) || (storedUserInfo && storedUserInfo.tenantId) || getTenantId();
+              }
+            } 
+            else {
+              // original behaviour
+              const forgotForm = state.form["employeeForgotPasswd"];
+              const city = forgotForm && forgotForm.fields && forgotForm.fields.city;
+              formData.tenantId = city && city.value;
+            }
+            formResponse = await httpRequest(saveUrl, action, [], formData);
+            // if (formResponse && formResponse.responseInfo && formResponse.responseInfo.status === "200") {
+            //   const message = "Password changed successfully";
+            //   dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, "success"));
+            //   // let the success snackbar be visible
+            //   await new Promise((resolve) => setTimeout(resolve, 1500));
+            // }
+          }
+          if (saveUrl == "/user/citizen/_create" && formResponse && formResponse.hasOwnProperty("UserRequest")) {
+            setUserObj(JSON.stringify(formResponse.UserRequest));
+          }
+          dispatch(submitFormComplete(formKey, formResponse, saveUrl));
+          /* ADD LOGOUTON PASSWORD UPDATE */
+          if (saveUrl === "/user/password/_update") {
+            try {
+              const authToken = getAccessToken();
+              if (authToken) {
+                const response = await httpRequest(AUTH.LOGOUT.URL, AUTH.LOGOUT.ACTION, [], { access_token: authToken });
+                localStorage.clear();
+                sessionStorage.clear();
+                const base = window.location.pathname.includes("/employee") ? "/employee" : "";
+                // window.location.replace(`${window.basename}/user/login`);
+                window.location.replace(`${base}/user/login`);
+                return;
+              } else {
+                clearUserDetails();
+                const base = window.location.pathname.includes("/employee") ? "/employee" : "";
+                process.env.REACT_APP_NAME === "Citizen"
+                  ? window.location.replace(`${window.basename}/user/register`)
+                  : window.location.replace(`${base}/user/login`);
+                return;
+              }
+            } catch (error) {
+              const { message } = error;
+              dispatch(submitFormError(formKey, message));
+            }
+          }
+        } catch (error) {
+          const { message } = error;
+          // throw new Error(error);
+          dispatch(submitFormError(formKey, message));
+          dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, "error"));
+        }
+      } else {
+        dispatch(displayFormErrors(formKey));
+      }
+    };
+  } else {
+    return async (dispatch, getState) => {
+      const state = getState();
+      const form = state.form[formKey];
+      if (form.loading) {
+        return;
+      }
+      const isFormValid = validateForm(form);
+      if (isFormValid) {
+        dispatch(submitFormPending(formKey));
+        const { action } = form;
+        try {
+          const formData = await transformer("viewModelToBusinessModelTransformer", formKey, form, state);
+          // Override tenantId based on mappedUlb priority
+          if (formData.otp) {
+            formData.otp.tenantId = formData.otp.mappedUlb || formData.otp.tenantId;
+          }
+          let formResponse = {};
           formResponse = await httpRequest(saveUrl, action, [], formData);
           dispatch(submitFormComplete(formKey, formResponse, saveUrl));
-      } catch (error) {
-        const { message } = error;
-        // throw new Error(error);
-        dispatch(submitFormError(formKey, message));
-        dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, "error"));
+        } catch (error) {
+          const { message } = error;
+          // throw new Error(error);
+          dispatch(submitFormError(formKey, message));
+          dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, "error"));
+        }
+      } else {
+        dispatch(displayFormErrors(formKey));
       }
-      }
-      else {
-      dispatch(displayFormErrors(formKey));
-    }
-    
+    };
   }
-  }
- 
 };
 
 // file actions

@@ -29,7 +29,7 @@ const formConfig = {
     id: "profile-save-action",
     type: "submit",
   },
-  toast: getLocaleLabels("PROFILE_UPDATED","PROFILE_UPDATED"),
+  toast: getLocaleLabels("Profile updated successfully","CORE_COMMON_PROFILE_UPDATE_SUCCESS"),
   saveUrl: "/user/profile/_update",
 };
 
